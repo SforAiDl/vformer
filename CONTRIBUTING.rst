@@ -64,14 +64,14 @@ Ready to contribute? Here's how to set up `vformer` for local development.
 
     $ git clone git@github.com:your_name_here/vformer.git
 
-3. Create a Conda virtual environment using the `environment.yml` file. Install your local copy of the package into the environment.
+3. Create a Conda virtual environment using the `environment.yml` file. Install your local copy of the package into the environment::
 
     $ conda env create -f environment.yml
     $ conda activate vformer
     $ cd vformer/
     $ python setup.py develop
 
-4. Set up pre-commit hooks.
+4. Set up pre-commit hooks::
 
     $ pip install pre-commit
     $ pre-commit install
@@ -82,7 +82,7 @@ Ready to contribute? Here's how to set up `vformer` for local development.
 
    Now you can make your changes locally.
 
-5. Ensure you write tests for the code you add and run the tests before you commit. You can run tests localy using `pytest` from the root directory of the repository.
+5. Ensure you write tests for the code you add and run the tests before you commit. You can run tests localy using `pytest` from the root directory of the repository::
 
     $ pytest
 
