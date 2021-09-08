@@ -64,11 +64,17 @@ Ready to contribute? Here's how to set up `vformer` for local development.
 
     $ git clone git@github.com:your_name_here/vformer.git
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
+3. Create a Conda virtual environment using the `environment.yml` file. Install your local copy of the package into the environment.
 
-    $ mkvirtualenv vformer
+    $ conda env create -f environment.yml
+    $ conda activate vformer
     $ cd vformer/
     $ python setup.py develop
+
+4. Set up pre-commit hooks.
+
+    $ pip install pre-commit
+    $ pre-commit install
 
 4. Create a branch for local development::
 
@@ -76,14 +82,9 @@ Ready to contribute? Here's how to set up `vformer` for local development.
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass flake8 and the
-   tests, including testing other Python versions with tox::
+5. Ensure you write tests for the code you add and run the tests before you commit. You can run tests localy using `pytest` from the root directory of the repository.
 
-    $ flake8 vformer tests
-    $ python setup.py test or pytest
-    $ tox
-
-   To get flake8 and tox, just pip install them into your virtualenv.
+    $ pytest
 
 6. Commit your changes and push your branch to GitHub::
 
