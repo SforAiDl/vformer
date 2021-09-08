@@ -38,7 +38,7 @@ and "help wanted" is open to whoever wants to implement it.
 Write Documentation
 ~~~~~~~~~~~~~~~~~~~
 
-vformer could always use more documentation, whether as part of the
+`vformer` could always use more documentation, whether as part of the
 official vformer docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
@@ -82,7 +82,7 @@ Ready to contribute? Here's how to set up `vformer` for local development.
 
    Now you can make your changes locally.
 
-5. Ensure you write tests for the code you add and run the tests before you commit. You can run tests localy using `pytest` from the root directory of the repository::
+5. Ensure you write tests for the code you add and run the tests before you commit. You can run tests locally using `pytest` from the root directory of the repository::
 
     $ pytest
 
