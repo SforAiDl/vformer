@@ -1,0 +1,2 @@
+class BaseViT:
+    pass
