@@ -17,7 +17,13 @@ with open("README.md", "r") as f:
     LONG_DESCRIPTION = f.read()
 
 # Define the keywords
-KEYWORDS = ["vision transformers", "pytorch", "computer vision", "machine learning", "deep learning"]
+KEYWORDS = [
+    "vision transformers",
+    "pytorch",
+    "computer vision",
+    "machine learning",
+    "deep learning",
+]
 
 # Define the classifiers
 # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
