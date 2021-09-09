@@ -15,6 +15,8 @@ class MLPDecoder(nn.Module):
         self.decoder.append(nn.LayerNorm(config[-1]))
         self.decoder.append(nn.Linear(config[-1], n_classes))
 
+        self.decoder = nn.Sequential(*self.decoder)
+
     def forward(self, x):
 
         return self.decoder(x)
