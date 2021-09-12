@@ -17,3 +17,4 @@ def test_VanillaViT():
         latent_dim=1024,
         decoder_config=(1024, 512),
     )
+    _ = model(img)
