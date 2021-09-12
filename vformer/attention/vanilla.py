@@ -1,10 +1,10 @@
+import torch
 import torch.nn as nn
-from einops import rearrange, repeat
-from einops.layers.torch import Rearrange
+from einops import rearrange
 
 
 class VanillaSelfAttention(nn.Module):
-    def __init__(self, dim, heads=8, dim_head=64, dropout=0.0):
+    def __init__(self, dim, heads=8, dim_head=64, p_dropout=0.0):
         super().__init__()
 
         inner_dim = dim_head * heads
@@ -17,7 +17,7 @@ class VanillaSelfAttention(nn.Module):
         self.to_qkv = nn.Linear(dim, inner_dim * 3, bias=False)
 
         self.to_out = (
-            nn.Sequential(nn.Linear(inner_dim, dim), nn.Dropout(dropout))
+            nn.Sequential(nn.Linear(inner_dim, dim), nn.Dropout(p_dropout))
             if project_out
             else nn.Identity()
         )

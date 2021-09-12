@@ -7,6 +7,9 @@ class MLPDecoder(nn.Module):
 
         self.decoder = nn.ModuleList()
 
+        if not isinstance(config, list) or not isinstance(config, tuple):
+            config = config
+
         if len(config) > 1:
             for i in range(len(config) - 1):
                 self.decoder.append(nn.LayerNorm(config[i]))

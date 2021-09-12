@@ -6,7 +6,7 @@ from .nn import FeedForward
 
 
 class VanillaEncoder(nn.Module):
-    def __init__(self, latent_dim, depth, heads, dim_head, mlp_dim, dropout=0.0):
+    def __init__(self, latent_dim, depth, heads, dim_head, decoder_dim, p_dropout=0.0):
         super().__init__()
 
         self.encoder = nn.ModuleList([])
@@ -21,12 +21,12 @@ class VanillaEncoder(nn.Module):
                                 latent_dim,
                                 heads=heads,
                                 dim_head=dim_head,
-                                dropout=dropout,
+                                p_dropout=p_dropout,
                             ),
                         ),
                         PreNorm(
                             latent_dim,
-                            FeedForward(latent_dim, mlp_dim, dropout=dropout),
+                            FeedForward(latent_dim, decoder_dim, p_dropout=p_dropout),
                         ),
                     ]
                 )
