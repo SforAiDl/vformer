@@ -1,7 +1,7 @@
 <h1 align="center">VFormer</h1>
 <h3 align="center">A PyTorch library for Vision Transformers</h3>
 
-<div align='center>
+<div align='center'>
 
 [![Build status](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml/badge.svg)](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml)
 
