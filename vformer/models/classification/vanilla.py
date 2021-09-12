@@ -17,7 +17,7 @@ class VanillaViT(BaseClassificationModel):
         dim_head=64,
         depth=6,
         attn_heads=16,
-        decoder_dim=2048,
+        encoder_mlp_dim=2048,
         in_channels=3,
         pool="cls",
         p_dropout_encoder=0.0,
@@ -36,11 +36,11 @@ class VanillaViT(BaseClassificationModel):
         self.embedding_dropout = nn.Dropout(p_dropout_embedding)
 
         self.encoder = VanillaEncoder(
-            latent_dim, depth, attn_heads, dim_head, decoder_dim, p_dropout_encoder
+            latent_dim, depth, attn_heads, dim_head, encoder_mlp_dim, p_dropout_encoder
         )
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
-        self.decoder = MLPDecoder(decoder_dim, n_classes)
+        self.decoder = MLPDecoder(latent_dim, n_classes)
 
     def forward(self, x):
 
