@@ -7,7 +7,7 @@ class MLPDecoder(nn.Module):
 
         self.decoder = nn.ModuleList()
 
-        if not isinstance(config, list) or not isinstance(config, tuple):
+        if not isinstance(config, list) and not isinstance(config, tuple):
             config = [config]
 
         if len(config) > 1:

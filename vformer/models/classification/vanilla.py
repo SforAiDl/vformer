@@ -19,6 +19,7 @@ class VanillaViT(BaseClassificationModel):
         attn_heads=16,
         encoder_mlp_dim=2048,
         in_channels=3,
+        decoder_config=None,
         pool="cls",
         p_dropout_encoder=0.0,
         p_dropout_embedding=0.0,
@@ -40,7 +41,10 @@ class VanillaViT(BaseClassificationModel):
         )
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
-        self.decoder = MLPDecoder(latent_dim, n_classes)
+        if decoder_config is not None:
+            self.decoder = MLPDecoder(decoder_config, n_classes)
+        else:
+            self.decoder = MLPDecoder(latent_dim, n_classes)
 
     def forward(self, x):
 
