@@ -1,7 +1,7 @@
 import torch.nn as nn
 
 from ..attention import VanillaSelfAttention
-from ..common import PreNorm
+from ..functional import PreNorm
 from .nn import FeedForward
 
 
