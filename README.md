@@ -10,3 +10,7 @@
 ### Getting Started
 
 Read the contributing guidelines in `CONTRIBUTING.rst` to learn how to start contributing.
+
+### References
+
+- [vit-pytorch](https://github.com/lucidrains/vit-pytorch)
