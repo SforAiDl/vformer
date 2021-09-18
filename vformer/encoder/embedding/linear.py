@@ -4,6 +4,13 @@ from torch import nn
 
 
 class LinearEmbedding(nn.Module):
+    """
+    class LinearEmbedding:-
+    Inputs:
+    --------------
+    embeding_dim: embeding dimension
+    """
+
     def __init__(
         self,
         embedding_dim,
