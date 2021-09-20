@@ -8,27 +8,6 @@ from ...encoder import LinearEmbedding, VanillaEncoder
 
 
 class VanillaViT(BaseClassificationModel):
-    """Standard Implementation of the Visual Transformer model for classification
-
-    Parameters
-    ----------
-    img_size : int
-        The size of the input image.
-    patch_size : int
-        The size of each patch the input image is broken into.
-    n_classes : int
-        The number of classes in the dataset.
-    latent_dim : int,optional
-        The number of dimensions of the output of the encoding layerd for image representation in latent space.
-        
-    Returns
-    -------
-    collections.Counter
-        dict-like object where keys are words and values are counts.
-
-    Examples
-    --------
-    """
     def __init__(
         self,
         img_size,
