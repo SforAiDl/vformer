@@ -4,7 +4,7 @@ import numpy
 import sys
 from torchvision import transforms
 import numpy as np
-import cv2
+#import cv2
 
 def grad_rollout(attentions, gradients, discard_ratio):
     result = torch.eye(attentions[0].size(-1))
