@@ -75,7 +75,7 @@ class VanillaViT(BaseClassificationModel):
 
         if decoder_config is not None:
             self.decoder = nn.Sequential(
-                nn.Linear(latent_dim, decoder_config[0]),
+                assert latent_dim == decoder_config[0], "first item in `decoder_config` should be equal to `latent_dim`"
                 MLPDecoder(decoder_config, n_classes),
             )
         else:
