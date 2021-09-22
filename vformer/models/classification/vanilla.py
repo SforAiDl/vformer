@@ -74,10 +74,11 @@ class VanillaViT(BaseClassificationModel):
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
         if decoder_config is not None:
-            self.decoder = nn.Sequential(
-                nn.Linear(latent_dim,decoder_config[0]),
-                MLPDecoder(decoder_config, n_classes),
-            )
+            assert (
+                decoder_config[0] != latent_dim
+            ), "`latend_dim` should be equal to the first item of `decoder_config`"
+            self.decoder = (MLPDecoder(decoder_config, n_classes),)
+
         else:
             self.decoder = MLPDecoder(latent_dim, n_classes)
 
