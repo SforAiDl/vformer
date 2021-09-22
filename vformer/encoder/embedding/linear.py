@@ -5,10 +5,15 @@ from torch import nn
 
 class LinearEmbedding(nn.Module):
     """
-    class LinearEmbedding:-
-    Inputs:
-    --------------
-    embeding_dim: embeding dimension
+    Parameters:
+    -----------
+    embeding_dim: int
+        Dimension of the embedding
+    patch_height: int
+        Height of the Patch
+    patch_width: int
+        width of the patch
+    patch_dim: int
     """
 
     def __init__(

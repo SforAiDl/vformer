@@ -3,17 +3,15 @@ import torch.nn as nn
 
 class PreNorm(nn.Module):
     """
-    class Prenorm:
-    Inputs-
-    ---------------
-    dim: embeding dimention
-    fn: Attention class (should be inherited from nn.module)
-
-    Output-
-    --------------
-    forward method returns attention of a normalised input vector
+    Parameters:
+    -----------
+    dim: int
+        Dimension of the embedding
+    fn: nn.Module
+        Attention class
     """
-    def __init__(self, dim:int, fn):
+
+    def __init__(self, dim, fn):
         super().__init__()
 
         self.norm = nn.LayerNorm(dim)

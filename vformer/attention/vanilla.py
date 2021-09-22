@@ -5,18 +5,20 @@ from einops import rearrange
 
 class VanillaSelfAttention(nn.Module):
     """
-    class VanillaSelfAttention - Self attention mechanism for vanilla transformer
-
-    Inputs:
-    -----------------
-    dim: embeding dimension
-    heads: number of heads in attention
-    dim_head: dimension of head
-    p_dropout:probability for dropout layer
-    ----------------
-
+    Vanilla Self attention
+    Parameters:
+    -----------
+    dim: int
+        Dimension of the Embedding
+    heads: int
+        Number of attention head
+    dim_head: int
+        Dimension of the head
+    p_dropout: float
+        Probability for dropout layer
     """
-    def __init__(self, dim:int , heads:int=8, dim_head:int=64, p_dropout:float=0.0):
+
+    def __init__(self, dim, heads=8, dim_head=64, p_dropout=0.0):
         super().__init__()
 
         inner_dim = dim_head * heads
@@ -34,8 +36,8 @@ class VanillaSelfAttention(nn.Module):
             else nn.Identity()
         )
 
-    def forward(self, x:torch.tensor):
-        #x.shape= B,N,C
+    def forward(self, x: torch.tensor):
+        # x.shape= B,N,C
 
         qkv = self.to_qkv(x).chunk(3, dim=-1)
         q, k, v = map(lambda t: rearrange(t, "b n (h d) -> b h n d", h=self.heads), qkv)
@@ -46,6 +48,6 @@ class VanillaSelfAttention(nn.Module):
 
         out = torch.matmul(attn, v)
         out = rearrange(out, "b h n d -> b n (h d)")
-        #out.shape=B,N,C
+        # out.shape=B,N,C
 
         return self.to_out(out)
