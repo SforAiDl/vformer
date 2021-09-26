@@ -20,7 +20,7 @@ class VanillaEncoder(nn.Module):
     mlp_dim: int
         Dimension of hidden linear layer for the feedforward network
     p_dropout: float
-        probability for the dropout layer
+        Dropout Probability
     """
 
     def __init__(self, latent_dim, depth, heads, dim_head, mlp_dim, p_dropout=0.0):

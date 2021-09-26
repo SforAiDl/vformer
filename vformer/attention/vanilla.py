@@ -5,7 +5,7 @@ from einops import rearrange
 
 class VanillaSelfAttention(nn.Module):
     """
-    Vanilla Self attention
+    Vanilla O(n^2) Self attention
     Parameters:
     -----------
     dim: int
@@ -15,7 +15,7 @@ class VanillaSelfAttention(nn.Module):
     dim_head: int
         Dimension of the head
     p_dropout: float
-        Probability for dropout layer
+        Dropout Probability/rate
     """
 
     def __init__(self, dim, heads=8, dim_head=64, p_dropout=0.0):
@@ -36,9 +36,7 @@ class VanillaSelfAttention(nn.Module):
             else nn.Identity()
         )
 
-    def forward(self, x: torch.tensor):
-        # x.shape= B,N,C
-
+    def forward(self, x):
         qkv = self.to_qkv(x).chunk(3, dim=-1)
         q, k, v = map(lambda t: rearrange(t, "b n (h d) -> b h n d", h=self.heads), qkv)
 
@@ -48,6 +46,5 @@ class VanillaSelfAttention(nn.Module):
 
         out = torch.matmul(attn, v)
         out = rearrange(out, "b h n d -> b n (h d)")
-        # out.shape=B,N,C
 
         return self.to_out(out)

@@ -8,11 +8,11 @@ class FeedForward(nn.Module):
     dim: int
         Number of dimentions in input tensor
 
-    hidden_dim:int
+    hidden_dim: int
         Dimention of hidden linear layer in feedforward class
 
-    p_dropout:float
-        Probability for dropout layer
+    p_dropout: float
+        Dropout Probability
     """
 
     def __init__(self, dim, hidden_dim, p_dropout=0.0):

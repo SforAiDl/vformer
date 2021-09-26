@@ -35,9 +35,9 @@ class VanillaViT(BaseClassificationModel):
     pool: str
         A string value which can take values only between {'cls', 'mean'}
     p_dropout_encoder: float
-        Probability for dropout layer of encoder
+        Dropout Probability
     p_dropout_embedding: float
-        Probability for dropout layer of patch embedding
+        Dropout probability/rate
     """
 
     def __init__(
@@ -74,10 +74,13 @@ class VanillaViT(BaseClassificationModel):
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
         if decoder_config is not None:
+            print(decoder_config)
+            if not isinstance(decoder_config, list):
+                decoder_config = list(decoder_config)
             assert (
-                decoder_config[0] != latent_dim
+                decoder_config[0] == latent_dim
             ), "`latend_dim` should be equal to the first item of `decoder_config`"
-            self.decoder = (MLPDecoder(decoder_config, n_classes),)
+            self.decoder = MLPDecoder(decoder_config, n_classes)
 
         else:
             self.decoder = MLPDecoder(latent_dim, n_classes)
