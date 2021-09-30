@@ -15,29 +15,31 @@ class VanillaViT(BaseClassificationModel):
     Parameters:
     -----------
     img_size: int
-        Size of the image
+        Size of an  image
     patch_size: int
-        size of patch
+        Size of a patch
     n_classes: int
-        Number of classes in the dataset/ dimension of final layer
-    latent_dim: int
+        Number of classes for classification
+    latent_dim: int or tuple or list
+        Dimension of hidden layer(s) in  `MLPDecoder`  class
     dim_head: int
-        Dimension of head
+        Dimension of the the head
     depth: int
-        Number of encoding  blocks
-    atten_heads:int
-        Number of attention heads in self attention block
+        Depth of the `VanillaEncoder` class
+    attn_heads:int
+        Number of the attention heads
     encoder_mlp_dim: int
-        Dimension of hidden layer in the feedforward network of encoder
+        Dimension of hidden layer in  `VanillaEncoder`  class
     in_channel: int
-        Number of input channels; for rgb images its value is 3; for grey scale its value is 1
-    decoder_config:
-    pool: str
-        A string value which can take values only between {'cls', 'mean'}
+        Number of input channels
+    decoder_config: int or tuple or list, optional
+        Dimension of hidden layer(s) in `MLPDecoder` class
+    pool: {"cls","mean"}
+        Feature pooling type
     p_dropout_encoder: float
         Dropout Probability
     p_dropout_embedding: float
-        Dropout probability/rate
+        Dropout probability
     """
 
     def __init__(

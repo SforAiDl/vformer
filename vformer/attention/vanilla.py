@@ -11,11 +11,11 @@ class VanillaSelfAttention(nn.Module):
     dim: int
         Dimension of the Embedding
     heads: int
-        Number of attention head
+        Number of the attention heads
     dim_head: int
         Dimension of the head
     p_dropout: float
-        Dropout Probability/rate
+        Dropout Probability
     """
 
     def __init__(self, dim, heads=8, dim_head=64, p_dropout=0.0):

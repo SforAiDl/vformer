@@ -12,13 +12,13 @@ class VanillaEncoder(nn.Module):
     latent_dim: int
         Dimension of the embedding
     depth: int
-        Number of feedforward and attention blocks in the encoding
+        Depth in the `VanillaEncoder` class
     heads: int
-        Number of attention heads
+        Number of the attention heads
     dim_head: int
         Dimension of the head
     mlp_dim: int
-        Dimension of hidden linear layer for the feedforward network
+        Dimension of the hidden layer in `FeedForward` class
     p_dropout: float
         Dropout Probability
     """

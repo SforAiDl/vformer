@@ -6,11 +6,9 @@ class FeedForward(nn.Module):
     Parameters:
     -----------
     dim: int
-        Number of dimentions in input tensor
-
+        Dimension of the input tensor
     hidden_dim: int
-        Dimention of hidden linear layer in feedforward class
-
+        Dimension of hidden layer
     p_dropout: float
         Dropout Probability
     """

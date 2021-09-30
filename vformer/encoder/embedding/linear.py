@@ -7,13 +7,14 @@ class LinearEmbedding(nn.Module):
     """
     Parameters:
     -----------
-    embeding_dim: int
+    embedding_dim: int
         Dimension of the embedding
     patch_height: int
         Height of the Patch
     patch_width: int
-        width of the patch
+        Width of the patch
     patch_dim: int
+        Dimension of the patch
     """
 
     def __init__(

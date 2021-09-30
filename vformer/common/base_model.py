@@ -4,6 +4,17 @@ from ..utils import pair
 
 
 class BaseClassificationModel(nn.Module):
+    """
+    img_size: int
+        Size of an image
+    patch_size: int
+        Size of a Patch
+    in_channels: int
+        Number of channels in input image
+    pool: {"mean","cls"}
+        Feature pooling type
+    """
+
     def __init__(self, img_size, patch_size, in_channels=3, pool="cls"):
         super(BaseClassificationModel, self).__init__()
 
