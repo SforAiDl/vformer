@@ -20,8 +20,8 @@ class VanillaViT(BaseClassificationModel):
         Size of a patch
     n_classes: int
         Number of classes for classification
-    latent_dim: int or tuple or list
-        Dimension of hidden layer(s) in  `MLPDecoder`  class
+    latent_dim: int
+        Dimension of hidden layer
     dim_head: int
         Dimension of the the head
     depth: int
