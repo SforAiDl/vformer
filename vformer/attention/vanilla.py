@@ -9,11 +9,11 @@ class VanillaSelfAttention(nn.Module):
     Parameters:
     -----------
     dim: int
-        Dimension of the Embedding
+        Dimension of the embedding
     heads: int
         Number of the attention heads
     dim_head: int
-        Dimension of the head
+        Dimension of each head
     p_dropout: float
         Dropout Probability
     """

@@ -15,7 +15,7 @@ class VanillaViT(BaseClassificationModel):
     Parameters:
     -----------
     img_size: int
-        Size of an  image
+        Size of the image
     patch_size: int
         Size of a patch
     n_classes: int
@@ -23,23 +23,23 @@ class VanillaViT(BaseClassificationModel):
     latent_dim: int
         Dimension of hidden layer
     dim_head: int
-        Dimension of the the head
+        Dimension of the attention head
     depth: int
-        Depth of the `VanillaEncoder` class
+        Number of attention layers in the encoder
     attn_heads:int
         Number of the attention heads
     encoder_mlp_dim: int
-        Dimension of hidden layer in  `VanillaEncoder`  class
+        Dimension of hidden layer in the encoder
     in_channel: int
         Number of input channels
     decoder_config: int or tuple or list, optional
-        Dimension of hidden layer(s) in `MLPDecoder` class
+        Configuration of the decoder. If None, the default configuration is used.
     pool: {"cls","mean"}
         Feature pooling type
     p_dropout_encoder: float
-        Dropout Probability
+        Dropout probability in the encoder
     p_dropout_embedding: float
-        Dropout probability
+        Dropout probability in the embedding layer
     """
 
     def __init__(
@@ -81,7 +81,7 @@ class VanillaViT(BaseClassificationModel):
                 decoder_config = list(decoder_config)
             assert (
                 decoder_config[0] == latent_dim
-            ), "`latend_dim` should be equal to the first item of `decoder_config`"
+            ), "`latent_dim` should be equal to the first item of `decoder_config`"
             self.decoder = MLPDecoder(decoder_config, n_classes)
 
         else:

@@ -10,7 +10,7 @@ class FeedForward(nn.Module):
     hidden_dim: int
         Dimension of hidden layer
     p_dropout: float
-        Dropout Probability
+        Dropout probability
     """
 
     def __init__(self, dim, hidden_dim, p_dropout=0.0):

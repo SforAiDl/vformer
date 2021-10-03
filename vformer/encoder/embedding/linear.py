@@ -8,9 +8,9 @@ class LinearEmbedding(nn.Module):
     Parameters:
     -----------
     embedding_dim: int
-        Dimension of the embedding
+        Dimension of the resultant embedding
     patch_height: int
-        Height of the Patch
+        Height of the patch
     patch_width: int
         Width of the patch
     patch_dim: int

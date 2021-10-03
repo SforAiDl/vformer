@@ -6,7 +6,7 @@ class MLPDecoder(nn.Module):
     Parameters
     -----------
     config : int or tuple or list
-        Dimension of Hidden layer(s)
+        Configuration of the hidden layer(s)
     n_classes : int
         Number of classes for classification
     """

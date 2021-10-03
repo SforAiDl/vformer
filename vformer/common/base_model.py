@@ -6,9 +6,9 @@ from ..utils import pair
 class BaseClassificationModel(nn.Module):
     """
     img_size: int
-        Size of an image
+        Size of the image
     patch_size: int
-        Size of a Patch
+        Size of the patch
     in_channels: int
         Number of channels in input image
     pool: {"mean","cls"}
