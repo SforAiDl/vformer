@@ -2,6 +2,17 @@ import torch.nn as nn
 
 
 class FeedForward(nn.Module):
+    """
+    Parameters:
+    -----------
+    dim: int
+        Dimension of the input tensor
+    hidden_dim: int
+        Dimension of hidden layer
+    p_dropout: float
+        Dropout probability
+    """
+
     def __init__(self, dim, hidden_dim, p_dropout=0.0):
         super().__init__()
 
@@ -14,5 +25,4 @@ class FeedForward(nn.Module):
         )
 
     def forward(self, x):
-
         return self.net(x)

@@ -4,6 +4,20 @@ from einops import rearrange
 
 
 class VanillaSelfAttention(nn.Module):
+    """
+    Vanilla O(n^2) Self attention
+    Parameters:
+    -----------
+    dim: int
+        Dimension of the embedding
+    heads: int
+        Number of the attention heads
+    dim_head: int
+        Dimension of each head
+    p_dropout: float
+        Dropout Probability
+    """
+
     def __init__(self, dim, heads=8, dim_head=64, p_dropout=0.0):
         super().__init__()
 
@@ -23,7 +37,6 @@ class VanillaSelfAttention(nn.Module):
         )
 
     def forward(self, x):
-
         qkv = self.to_qkv(x).chunk(3, dim=-1)
         q, k, v = map(lambda t: rearrange(t, "b n (h d) -> b h n d", h=self.heads), qkv)
 

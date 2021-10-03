@@ -2,6 +2,15 @@ import torch.nn as nn
 
 
 class PreNorm(nn.Module):
+    """
+    Parameters:
+    -----------
+    dim: int
+        Dimension of the embedding
+    fn:
+        Attention class
+    """
+
     def __init__(self, dim, fn):
         super().__init__()
 

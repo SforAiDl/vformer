@@ -6,11 +6,26 @@ from .nn import FeedForward
 
 
 class VanillaEncoder(nn.Module):
+    """
+    Parameters:
+    -----------
+    latent_dim: int
+        Dimension of the embedding
+    depth: int
+        Number of self-attention layers
+    heads: int
+        Number of the attention heads
+    dim_head: int
+        Dimension of each head
+    mlp_dim: int
+        Dimension of the hidden layer in the feed-forward layer
+    p_dropout: float
+        Dropout Probability
+    """
+
     def __init__(self, latent_dim, depth, heads, dim_head, mlp_dim, p_dropout=0.0):
         super().__init__()
-
         self.encoder = nn.ModuleList([])
-
         for _ in range(depth):
             self.encoder.append(
                 nn.ModuleList(
