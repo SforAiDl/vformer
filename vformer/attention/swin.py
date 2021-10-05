@@ -4,7 +4,6 @@ import torch.nn as nn
 from ..utils import get_relative_position_bias_index, trunc_normal_
 
 
-
 class WindowAttention(nn.Module):
     """"""
 
