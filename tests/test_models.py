@@ -1,6 +1,6 @@
 import torch
 
-from vformer.models import VanillaViT
+from vformer.models import SwinTransformer, VanillaViT
 
 img = torch.randn(2, 3, 256, 256)
 
@@ -16,5 +16,15 @@ def test_VanillaViT():
         n_classes=10,
         latent_dim=1024,
         decoder_config=(1024, 512),
+    )
+    _ = model(img)
+
+
+img = torch.randn(2, 3, 224, 224)
+
+
+def test_SwinTransformer():
+    model = SwinTransformer(
+        img_size=224, patch_size=4, n_classes=10, in_channels=3, embed_dim=96
     )
     _ = model(img)

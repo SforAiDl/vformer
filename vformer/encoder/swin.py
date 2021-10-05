@@ -1,5 +1,4 @@
 import torch.nn as nn
-from torch.utils.checkpoint import checkpoint as checkpoint
 
 from ..attention.swin import WindowAttention
 from ..utils.utils import (
@@ -28,7 +27,6 @@ class SwinEncoderBlock(nn.Module):
         drop=0.0,
         attn_drop=0.0,
         drop_path=0.0,
-        act_layer=nn.GELU,
         norm_layer=nn.LayerNorm,
     ):
         super(SwinEncoderBlock, self).__init__()
@@ -58,9 +56,7 @@ class SwinEncoderBlock(nn.Module):
         self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
         hidden_dim = int(dim * mlp_ratio)
-        self.mlp = FeedForward(
-            dim=dim, hidden_dim=hidden_dim, act_layer=act_layer, p_dropout=drop
-        )
+        self.mlp = FeedForward(dim=dim, hidden_dim=hidden_dim, p_dropout=drop)
 
         if self.shift_size > 0:
             attn_mask = create_mask(
