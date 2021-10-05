@@ -5,7 +5,25 @@ from ..utils import get_relative_position_bias_index, trunc_normal_
 
 
 class WindowAttention(nn.Module):
-    """"""
+    """
+    Parameters:
+    -----------
+    dim: int
+        Number of input channels.
+    window_size : tuple[int]
+        The height and width of the window.
+    num_heads: int
+        Number of attention heads.
+    qkv_bias :bool, default = True
+        If True, add a learnable bias to query, key, value.
+    qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 if set
+    attn_drop: float, optional
+        Dropout ratio of attention weight.
+    proj_drop: float, optional
+        Dropout ratio of output
+
+    """
 
     def __init__(
         self,

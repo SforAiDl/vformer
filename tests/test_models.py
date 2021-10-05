@@ -25,6 +25,6 @@ img = torch.randn(2, 3, 224, 224)
 
 def test_SwinTransformer():
     model = SwinTransformer(
-        img_size=224, patch_size=4, n_classes=10, in_channels=3, embed_dim=96
+        img_size=224, patch_size=28, n_classes=10, in_channels=3, embed_dim=96
     )
     _ = model(img)

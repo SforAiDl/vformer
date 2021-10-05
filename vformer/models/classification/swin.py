@@ -8,6 +8,44 @@ from ...utils import PatchMerging, trunc_normal_
 
 
 class SwinTransformer(BaseClassificationModel):
+    """
+    Parameters:
+    -----------
+    img_size: int
+        Size of an Image
+    patch_size: int
+        Patch Size
+    in_channels:int
+        Input channels in image, default=3
+    n_classes: int
+        Number of classes for classification
+    embed_dim: int
+        Patch Embedding dimension
+    depths: tuple[int]
+        Depth in each Transformer layer
+    num_heads: tuple[int]
+        Number of heads in each transformer layer
+    window_size: int
+        Window Size
+    mlp_ratio : float
+        Ratio of mlp heads to embedding dimension
+    qkv_bias: bool, default= True
+        Adds biasto the qkv if true
+    qk_scale:  float, optional
+    drop_rate: float
+        Dropout rate
+    attn_drop_rate: float
+        Attension dropout rate
+    drop_path_rate: float
+        Stochastic depth rate
+    norm_layer: nn.Module
+    ape: bool
+        Adds relative/absolute position embedding if true
+    decoder_config: int or tuple[int], optional
+    patch_norm: bool, optional
+        Adds normalisation layer to PatchEmbedding if true
+    """
+
     def __init__(
         self,
         img_size,
@@ -26,7 +64,7 @@ class SwinTransformer(BaseClassificationModel):
         drop_path_rate=0.1,
         norm_layer=nn.LayerNorm,
         ape=True,
-        decoder_config=(1024,),
+        decoder_config=None,
         patch_norm=True,
     ):
         super(SwinTransformer, self).__init__(
@@ -38,7 +76,7 @@ class SwinTransformer(BaseClassificationModel):
             patch_size=patch_size,
             in_channels=in_channels,
             embed_dim=embed_dim,
-            norm_layer=norm_layer,
+            norm_layer=norm_layer if patch_norm else nn.Identity,
         )
         self.patch_resolution = self.patch_embed.patch_resolution
         num_patches = self.patch_resolution[0] * self.patch_resolution[1]
@@ -64,6 +102,7 @@ class SwinTransformer(BaseClassificationModel):
                 window_size=window_size,
                 mlp_ratio=mlp_ratio,
                 qkv_bias=qkv_bias,
+                qkv_scale=qk_scale,
                 drop=drop_rate,
                 attn_drop=attn_drop_rate,
                 drop_path=dpr[sum(depths[:i_layer]) : sum(depths[: i_layer + 1])],

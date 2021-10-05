@@ -12,7 +12,33 @@ from .nn import FeedForward
 
 
 class SwinEncoderBlock(nn.Module):
-    """"""
+    """
+    Parameters:
+    -----------
+    dim: int
+        Number of input channels
+    input_resolution: int
+        Input resolution
+    num_heads: int
+        Number of Attention heads
+    window_size: int
+        Window_size
+    shift_size: int
+        Shift size for Shifted Window Masked Self Attention (SW_MSA)
+    mlp_ratio: float
+        Ratio of Mlp hidden dimension to embeddig dim
+    qkv_bias: bool, default= True
+        Adds bias to the qkv
+    qk_scale: flaot, Optional
+    drop: float
+        Dropout rate
+    attn_drop: float
+        Attention dropout rate
+    drop_path: float
+        stochastic depth rate
+    norm_layer:nn.Module
+
+    """
 
     def __init__(
         self,
@@ -106,7 +132,32 @@ class SwinEncoderBlock(nn.Module):
 
 
 class SwinEncoder(nn.Module):
-    """"""
+    """
+    dim: int
+        Number of input channels.
+    input_resolution: tuple[int]
+        Input resolution.
+    depth: int
+        Number of blocks.
+    num_heads: int
+        Number of attention heads.
+    window_size: int
+        Local window size.
+    mlp_ratio: float
+        Ratio of mlp hidden dim to embedding dim.
+    qkv_bias: bool, default= True
+       Adds bias to the qkv
+    qk_scale: float, optional
+    drop: float,
+        Dropout rate.
+    attn_drop: float, optional
+        Attention dropout rate
+    drop_path: float,tuple[float]
+        Stochastic depth rate.
+    norm_layer (nn.Module, optional):
+        Normalization layer. Default: nn.LayerNorm
+    downsample (nn.Module | None, optional): Downsample layer at the end of the layer. Default: None
+    """
 
     def __init__(
         self,

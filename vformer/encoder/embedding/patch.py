@@ -4,6 +4,21 @@ from ...utils import pair
 
 
 class PatchEmbedding(nn.Module):
+    """
+    Parameters:
+    -----------
+    img_size: int
+        Image Size
+    patch_size: int
+        Patch Size
+    in_channels: int
+        Number of input channels in Image, default =3
+    embed_dim: int
+        Number of linear projection output channels
+    norm_layer: nn.Module, optional
+        Normalization layer
+    """
+
     def __init__(self, img_size, patch_size, in_channels, embed_dim, norm_layer=None):
         self.img_size = pair(img_size)
         self.patch_size = pair(patch_size)
