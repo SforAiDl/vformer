@@ -7,6 +7,7 @@ from ...encoder import PatchEmbedding, SwinEncoder
 from ...utils import PatchMerging, trunc_normal_
 
 
+
 class SwinTransformer(BaseClassificationModel):
     """
     Parameters:
