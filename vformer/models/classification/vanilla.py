@@ -76,7 +76,6 @@ class VanillaViT(BaseClassificationModel):
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
         if decoder_config is not None:
-            print(decoder_config)
             if not isinstance(decoder_config, list):
                 decoder_config = list(decoder_config)
             assert (
