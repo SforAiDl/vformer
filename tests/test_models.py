@@ -12,8 +12,8 @@ def test_VanillaViT():
     _ = model(img)
 
     model = VanillaViT(
-        img_size=224,
-        patch_size=4,
+        img_size=256,
+        patch_size=32,
         n_classes=10,
         latent_dim=1024,
         decoder_config=(1024, 512),
