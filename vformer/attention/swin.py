@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from ..utils import get_relative_position_bias_index, trunc_normal_,pair
+from ..utils import get_relative_position_bias_index, pair, trunc_normal_
 
 
 class WindowAttention(nn.Module):
@@ -36,16 +36,18 @@ class WindowAttention(nn.Module):
         proj_drop=0.0,
     ):
         super(WindowAttention, self).__init__()
-        self.dim=dim
+        self.dim = dim
         self.window_size = pair(window_size)
         self.num_heads = num_heads
         self.head_dim = dim // num_heads
         self.scale = qk_scale or self.head_dim ** -0.5
         self.qkv_bias = True
         self.relative_position_bias_table = nn.Parameter(
-            torch.zeros((2 * self.window_size[0] - 1) * (2 * self.window_size[1] - 1), num_heads)
+            torch.zeros(
+                (2 * self.window_size[0] - 1) * (2 * self.window_size[1] - 1), num_heads
+            )
         )
-        relative_position_index= get_relative_position_bias_index(self.window_size)
+        relative_position_index = get_relative_position_bias_index(self.window_size)
         self.register_buffer("relative_position_index", relative_position_index)
 
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
@@ -68,7 +70,7 @@ class WindowAttention(nn.Module):
         )
         q, k, v = qkv[0], qkv[1], qkv[2]
         q = q * self.scale
-        attn = (q @ k.transpose(-2, -1))
+        attn = q @ k.transpose(-2, -1)
 
         relative_position_bias = self.relative_position_bias_table[
             self.relative_position_index.view(-1)
@@ -86,7 +88,6 @@ class WindowAttention(nn.Module):
                 1
             ).unsqueeze(0)
             attn = attn.view(-1, self.num_heads, N, N)
-
 
         attn = self.to_out_1(attn)
         x = (attn @ v).transpose(1, 2).reshape(B_, N, C)

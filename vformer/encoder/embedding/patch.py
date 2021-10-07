@@ -38,8 +38,6 @@ class PatchEmbedding(nn.Module):
             self.norm = norm_layer(embed_dim)
 
     def forward(self, x):
-        #print("patch_embed_starts")
-        #print(x.shape)
         B, C, H, W = x.shape
 
         assert (

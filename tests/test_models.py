@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+
 from vformer.models import SwinTransformer, VanillaViT
 
 img = torch.randn(2, 3, 256, 256)
@@ -20,15 +21,38 @@ def test_VanillaViT():
     _ = model(img)
 
 
-img = torch.randn(2, 3, 224, 224)
-
-
 def test_SwinTransformer():
+    img = torch.randn(2, 3, 224, 224)
     model = SwinTransformer(
-        img_size=224, patch_size=4, in_channels=3, n_classes=1000,
-        embed_dim=96, depths=[2, 2, 6, 2], num_heads=[3, 6, 12, 24],
-        window_size=7, mlp_ratio=4., qkv_bias=True, qk_scale=None,
-        drop_rate=0., attn_drop_rate=0., drop_path_rate=0.1,
-        norm_layer=nn.LayerNorm, ape=False, patch_norm=True,
+        img_size=224,
+        patch_size=4,
+        in_channels=3,
+        n_classes=1000,
+        embed_dim=96,
+        depths=[2, 2, 6, 2],
+        num_heads=[3, 6, 12, 24],
+        window_size=7,
+        mlp_ratio=4.0,
+        qkv_bias=True,
+        qk_scale=None,
+        drop_rate=0.0,
+        attn_drop_rate=0.0,
+        drop_path_rate=0.1,
+        norm_layer=nn.LayerNorm,
+        ape=False,
+        patch_norm=True,
     )
     _ = model(img)
+    # swin_base_patch4_window12_384
+    img = torch.randn(10, 3, 384, 384)
+    model = SwinTransformer(
+        img_size=384,
+        patch_size=4,
+        in_channels=3,
+        n_classes=1000,
+        embed_dim=128,
+        depths=(2, 2, 18, 2),
+        num_heads=(4, 8, 16, 32),
+        window_size=12,
+    )
+    model(img)

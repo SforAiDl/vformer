@@ -1,5 +1,6 @@
 import math
 import warnings
+
 import torch
 import torch.nn as nn
 
@@ -13,7 +14,7 @@ def pair(t):
     return t if isinstance(t, tuple) else (t, t)
 
 
-def cyclicshift(input, shift_size,dims=None):
+def cyclicshift(input, shift_size, dims=None):
     """
     Parameters:
     ----------
@@ -25,7 +26,9 @@ def cyclicshift(input, shift_size,dims=None):
         Axis along which to roll
     """
 
-    return torch.roll(input, shifts=pair(shift_size), dims=(1,2) if dims==None else dims)
+    return torch.roll(
+        input, shifts=pair(shift_size), dims=(1, 2) if dims == None else dims
+    )
 
 
 class PatchMerging(nn.Module):
@@ -36,6 +39,7 @@ class PatchMerging(nn.Module):
         Resolution of input features
     dim : int
     """
+
     def __init__(self, input_resolution, dim, norm_layer=nn.LayerNorm):
         super(PatchMerging, self).__init__()
         self.input_resolution = pair(input_resolution)
@@ -75,7 +79,9 @@ def window_partition(x, window_size):
     """
     B, H, W, C = x.shape
     x = x.view(B, H // window_size, window_size, W // window_size, window_size, C)
-    windows = x.permute(0, 1, 3, 2, 4, 5).contiguous().view(-1, window_size, window_size, C)
+    windows = (
+        x.permute(0, 1, 3, 2, 4, 5).contiguous().view(-1, window_size, window_size, C)
+    )
 
     return windows
 
@@ -96,12 +102,14 @@ def window_reverse(windows, window_size, H, W):
 
 
 def get_relative_position_bias_index(window_size):
-    window_size=pair(window_size)
+    window_size = pair(window_size)
     coords_h = torch.arange(window_size[0])
     coords_w = torch.arange(window_size[1])
     coords = torch.stack(torch.meshgrid([coords_h, coords_w]))  # 2, Wh, Ww
     coords_flatten = torch.flatten(coords, 1)  # 2, Wh*Ww
-    relative_coords = coords_flatten[:, :, None] - coords_flatten[:, None, :]  # 2, Wh*Ww, Wh*Ww
+    relative_coords = (
+        coords_flatten[:, :, None] - coords_flatten[:, None, :]
+    )  # 2, Wh*Ww, Wh*Ww
     relative_coords = relative_coords.permute(1, 2, 0).contiguous()  # Wh*Ww, Wh*Ww, 2
     relative_coords[:, :, 0] += window_size[0] - 1  # shift to start from 0
     relative_coords[:, :, 1] += window_size[1] - 1

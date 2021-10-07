@@ -48,10 +48,10 @@ class SwinTransformer(BaseClassificationModel):
 
     def __init__(
         self,
-        img_size=224,
-        patch_size=4,
-        in_channels=3,
-        n_classes=1000,
+        img_size,
+        patch_size,
+        in_channels,
+        n_classes,
         embed_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
@@ -81,6 +81,7 @@ class SwinTransformer(BaseClassificationModel):
         self.patch_resolution = self.patch_embed.patch_resolution
         num_patches = self.patch_resolution[0] * self.patch_resolution[1]
         self.ape = ape
+        num_features = int(embed_dim * 2 ** (len(depths) - 1))
 
         if self.ape:
             self.absolute_pos_embed = nn.Parameter(
@@ -90,14 +91,13 @@ class SwinTransformer(BaseClassificationModel):
 
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
         self.encoder = nn.ModuleList()
-        for i_layer in range(0,len(depths)):
-            print(i_layer)
+        for i_layer in range(len(depths)):
             layer = SwinEncoder(
                 dim=int(embed_dim * (2 ** i_layer)),
-                input_resolution=((
-                    self.patch_resolution[0] // (2 ** i_layer)),
-                    self.patch_resolution[1] // (2 ** i_layer)),
-
+                input_resolution=(
+                    (self.patch_resolution[0] // (2 ** i_layer)),
+                    self.patch_resolution[1] // (2 ** i_layer),
+                ),
                 depth=depths[i_layer],
                 num_heads=num_heads[i_layer],
                 window_size=window_size,
@@ -116,22 +116,20 @@ class SwinTransformer(BaseClassificationModel):
             if not isinstance(decoder_config, list):
                 decoder_config = list(decoder_config)
             assert (
-                decoder_config[0] == embed_dim
-            ), "`embed_dim` should be equal to first item of `decoder_config`"
+                decoder_config[0] == num_features
+            ), f"first item of `decoder_config` should be equal to the `num_features`; num_features=embed_dim * 2** (len(depths)-1) which is = {num_features} "
             self.decoder = MLPDecoder(decoder_config, n_classes)
         else:
-            self.decoder = MLPDecoder(embed_dim, n_classes)
+            self.decoder = MLPDecoder(num_features, n_classes)
         self.pool = nn.AdaptiveAvgPool1d(1)
-        self.norm = norm_layer if norm_layer is not None else nn.Identity
-        self.pos_drop=nn.Dropout(p=drop_rate)
+        self.norm = norm_layer(num_features) if norm_layer is not None else nn.Identity
+        self.pos_drop = nn.Dropout(p=drop_rate)
 
     def forward(self, x):
         x = self.patch_embed(x)
-        #print(x.shape)
         if self.ape:
             x += self.absolute_pos_embed
-        x=self.pos_drop(x)
-        #print(x.shape)
+        x = self.pos_drop(x)
 
         for layer in self.encoder:
             x = layer(x)
@@ -139,6 +137,5 @@ class SwinTransformer(BaseClassificationModel):
         x = self.norm(x)
 
         x = self.pool(x.transpose(1, 2)).flatten(1)
-
         x = self.decoder(x)
         return x
