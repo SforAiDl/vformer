@@ -48,14 +48,14 @@ class SwinTransformer(BaseClassificationModel):
 
     def __init__(
         self,
-        img_size,
-        patch_size,
-        in_channels,
-        n_classes,
-        embed_dim,
+        img_size=224,
+        patch_size=4,
+        in_channels=3,
+        n_classes=1000,
+        embed_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
-        window_size=7,
+        window_size=8,
         mlp_ratio=4.0,
         qkv_bias=True,
         qk_scale=None,
@@ -90,13 +90,14 @@ class SwinTransformer(BaseClassificationModel):
 
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
         self.encoder = nn.ModuleList()
-        for i_layer in range(len(depths)):
+        for i_layer in range(0,len(depths)):
+            print(i_layer)
             layer = SwinEncoder(
-                dim=embed_dim * 2 ** i_layer,
-                input_resolution=(
-                    self.patch_resolution[0] // (2 ** i_layer),
-                    self.patch_resolution[1] // (2 ** i_layer),
-                ),
+                dim=int(embed_dim * (2 ** i_layer)),
+                input_resolution=((
+                    self.patch_resolution[0] // (2 ** i_layer)),
+                    self.patch_resolution[1] // (2 ** i_layer)),
+
                 depth=depths[i_layer],
                 num_heads=num_heads[i_layer],
                 window_size=window_size,
@@ -122,12 +123,15 @@ class SwinTransformer(BaseClassificationModel):
             self.decoder = MLPDecoder(embed_dim, n_classes)
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.norm = norm_layer if norm_layer is not None else nn.Identity
+        self.pos_drop=nn.Dropout(p=drop_rate)
 
     def forward(self, x):
         x = self.patch_embed(x)
-
+        #print(x.shape)
         if self.ape:
-            x += self.absolute_pos_embed(x)
+            x += self.absolute_pos_embed
+        x=self.pos_drop(x)
+        #print(x.shape)
 
         for layer in self.encoder:
             x = layer(x)

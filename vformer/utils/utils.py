@@ -1,29 +1,49 @@
 import math
 import warnings
-
-import numpy as np
 import torch
 import torch.nn as nn
 
 
 def pair(t):
+    """
+    Parameters:
+    -----------
+    t: tuple[int] or int
+    """
     return t if isinstance(t, tuple) else (t, t)
 
 
-def cyclicshift(input, shift_size):
-    return torch.roll(input, shifts=(shift_size, shift_size), dims=(1, 2))
+def cyclicshift(input, shift_size,dims=None):
+    """
+    Parameters:
+    ----------
+    input: torch.Tensor
+        input tensor
+    shift_size: int or tuple[int]
+        Number of places by which input tensor is shifted
+    dims: int or tuple[int],optional
+        Axis along which to roll
+    """
+
+    return torch.roll(input, shifts=pair(shift_size), dims=(1,2) if dims==None else dims)
 
 
 class PatchMerging(nn.Module):
+    """
+    Parameters :
+    ------------
+    input_resolution: int or tuple[int]
+        Resolution of input features
+    dim : int
+    """
     def __init__(self, input_resolution, dim, norm_layer=nn.LayerNorm):
         super(PatchMerging, self).__init__()
-        self.input_resolution = input_resolution
+        self.input_resolution = pair(input_resolution)
         self.dim = dim
         self.reduction = nn.Linear(4 * self.dim, 2 * self.dim, bias=False)
         self.norm = norm_layer(4 * dim)
 
     def forward(self, x):
-        H, W = self.input_resolution
         H, W = self.input_resolution
         B, L, C = x.shape
         assert L == H * W, "input feature has wrong size"
@@ -45,17 +65,28 @@ class PatchMerging(nn.Module):
 
 
 def window_partition(x, window_size):
-    """"""
-    B, H, W, C = x.shape()
+    """
+    Parameters:
+    -----------
+    x: torch.Tensor
+        input tensor
+    window_size: int
+        window size
+    """
+    B, H, W, C = x.shape
     x = x.view(B, H // window_size, window_size, W // window_size, window_size, C)
-    windows = (
-        x.permute(0, 1, 3, 2, 4, 5).contiguos().view(-1, window_size, window_size, C)
-    )
+    windows = x.permute(0, 1, 3, 2, 4, 5).contiguous().view(-1, window_size, window_size, C)
+
     return windows
 
 
 def window_reverse(windows, window_size, H, W):
-    """"""
+    """
+    Parameters:
+    -----------
+    windows: torch.Tensor
+    window_size: int
+    """
     B = int(windows.shape[0] / (H * W / window_size / window_size))
     x = windows.view(
         B, H // window_size, W // window_size, window_size, window_size, -1
@@ -65,15 +96,18 @@ def window_reverse(windows, window_size, H, W):
 
 
 def get_relative_position_bias_index(window_size):
-    indices = torch.tensor(
-        np.array([[x, y] for x in range(window_size[0]) for y in range(window_size[1])])
-    )
-    distance = indices[None, :, :] - indices[:, None, :]
-    distance[:, :, 0] += (window_size[0]) - 1
-    distance[:, :, 1] += (window_size[1]) - 1
-    distance[:, :, 0] *= 2 * (window_size[1]) - 1
-    distance_sum = distance.sum(-1)
-    return distance_sum.T, distance
+    window_size=pair(window_size)
+    coords_h = torch.arange(window_size[0])
+    coords_w = torch.arange(window_size[1])
+    coords = torch.stack(torch.meshgrid([coords_h, coords_w]))  # 2, Wh, Ww
+    coords_flatten = torch.flatten(coords, 1)  # 2, Wh*Ww
+    relative_coords = coords_flatten[:, :, None] - coords_flatten[:, None, :]  # 2, Wh*Ww, Wh*Ww
+    relative_coords = relative_coords.permute(1, 2, 0).contiguous()  # Wh*Ww, Wh*Ww, 2
+    relative_coords[:, :, 0] += window_size[0] - 1  # shift to start from 0
+    relative_coords[:, :, 1] += window_size[1] - 1
+    relative_coords[:, :, 0] *= 2 * window_size[1] - 1
+    relative_position_index = relative_coords.sum(-1)
+    return relative_position_index
 
 
 def create_mask(window_size, shift_size, H, W):
@@ -111,7 +145,6 @@ https://github.com/rwightman/pytorch-image-models
 
 
 def _no_grad_trunc_normal_(tensor, mean, std, a, b):
-    # copied from timm; credits to the repsected authors
     # Cut & paste from PyTorch official master until it's in a few official releases - RW
     # Method based on https://people.sc.fsu.edu/~jburkardt/presentations/truncated_normal.pdf
     def norm_cdf(x):
@@ -150,7 +183,6 @@ def _no_grad_trunc_normal_(tensor, mean, std, a, b):
 
 
 def trunc_normal_(tensor, mean=0.0, std=1.0, a=-2.0, b=2.0):
-    # copied from timm; thanks to the author
     # type: #(Tensor, float, float, float, float)-> Tensor
     r"""Fills the input Tensor with values drawn from a truncated
     normal distribution. The values are effectively drawn from the

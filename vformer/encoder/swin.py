@@ -1,5 +1,5 @@
 import torch.nn as nn
-
+import torch.utils.checkpoint as checkpoint
 from ..attention.swin import WindowAttention
 from ..utils.utils import (
     DropPath,
@@ -7,6 +7,7 @@ from ..utils.utils import (
     cyclicshift,
     window_partition,
     window_reverse,
+    pair
 )
 from .nn import FeedForward
 
@@ -17,7 +18,7 @@ class SwinEncoderBlock(nn.Module):
     -----------
     dim: int
         Number of input channels
-    input_resolution: int
+    input_resolution: int or tuple[int]
         Input resolution
     num_heads: int
         Number of Attention heads
@@ -45,7 +46,7 @@ class SwinEncoderBlock(nn.Module):
         dim,
         input_resolution,
         num_heads,
-        window_size,
+        window_size=7,
         shift_size=0,
         mlp_ratio=4.0,
         qkv_bias=True,
@@ -57,21 +58,21 @@ class SwinEncoderBlock(nn.Module):
     ):
         super(SwinEncoderBlock, self).__init__()
         self.dim = dim
-        self.input_resolution = input_resolution
+        self.input_resolution = pair(input_resolution)
         self.num_heads = num_heads
         self.window_size = window_size
         self.mlp_ratio = mlp_ratio
         self.shift_size = shift_size
         if min(self.input_resolution) <= self.window_size:
             self.shift_size = 0
-            self.window_size = min(self.input_resolution)
+            self.window_size =min(self.input_resolution)
         assert (
-            0 <= self.shift_size < self.window_size
+            0 <= self.shift_size < window_size
         ), " `shift_size` must be in 0 to `window_size` "
         self.norm1 = norm_layer(dim)
         self.attn = WindowAttention(
             dim=dim,
-            window_size=(window_size, window_size),
+            window_size=pair(self.window_size),
             num_heads=num_heads,
             qkv_bias=qkv_bias,
             qk_scale=qk_scale,
@@ -97,8 +98,11 @@ class SwinEncoderBlock(nn.Module):
 
     def forward(self, x):
         H, W = self.input_resolution
+        print(H,W)
+
         B, L, C = x.shape
-        assert L == H * W, "input tensor shape is not correct; "
+        print(B,L,C,H,W)
+        assert L == H * W, f"input tensor shape is not correct; `L` {L} should be equal to `H`{H},`W`{W} x.shape={x.shape}"
 
         skip_connection = x
 
@@ -114,17 +118,18 @@ class SwinEncoderBlock(nn.Module):
             -1, self.window_size * self.window_size, C
         )
 
-        attn_windows = self.attn(x_windows, mask=self.attn_mask).view(
-            -1, self.shift_size, self.window_size, C
+        attn_windows = self.attn(x_windows, mask=self.attn_mask)
+        attn_windows=attn_windows.view(
+            -1, self.window_size,self.window_size, C
         )
 
         shifted_x = window_reverse(attn_windows, self.window_size, H, W)
 
         if self.shift_size > 0:
-            x = cyclicshift(shifted_x, shift_size=self.shift_size).view(B, H * W, C)
+            x = cyclicshift(shifted_x, shift_size=self.shift_size)
         else:
-            x = shifted_x.view(B, H * W, C)
-
+            x = shifted_x
+        x=x.view(B,H*W,C)
         x = skip_connection + self.drop_path(x)
         x = x + self.drop_path(self.mlp(self.norm2(x)))
 
@@ -177,6 +182,8 @@ class SwinEncoder(nn.Module):
         use_checkpoint=False,
     ):
         super(SwinEncoder, self).__init__()
+        self.dim=dim
+        self.input_resolution=input_resolution
         self.depth = depth
         self.use_checkpoint = use_checkpoint
 
@@ -210,6 +217,10 @@ class SwinEncoder(nn.Module):
 
     def forward(self, x):
         for blk in self.blocks:
-            x = blk(x)
+            if self.use_checkpoint:
+                x=checkpoint.checkpoint(blk,x)
+            else:
+                x = blk(x)
             if self.downsample is not None:
                 x = self.downsample(x)
+        return x
