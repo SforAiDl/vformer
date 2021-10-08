@@ -102,4 +102,4 @@ def test_SwinTransformer():
         decoder_config=(768, 256, 10, 2),
     )
     _ = model(img_3channels_224)
-    del  model
+    del model
