@@ -4,7 +4,7 @@ import torch.nn as nn
 from vformer.models import SwinTransformer, VanillaViT
 
 img_3channels_256 = torch.randn(2, 3, 256, 256)
-img_3channels_224 = torch.randn(2, 3, 224, 224)
+img_3channels_224 = torch.randn(4, 3, 224, 224)
 img_1channels_224 = torch.randn(2, 1, 224, 224)
 
 

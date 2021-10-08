@@ -64,12 +64,14 @@ class SwinEncoderBlock(nn.Module):
         self.window_size = window_size
         self.mlp_ratio = mlp_ratio
         self.shift_size = shift_size
+        hidden_dim = int(dim * mlp_ratio)
         if min(self.input_resolution) <= self.window_size:
             self.shift_size = 0
             self.window_size = min(self.input_resolution)
         assert (
             0 <= self.shift_size < window_size
         ), " `shift_size` must be in 0 to `window_size` "
+
         self.norm1 = norm_layer(dim)
         self.attn = WindowAttention(
             dim=dim,
@@ -83,7 +85,6 @@ class SwinEncoderBlock(nn.Module):
 
         self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
-        hidden_dim = int(dim * mlp_ratio)
         self.mlp = FeedForward(dim=dim, hidden_dim=hidden_dim, p_dropout=drop)
 
         if self.shift_size > 0:
@@ -103,7 +104,7 @@ class SwinEncoderBlock(nn.Module):
         B, L, C = x.shape
         assert (
             L == H * W
-        ), f"input tensor shape is not correct; `L` {L} should be equal to `H`{H},`W`{W} x.shape={x.shape}"
+        ), f"input tensor shape is not correct; `L` {L} should be equal to `H`{H},*`W`{W} x.shape={x.shape}"
 
         skip_connection = x
 
@@ -119,16 +120,17 @@ class SwinEncoderBlock(nn.Module):
             -1, self.window_size * self.window_size, C
         )
 
-        attn_windows = self.attn(x_windows, mask=self.attn_mask)
-        attn_windows = attn_windows.view(-1, self.window_size, self.window_size, C)
+        attn_windows = self.attn(x_windows, mask=self.attn_mask).view(
+            -1, self.window_size, self.window_size, C
+        )
 
         shifted_x = window_reverse(attn_windows, self.window_size, H, W)
 
         if self.shift_size > 0:
-            x = cyclicshift(shifted_x, shift_size=self.shift_size)
+            x = cyclicshift(shifted_x, shift_size=self.shift_size).view(B, H * W, C)
         else:
-            x = shifted_x
-        x = x.view(B, H * W, C)
+            x = shifted_x.view(B, H * W, C)
+
         x = skip_connection + self.drop_path(x)
         x = x + self.drop_path(self.mlp(self.norm2(x)))
         return x

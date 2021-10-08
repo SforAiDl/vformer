@@ -95,7 +95,6 @@ class VanillaViT(BaseClassificationModel):
         x = torch.cat((cls_tokens, x), dim=1)
         x += self.pos_embedding[:, : (n + 1)]
         x = self.embedding_dropout(x)
-
         x = self.encoder(x)
         x = self.pool(x)
         x = self.decoder(x)

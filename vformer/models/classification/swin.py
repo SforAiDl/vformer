@@ -131,7 +131,6 @@ class SwinTransformer(BaseClassificationModel):
         if self.ape:
             x += self.absolute_pos_embed
         x = self.pos_drop(x)
-
         for layer in self.encoder:
             x = layer(x)
 
