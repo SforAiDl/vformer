@@ -19,6 +19,7 @@ def test_VanillaViT():
         decoder_config=(1024, 512),
     )
     _ = model(img)
+    del model
 
 
 def test_SwinTransformer():
@@ -43,6 +44,7 @@ def test_SwinTransformer():
         patch_norm=True,
     )
     _ = model(img)
+    del model
     # swin_base_patch4_window12_384
     img = torch.randn(10, 3, 384, 384)
     model = SwinTransformer(
@@ -56,3 +58,4 @@ def test_SwinTransformer():
         window_size=12,
     )
     model(img)
+    del model
