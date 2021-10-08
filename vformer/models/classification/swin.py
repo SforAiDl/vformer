@@ -1,10 +1,11 @@
 import torch
 import torch.nn as nn
+from timm.models.layers import trunc_normal_
 
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import PatchEmbedding, SwinEncoder
-from ...utils import PatchMerging, trunc_normal_
+from ...utils import PatchMerging
 
 
 class SwinTransformer(BaseClassificationModel):

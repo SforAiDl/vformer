@@ -1,9 +1,9 @@
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
+from timm.models.layers import DropPath
 
-from ..attention.swin import WindowAttention
+from ..attention.window import WindowAttention
 from ..utils.utils import (
-    DropPath,
     create_mask,
     cyclicshift,
     pair,

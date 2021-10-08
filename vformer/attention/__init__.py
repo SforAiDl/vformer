@@ -1,2 +1,2 @@
-from .swin import WindowAttention
 from .vanilla import VanillaSelfAttention
+from .window import WindowAttention
