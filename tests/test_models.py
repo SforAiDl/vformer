@@ -46,16 +46,3 @@ def test_SwinTransformer():
     _ = model(img)
     del model
     # swin_base_patch4_window12_384
-    img = torch.randn(10, 3, 384, 384)
-    model = SwinTransformer(
-        img_size=384,
-        patch_size=4,
-        in_channels=3,
-        n_classes=1000,
-        embed_dim=128,
-        depths=(2, 2, 18, 2),
-        num_heads=(4, 8, 16, 32),
-        window_size=12,
-    )
-    model(img)
-    del model
