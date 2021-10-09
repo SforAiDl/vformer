@@ -103,3 +103,19 @@ def test_SwinTransformer():
     )
     _ = model(img_3channels_224)
     del model
+    # ape=false
+    model = SwinTransformer(
+        img_size=224,
+        patch_size=4,
+        in_channels=3,
+        n_classes=10,
+        embed_dim=96,
+        depths=[2, 2, 6, 2],
+        num_heads=[3, 6, 12, 24],
+        window_size=7,
+        drop_rate=0.2,
+        decoder_config=(768, 256, 10, 2),
+        ape=False,
+    )
+    _ = model(img_3channels_224)
+    del model

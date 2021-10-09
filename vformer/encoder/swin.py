@@ -161,7 +161,9 @@ class SwinEncoder(nn.Module):
         Stochastic depth rate.
     norm_layer (nn.Module, optional):
         Normalization layer. Default: nn.LayerNorm
-    downsample (nn.Module | None, optional): Downsample layer at the end of the layer. Default: None
+    downsample (nn.Module | None, optional):
+        Downsample layer(like PatchMerging) at the end of the layer. Default: Non
+
     """
 
     def __init__(

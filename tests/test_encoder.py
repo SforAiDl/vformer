@@ -37,6 +37,7 @@ def test_SwinEncoder():
         num_heads=3,
         window_size=7,
         downsample=None,
+        use_checkpoint=True,
     )
     _ = encoder(test_tensor2)
     assert _.shape == (3, 3136, 96)
