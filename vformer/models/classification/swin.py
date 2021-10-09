@@ -51,6 +51,7 @@ class SwinTransformer(BaseClassificationModel):
         Adds normalisation layer to PatchEmbedding if true
     """
 
+
     def __init__(
         self,
         img_size,
