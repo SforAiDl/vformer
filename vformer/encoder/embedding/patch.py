@@ -12,7 +12,7 @@ class PatchEmbedding(nn.Module):
     patch_size: int
         Patch Size
     in_channels: int
-        Number of input channels in Image, default =3
+        Number of input channels in the image, default is 3
     embed_dim: int
         Number of linear projection output channels
     norm_layer: nn.Module, optional

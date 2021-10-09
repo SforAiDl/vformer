@@ -11,8 +11,9 @@ img_1channels_224 = torch.randn(2, 1, 224, 224)
 def test_VanillaViT():
 
     model = VanillaViT(img_size=256, patch_size=32, n_classes=10, in_channels=3)
-    _ = model(img_3channels_256)
-
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
+    del model
     model = VanillaViT(
         img_size=256,
         patch_size=32,
@@ -20,7 +21,8 @@ def test_VanillaViT():
         latent_dim=1024,
         decoder_config=(1024, 512),
     )
-    _ = model(img_3channels_256)
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
     del model
 
 
@@ -44,7 +46,8 @@ def test_SwinTransformer():
         ape=False,
         patch_norm=True,
     )
-    _ = model(img_3channels_224)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
     del model
     # tiny_patch4_window7_224
     model = SwinTransformer(
@@ -58,7 +61,8 @@ def test_SwinTransformer():
         window_size=7,
         drop_rate=0.2,
     )
-    _ = model(img_3channels_224)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
     del model
     # tiny_c24_patch4_window8_256
     model = SwinTransformer(
@@ -72,7 +76,8 @@ def test_SwinTransformer():
         window_size=8,
         drop_rate=0.2,
     )
-    _ = model(img_3channels_256)
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
     del model
     # for greyscale image
     model = SwinTransformer(
@@ -86,7 +91,8 @@ def test_SwinTransformer():
         window_size=7,
         drop_rate=0.2,
     )
-    _ = model(img_1channels_224)
+    out = model(img_1channels_224)
+    assert out.shape == (2, 10)
     del model
     # testing for decoder_config parameter
     model = SwinTransformer(
@@ -101,8 +107,9 @@ def test_SwinTransformer():
         drop_rate=0.2,
         decoder_config=(768, 256, 10, 2),
     )
-    _ = model(img_3channels_224)
+    out = model(img_3channels_224)
     del model
+    assert out.shape == (4, 10)
     # ape=false
     model = SwinTransformer(
         img_size=224,
@@ -117,5 +124,6 @@ def test_SwinTransformer():
         decoder_config=(768, 256, 10, 2),
         ape=False,
     )
-    _ = model(img_3channels_224)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
     del model

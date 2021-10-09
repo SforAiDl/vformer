@@ -11,8 +11,8 @@ def test_VanillaEncoder():
     encoder = VanillaEncoder(
         latent_dim=1024, depth=6, heads=16, dim_head=64, mlp_dim=2048
     )
-    _ = encoder(test_tensor1)
-    assert _.shape == test_tensor1.shape  # shape remains same
+    out = encoder(test_tensor1)
+    assert out.shape == test_tensor1.shape  # shape remains same
     del encoder
 
 
@@ -26,8 +26,9 @@ def test_SwinEncoder():
         window_size=7,
         downsample=PatchMerging,
     )
-    _ = encoder(test_tensor2)
-    assert _.shape == (3, 784, 192)
+    out = encoder(test_tensor2)
+
+    assert out.shape == (3, 784, 192)
     del encoder
     # when not downsampled
     encoder = SwinEncoder(
@@ -39,8 +40,8 @@ def test_SwinEncoder():
         downsample=None,
         use_checkpoint=True,
     )
-    _ = encoder(test_tensor2)
-    assert _.shape == (3, 3136, 96)
+    out = encoder(test_tensor2)
+    assert out.shape == (3, 3136, 96)
     del encoder
 
 
@@ -48,5 +49,5 @@ def test_SwinEncoderBlock():
     encoder = SwinEncoderBlock(
         dim=96, input_resolution=(224 // 4, 224 // 4), num_heads=3, window_size=7
     )
-    _ = encoder(test_tensor2)
-    assert _.shape == test_tensor2.shape
+    out = encoder(test_tensor2)
+    assert out.shape == test_tensor2.shape

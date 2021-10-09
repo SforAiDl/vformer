@@ -18,20 +18,20 @@ class SwinEncoderBlock(nn.Module):
     Parameters:
     -----------
     dim: int
-        Number of input channels
+        Number of the input channels
     input_resolution: int or tuple[int]
         Input resolution
     num_heads: int
-        Number of Attention heads
+        Number of attention heads
     window_size: int
-        Window_size
+        Window size
     shift_size: int
         Shift size for Shifted Window Masked Self Attention (SW_MSA)
     mlp_ratio: float
-        Ratio of Mlp hidden dimension to embeddig dim
+        Ratio of MLP hidden dimension to embedding dim
     qkv_bias: bool, default= True
-        Adds bias to the qkv
-    qk_scale: flaot, Optional
+        Whether to add a bias vector to the q,k, and v matrices
+    qk_scale: float, Optional
     drop: float
         Dropout rate
     attn_drop: float
@@ -70,7 +70,7 @@ class SwinEncoderBlock(nn.Module):
             self.window_size = min(self.input_resolution)
         assert (
             0 <= self.shift_size < window_size
-        ), " `shift_size` must be in 0 to `window_size` "
+        ), "shift size must range from 0 to window size"
 
         self.norm1 = norm_layer(dim)
         self.attn = WindowAttention(
@@ -102,9 +102,7 @@ class SwinEncoderBlock(nn.Module):
         H, W = self.input_resolution
 
         B, L, C = x.shape
-        assert (
-            L == H * W
-        ), f"input tensor shape is not correct; `L` {L} should be equal to `H`{H},*`W`{W} x.shape={x.shape}"
+        assert L == H * W, "Input tensor shape not compatible"
 
         skip_connection = x
 
@@ -149,9 +147,9 @@ class SwinEncoder(nn.Module):
     window_size: int
         Local window size.
     mlp_ratio: float
-        Ratio of mlp hidden dim to embedding dim.
-    qkv_bias: bool, default= True
-       Adds bias to the qkv
+        Ratio of MLP hidden dim to embedding dim.
+    qkv_bias: bool, default is True
+       Whether to add a bias vector to the q,k, and v matrices
     qk_scale: float, optional
     drop: float,
         Dropout rate.
@@ -160,9 +158,9 @@ class SwinEncoder(nn.Module):
     drop_path: float,tuple[float]
         Stochastic depth rate.
     norm_layer (nn.Module, optional):
-        Normalization layer. Default: nn.LayerNorm
+        Normalization layer. default is nn.LayerNorm
     downsample (nn.Module | None, optional):
-        Downsample layer(like PatchMerging) at the end of the layer. Default: Non
+        Downsample layer(like PatchMerging) at the end of the layer, default is None
 
     """
 

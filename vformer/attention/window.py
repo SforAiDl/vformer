@@ -20,9 +20,9 @@ class WindowAttention(nn.Module):
     qk_scale: float, optional
         Override default qk scale of head_dim ** -0.5 if set
     attn_drop: float, optional
-        Dropout ratio of attention weight.
+        Dropout rate
     proj_drop: float, optional
-        Dropout ratio of output
+        Dropout rate
 
     """
 

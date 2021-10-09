@@ -13,7 +13,6 @@ class SwinTransformer(BaseClassificationModel):
     Implementation of `Swin Transformer: Hierarchical Vision Transformer using Shifted Windows`
     https://arxiv.org/abs/2103.14030v1
 
-
     Parameters:
     -----------
     img_size: int
@@ -44,13 +43,14 @@ class SwinTransformer(BaseClassificationModel):
     drop_path_rate: float
         Stochastic depth rate
     norm_layer: nn.Module
-    ape: bool
-        Adds relative/absolute position embedding if true
+        Normalization layer
+    ape: bool, optional
+        Whether to add relative/absolute position embedding to patch embedding, default is True
     decoder_config: int or tuple[int], optional
+        Configuration of the decoder. If None, the default configuration is used.
     patch_norm: bool, optional
-        Adds normalisation layer to PatchEmbedding if true
+        Whether to add Normalization layer in PatchEmbedding, default is True
     """
-
 
     def __init__(
         self,
