@@ -15,7 +15,7 @@ class WindowAttention(nn.Module):
         The height and width of the window.
     num_heads: int
         Number of attention heads.
-    qkv_bias :bool, default = True
+    qkv_bias :bool, default is True
         If True, add a learnable bias to query, key, value.
     qk_scale: float, optional
         Override default qk scale of head_dim ** -0.5 if set
