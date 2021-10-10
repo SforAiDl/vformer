@@ -14,3 +14,4 @@ Read the contributing guidelines in `CONTRIBUTING.rst` to learn how to start con
 ### References
 
 - [vit-pytorch](https://github.com/lucidrains/vit-pytorch)
+- [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
