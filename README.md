@@ -42,6 +42,7 @@ model = SwinTransformer(
     )
 logits = model(image)            
 ```
+<br>
 
 ### References
 

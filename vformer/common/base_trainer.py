@@ -1,2 +1,2 @@
-class BaseTrainer:              # pragma: no cover
+class BaseTrainer:  # pragma: no cover
     pass
