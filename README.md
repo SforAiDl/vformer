@@ -7,9 +7,9 @@
 
 </div>
 
-### Getting Started
 
-Read the contributing guidelines in `CONTRIBUTING.rst` to learn how to start contributing.
+
+
 
 ### References
 
