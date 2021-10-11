@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from ..utils.utils import pair
+from ..utils import pair
 
 
 class PatchMerging(nn.Module):
