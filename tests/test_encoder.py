@@ -1,7 +1,7 @@
 import torch
 
 from vformer.encoder import SwinEncoder, SwinEncoderBlock, VanillaEncoder
-from vformer.utils import PatchMerging
+from vformer.functional import PatchMerging
 
 test_tensor1 = torch.randn(2, 65, 1024)
 test_tensor2 = torch.randn(3, 3136, 96)
