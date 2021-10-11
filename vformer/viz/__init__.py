@@ -1,2 +1,2 @@
-from .vit_grad_rollout import VITAttentionGradRollout
-from .vit_rollout import VITAttentionRollout
+from .vit_grad_rollout import ViTAttentionGradRollout
+from .vit_rollout import ViTAttentionRollout

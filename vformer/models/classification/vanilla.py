@@ -8,6 +8,40 @@ from ...encoder import LinearEmbedding, VanillaEncoder
 
 
 class VanillaViT(BaseClassificationModel):
+    """
+    Implementation of 'An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'
+    https://arxiv.org/abs/2010.11929
+
+    Parameters:
+    -----------
+    img_size: int
+        Size of the image
+    patch_size: int
+        Size of a patch
+    n_classes: int
+        Number of classes for classification
+    latent_dim: int
+        Dimension of hidden layer
+    dim_head: int
+        Dimension of the attention head
+    depth: int
+        Number of attention layers in the encoder
+    attn_heads:int
+        Number of the attention heads
+    encoder_mlp_dim: int
+        Dimension of hidden layer in the encoder
+    in_channel: int
+        Number of input channels
+    decoder_config: int or tuple or list, optional
+        Configuration of the decoder. If None, the default configuration is used.
+    pool: {"cls","mean"}
+        Feature pooling type
+    p_dropout_encoder: float
+        Dropout probability in the encoder
+    p_dropout_embedding: float
+        Dropout probability in the embedding layer
+    """
+
     def __init__(
         self,
         img_size,
@@ -42,7 +76,13 @@ class VanillaViT(BaseClassificationModel):
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
         if decoder_config is not None:
+            if not isinstance(decoder_config, list):
+                decoder_config = list(decoder_config)
+            assert (
+                decoder_config[0] == latent_dim
+            ), "`latent_dim` should be equal to the first item of `decoder_config`"
             self.decoder = MLPDecoder(decoder_config, n_classes)
+
         else:
             self.decoder = MLPDecoder(latent_dim, n_classes)
 
@@ -55,7 +95,6 @@ class VanillaViT(BaseClassificationModel):
         x = torch.cat((cls_tokens, x), dim=1)
         x += self.pos_embedding[:, : (n + 1)]
         x = self.embedding_dropout(x)
-
         x = self.encoder(x)
         x = self.pool(x)
         x = self.decoder(x)
