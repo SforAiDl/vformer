@@ -49,7 +49,7 @@ def rollout(attentions, discard_ratio, head_fusion):
     return mask
 
 
-class VITAttentionRollout:
+class ViTAttentionRollout:
     def __init__(
         self,
         model,
