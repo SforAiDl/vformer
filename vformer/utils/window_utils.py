@@ -1,6 +1,6 @@
 import torch
 
-from . import pair
+from .utils import pair
 
 
 def cyclicshift(input, shift_size, dims=None):
