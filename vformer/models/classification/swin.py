@@ -5,7 +5,7 @@ from timm.models.layers import trunc_normal_
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import PatchEmbedding, SwinEncoder
-from ...utils import PatchMerging
+from ...functional import PatchMerging
 
 
 class SwinTransformer(BaseClassificationModel):

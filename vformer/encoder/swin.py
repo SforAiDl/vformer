@@ -3,13 +3,7 @@ import torch.utils.checkpoint as checkpoint
 from timm.models.layers import DropPath
 
 from ..attention.window import WindowAttention
-from ..utils.utils import (
-    create_mask,
-    cyclicshift,
-    pair,
-    window_partition,
-    window_reverse,
-)
+from ..utils import create_mask, cyclicshift, pair, window_partition, window_reverse
 from .nn import FeedForward
 
 
