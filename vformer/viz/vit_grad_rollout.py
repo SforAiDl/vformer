@@ -39,7 +39,7 @@ def grad_rollout(attentions, gradients, discard_ratio):
     return mask
 
 
-class VITAttentionGradRollout:
+class ViTAttentionGradRollout:
     def __init__(self, model, attention_layer_name="attn_drop", discard_ratio=0.9):
         self.model = model
         self.discard_ratio = discard_ratio
