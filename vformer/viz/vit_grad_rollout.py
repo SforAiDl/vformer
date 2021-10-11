@@ -1,12 +1,27 @@
-import sys
+"""MIT License
 
-import numpy
+Copyright (c) 2020 Jacob Gildenblat
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE."""
+
 import numpy as np
 import torch
-from PIL import Image
-from torchvision import transforms
-
-# import cv2
 
 
 def grad_rollout(attentions, gradients, discard_ratio):
@@ -16,23 +31,11 @@ def grad_rollout(attentions, gradients, discard_ratio):
             weights = grad
             attention_heads_fused = (attention * weights).mean(axis=1)
             attention_heads_fused[attention_heads_fused < 0] = 0
-
-            # Drop the lowest attentions, but
-            # don't drop the class token
-            flat = attention_heads_fused.view(attention_heads_fused.size(0), -1)
-            _, indices = flat.topk(int(flat.size(-1) * discard_ratio), -1, False)
-            # indices = indices[indices != 0]
-            flat[0, indices] = 0
-
             I = torch.eye(attention_heads_fused.size(-1))
             a = (attention_heads_fused + 1.0 * I) / 2
             a = a / a.sum(dim=-1)
             result = torch.matmul(a, result)
-
-    # Look at the total attention between the class token,
-    # and the image patches
     mask = result[0, 0, 1:]
-    # In case of 224x224 image, this brings us from 196 to 14
     width = int(mask.size(-1) ** 0.5)
     mask = mask.reshape(width, width).numpy()
     mask = mask / np.max(mask)
