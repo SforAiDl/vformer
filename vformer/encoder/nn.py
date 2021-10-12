@@ -13,12 +13,12 @@ class FeedForward(nn.Module):
         Dropout probability
     """
 
-    def __init__(self, dim, hidden_dim, p_dropout=0.0):
+    def __init__(self, dim, hidden_dim, p_dropout=0.0,fn=nn.GELU):
         super().__init__()
 
         self.net = nn.Sequential(
             nn.Linear(dim, hidden_dim),
-            nn.GELU(),
+            fn(),
             nn.Dropout(p_dropout),
             nn.Linear(hidden_dim, dim),
             nn.Dropout(p_dropout),
