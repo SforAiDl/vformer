@@ -1,9 +1,11 @@
 import torch
 import torch.nn as nn
 from timm.models.layers import DropPath
-from .nn import FeedForward
+
 from ..attention import SpatialAttention
 from ..functional import PreNorm
+from .pvtfeedforward import PVTFeedForward
+
 
 class PVTEncoder(nn.Module):
     def __init__(
@@ -24,8 +26,7 @@ class PVTEncoder(nn.Module):
     ):
         super(PVTEncoder, self).__init__()
         self.encoder = nn.ModuleList([])
-        dwconv=
-        for _ in range(depth):
+        for i in range(depth):
             self.encoder.append(
                 nn.ModuleList(
                     [
@@ -42,17 +43,28 @@ class PVTEncoder(nn.Module):
                                 linear=linear,
                             ),
                         ),
-                        DropPath(drop_prob=drop_path) if drop_path>0. else nn.Identity(),
-
+                        DropPath(drop_prob=drop_path[i])
+                        if drop_path > 0.0
+                        else nn.Identity(),
                         PreNorm(
                             dim=dim,
-                            fn=FeedForward(dim=dim,
-                                           hidden_dim=int(dim *mlp_ratio ),
-                                           p_dropout=drop,
-                                           fn=dwconv)
-                        )
+                            fn=PVTFeedForward(
+                                dim=dim,
+                                hidden_dim=int(dim * mlp_ratio),
+                                act_layer=act_layer,
+                                drop=drop,
+                                linear=linear,
+                            ),
+                        ),
                     ]
                 )
             )
-    def forward(self,x):
-        pass
+            self.drop_path = (
+                DropPath(drop_prob=drop_path) if drop_path > 0.0 else nn.Identity()
+            )
+
+    def forward(self, x, H, W):
+        for attn, drop_path, ff in self.encoder:
+            x = x + drop_path(attn(x, H, W))
+            x = x + drop_path(ff(x, H, W))
+        return x
