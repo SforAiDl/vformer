@@ -48,6 +48,7 @@ logits = model(image)
 
 - [vit-pytorch](https://github.com/lucidrains/vit-pytorch)
 - [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
+- [vit-explain](https://github.com/jacobgil/vit-explain)
 
 <br>
 

@@ -48,7 +48,6 @@ class VanillaEncoder(nn.Module):
             )
 
     def forward(self, x):
-
         for attn, ff in self.encoder:
             x = attn(x) + x
             x = ff(x) + x
