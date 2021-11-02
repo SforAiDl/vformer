@@ -16,8 +16,8 @@ class PVTFeedForward(nn.Module):
         **kwargs
     ):
         super(PVTFeedForward, self).__init__()
-        out_dim = out_dim if not out_dim else dim
-        hidden_dim = hidden_dim if not None else dim
+        out_dim = out_dim if out_dim is not None else dim
+        hidden_dim = hidden_dim if hidden_dim is not None else dim
 
         self.fc1 = nn.Linear(dim, hidden_dim)
         self.relu = nn.ReLU(inplace=True) if linear else nn.Identity()

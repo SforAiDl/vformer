@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 from timm.models.layers import DropPath
 
@@ -43,9 +42,6 @@ class PVTEncoder(nn.Module):
                                 linear=linear,
                             ),
                         ),
-                        DropPath(drop_prob=drop_path[i])
-                        if drop_path > 0.0
-                        else nn.Identity(),
                         PreNorm(
                             dim=dim,
                             fn=PVTFeedForward(
@@ -60,11 +56,13 @@ class PVTEncoder(nn.Module):
                 )
             )
             self.drop_path = (
-                DropPath(drop_prob=drop_path) if drop_path > 0.0 else nn.Identity()
+                DropPath(drop_prob=drop_path[i])
+                if drop_path[i] > 0.0
+                else nn.Identity()
             )
 
     def forward(self, x, H, W):
-        for attn, drop_path, ff in self.encoder:
-            x = x + drop_path(attn(x, H, W))
-            x = x + drop_path(ff(x, H, W))
+        for prenorm_attn, prenorm_ff in self.encoder:
+            x = x + self.drop_path(prenorm_attn(x, H, W))
+            x = x + self.drop_path(prenorm_ff(x, H, W))
         return x

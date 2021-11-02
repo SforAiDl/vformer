@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from vformer.models import SwinTransformer, VanillaViT
+from vformer.models import PyramidVisionTransformerV2, SwinTransformer, VanillaViT
 
 img_3channels_256 = torch.randn(2, 3, 256, 256)
 img_3channels_224 = torch.randn(4, 3, 224, 224)
@@ -127,3 +127,17 @@ def test_SwinTransformer():
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
+
+
+def test_pvt():
+    model = PyramidVisionTransformerV2(
+        embed_dims=[64, 128, 320, 512],
+        num_heads=[1, 2, 5, 8],
+        mlp_ratio=[8, 8, 4, 4],
+        qkv_bias=True,
+        norm_layer=nn.LayerNorm,
+        depths=[2, 2, 2, 2],
+        sr_ratios=[8, 4, 2, 1],
+    )
+    out = model(img_3channels_224)
+    print(out.shape)

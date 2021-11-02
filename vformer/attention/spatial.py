@@ -1,4 +1,3 @@
-import torch
 import torch.nn as nn
 
 from ..functional import PreNorm
@@ -6,27 +5,36 @@ from ..functional import PreNorm
 
 class SpatialAttention(nn.Module):
     """
-    Spatial Reduction Attention
+    Spatial Reduction Attention- Linear complexity attention layer
 
     Parameters
     -----------
     dim: int
+        Dimension of the input tensor
     num_heads: int
+        Number of attention heads
     dim_head: int
+        Dimension of the attention head
     sr_ratio :int
+        Spatial Reduction ratio
     qkv_bias : bool
+
     qk_scale : float, optional
+
     attn_drop : float
+
     proj_drop :float
+
     linear : bool
+
     act_fn : activation function
+
     """
 
     def __init__(
         self,
         dim,
         num_heads,
-        dim_head,
         sr_ratio=1,
         qkv_bias=False,
         qk_scale=None,
@@ -37,10 +45,12 @@ class SpatialAttention(nn.Module):
     ):
         super(SpatialAttention, self).__init__()
         self.num_heads = num_heads
-        inner_dim = dim_head * num_heads
-
         self.sr_ratio = sr_ratio
         self.scale = qk_scale
+
+        dim_head = dim // num_heads
+        inner_dim = dim_head * num_heads
+
         self.q = nn.Linear(dim, inner_dim, bias=qkv_bias)
         self.kv = nn.Linear(dim, inner_dim * 2, bias=qkv_bias)
 
