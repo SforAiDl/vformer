@@ -94,10 +94,10 @@ class PyramidVisionTransformerV2(nn.Module):
             # print(patch_embed)
             # print(norm)
             # print(block)
-            #print(x.shape)
-            #print(type(patch_embed[0]))
+            # print(x.shape)
+            # print(type(patch_embed[0]))
             x, H, W = patch_embed[0](x)
-            #print("mai dikh raha hoo then patch_embed is not guilty")
+            # print("mai dikh raha hoo then patch_embed is not guilty")
 
             for blk in block:
 
