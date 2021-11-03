@@ -61,8 +61,8 @@ class PVTEncoder(nn.Module):
                 else nn.Identity()
             )
 
-    def forward(self, x, H, W):
+    def forward(self, x, **kwargs):
         for prenorm_attn, prenorm_ff in self.encoder:
-            x = x + self.drop_path(prenorm_attn(x, H, W))
-            x = x + self.drop_path(prenorm_ff(x, H, W))
+            x = x + self.drop_path(prenorm_attn(x, **kwargs))
+            x = x + self.drop_path(prenorm_ff(x, **kwargs))
         return x

@@ -21,7 +21,7 @@ class PVTFeedForward(nn.Module):
 
         self.fc1 = nn.Linear(dim, hidden_dim)
         self.relu = nn.ReLU(inplace=True) if linear else nn.Identity()
-        self.fn = fn(**kwargs)
+        self.fn = fn(dim=hidden_dim, **kwargs)
         self.to_out = nn.Sequential(
             act_layer(),
             nn.Dropout(p=drop),

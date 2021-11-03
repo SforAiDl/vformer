@@ -46,7 +46,8 @@ class SpatialAttention(nn.Module):
         super(SpatialAttention, self).__init__()
         self.num_heads = num_heads
         self.sr_ratio = sr_ratio
-        self.scale = qk_scale
+        head_dim = dim // num_heads
+        self.scale = qk_scale or (head_dim) ** (0.5)
 
         dim_head = dim // num_heads
         inner_dim = dim_head * num_heads

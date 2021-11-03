@@ -5,7 +5,7 @@ from ...decoder import MLPDecoder
 from ...encoder import OverlapPatchEmbed, PVTEncoder
 
 
-class PyramidVisionTransformerV2(nn.Module):
+class PyramidVisionTransformerClassificationV2(nn.Module):
     """
     https://arxiv.org/abs/2106.13797v2
     """
@@ -30,7 +30,7 @@ class PyramidVisionTransformerV2(nn.Module):
         decoder_config=None,
         linear=False,
     ):
-        super(PyramidVisionTransformerV2, self).__init__()
+        super(PyramidVisionTransformerClassificationV2, self).__init__()
         self.depths = depths
         assert (
             len(depths) == len(num_heads) == len(embed_dims)
@@ -49,6 +49,7 @@ class PyramidVisionTransformerV2(nn.Module):
                             patch_size=patch_size[i],
                             stride=4 if i == 0 else 2,
                             in_channels=in_channels if i == 0 else embed_dims[i - 1],
+                            embed_dim=embed_dims[i],
                         )
                     ]
                 )
@@ -77,31 +78,28 @@ class PyramidVisionTransformerV2(nn.Module):
             self.norms.append(norm_layer(embed_dims[i]))
 
         if decoder_config is not None:
+
+            if not isinstance(decoder_config, list) and not isinstance(
+                decoder_config, tuple
+            ):
+                decoder_config = [decoder_config]
             assert (
                 decoder_config[0] == embed_dims[-1]
-            ), "Configurations do not match for MLPDecoder"
+            ), f"Configurations do not match for MLPDecoder, First element of `decoder_config` expected to be {embed_dims[-1]}, got {decoder_config[0]} "
             self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
         else:
             self.decoder = MLPDecoder(config=embed_dims[-1], n_classes=num_classes)
 
     def forward(self, x):
         B = x.shape[0]
-        print("hello hello welcome to our show of debugginh :)")
         for i in range(len(self.depths)):
             patch_embed = self.patch_embeds[i]
             block = self.blocks[i]
             norm = self.norms[i]
-            # print(patch_embed)
-            # print(norm)
-            # print(block)
-            # print(x.shape)
-            # print(type(patch_embed[0]))
             x, H, W = patch_embed[0](x)
-            # print("mai dikh raha hoo then patch_embed is not guilty")
 
             for blk in block:
-
-                x = blk(x, H, W)
+                x = blk(x, H=H, W=W)
             x = norm(x)
             if i == len(self.depths) - 1:
                 x = x.mean(dim=1)
