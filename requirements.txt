@@ -41,3 +41,4 @@ timm==0.4.12
 typing-extensions
 urllib3==1.26.6
 virtualenv==20.7.2
+opencv-python==4.5.3.56
