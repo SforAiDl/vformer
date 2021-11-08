@@ -79,11 +79,7 @@ swin_encoder = SwinEncoder(
 
 - [vit-pytorch](https://github.com/lucidrains/vit-pytorch)
 - [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
-<<<<<<< HEAD
-- [Attention-Visualization-Methods](https://github.com/jacobgil/vit-explain)
-=======
 - [vit-explain](https://github.com/jacobgil/vit-explain)
->>>>>>> 309b74e0d88ae6a58265687478e758ed8f0bbe6f
 
 <br>
 
