@@ -13,6 +13,7 @@ def test_attention_rollout():
     model_attention_rollout_min = ViTAttentionRollout(model, layer, "min")
     _ = model(img)
     _ = model_attention_rollout_mean(img)
+    print(_.size)
     _ = model_attention_rollout_max(img)
     _ = model_attention_rollout_min(img)
 

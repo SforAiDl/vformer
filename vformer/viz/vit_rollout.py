@@ -35,7 +35,7 @@ def rollout(attentions, discard_ratio, head_fusion):
             elif head_fusion == "min":
                 attention_heads_fused = attention.min(axis=1)[0]
             else:
-                raise "Attention head fusion type Not supported"
+                raise ValueError("Please enter a vlaid attention head fusion type")
             I = torch.eye(attention_heads_fused.size(-1))
             a = (attention_heads_fused + 1.0 * I) / 2
             a = a / a.sum(dim=-1)

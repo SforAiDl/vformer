@@ -3,7 +3,7 @@
 
 <div align='center'>
 
-[![Build status](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml/badge.svg)](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml)
+[![Tests](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml/badge.svg)](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml)
 [![codecov](https://codecov.io/gh/SforAiDl/vformer/branch/main/graph/badge.svg?token=5QKCZ67CM2)](https://codecov.io/gh/SforAiDl/vformer)
 
 
@@ -42,13 +42,48 @@ model = SwinTransformer(
     )
 logits = model(image)            
 ```
+
+`VFormer` is designed to be modular and allows for easy experimentation using blocks/modules of different architectures. For example, if desired, you can use just the encoder of the Swin Transformer model, or just the windowed attention layer of the Swin Transformer model.
+
+```python
+
+from vformer.attention import WindowAttention
+
+window_attn = WindowAttention(
+        dim=128,
+        window_size=7,
+        num_heads=2,
+        **kwargs,
+    )
+
+```
+
+```python
+
+from vformer.encoder import SwinEncoder
+
+swin_encoder = SwinEncoder(
+        dim=128,
+        input_resolution=(224, 224),
+        depth=2,
+        num_heads=2,
+        window_size=7,
+        **kwargs,
+    )
+
+```
+
 <br>
 
 ### References
 
 - [vit-pytorch](https://github.com/lucidrains/vit-pytorch)
 - [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
+<<<<<<< HEAD
 - [Attention-Visualization-Methods](https://github.com/jacobgil/vit-explain)
+=======
+- [vit-explain](https://github.com/jacobgil/vit-explain)
+>>>>>>> 309b74e0d88ae6a58265687478e758ed8f0bbe6f
 
 <br>
 
