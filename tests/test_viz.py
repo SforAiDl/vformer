@@ -5,7 +5,7 @@ from vformer.viz import ViTAttentionGradRollout, ViTAttentionRollout
 
 
 def test_attention_rollout():
-    img = torch.randn(1, 3, 224, 224)
+    img = torch.randn(1, 3, 256, 256)
     layer = "attend"
     model = VanillaViT(img_size=256, patch_size=32, n_classes=10, in_channels=3)
     model_attention_rollout_mean = ViTAttentionRollout(model, layer)
@@ -13,13 +13,12 @@ def test_attention_rollout():
     model_attention_rollout_min = ViTAttentionRollout(model, layer, "min")
     _ = model(img)
     _ = model_attention_rollout_mean(img)
-    print(_.size)
     _ = model_attention_rollout_max(img)
     _ = model_attention_rollout_min(img)
 
 
 def test_attention_grad_rollout():
-    img = torch.randn(1, 3, 224, 224)
+    img = torch.randn(1, 3, 256, 256)
     layer = "attend"
     model = VanillaViT(img_size=256, patch_size=32, n_classes=10, in_channels=3)
     model_attention_grad_rollout = ViTAttentionGradRollout(model, layer)

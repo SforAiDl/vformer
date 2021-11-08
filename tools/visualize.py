@@ -16,6 +16,13 @@ def get_args():
         "--image_path", type=str, required=True, help="Input image path"
     )
     parser.add_argument(
+        "--image_size",
+        type=int,
+        nargs=2,
+        default=[256, 256],
+        help="The size of image to be resized to",
+    )
+    parser.add_argument(
         "--model_path",
         type=str,
         required=False,
@@ -31,7 +38,8 @@ def get_args():
     parser.add_argument(
         "--head_fusion",
         type=str,
-        default="max",
+        default="mean",
+        choices=["mean", "max", "min"],
         help="How to fuse the attention heads for attention rollout.\
                          Can be mean/max/min",
     )
@@ -42,7 +50,10 @@ def get_args():
         help="How many of the lowest attention paths should we discard",
     )
     parser.add_argument(
-        "--grad_rollout", type=bool, default=False, help="Implement gradient rollout"
+        "--grad_rollout",
+        default=False,
+        action="store_true",
+        help="Implement gradient rollout",
     )
     parser.add_argument(
         "--category_index",
@@ -54,10 +65,10 @@ def get_args():
     return args
 
 
-def open_image(path):
+def open_image(path, size=[256, 256]):
     """Opens the image in path and converts to tensor to act as input for the neural network"""
     img = Image.open(path)
-    img = F.to_tensor(F.resize(img, (256, 256)))
+    img = F.to_tensor(F.resize(img, size))
     img.unsqueeze_(0)
     return img
 
@@ -66,15 +77,14 @@ def model_rollout(
     img,
     model,
     layer="attend",
-    grad_rollout=False,
     head_fusion="mean",
     discard_ratio=0.9,
+    grad_rollout=False,
     category_index=0,
 ):
+    """runs grad rollout on the given model"""
     if grad_rollout:
-        model_attention_rollout = ViTAttentionGradRollout(
-            model=model, layer=layer, discard_ratio=discard_ratio
-        )
+        model_attention_rollout = ViTAttentionGradRollout(model, layer, discard_ratio)
         rollout = model_attention_rollout(img, category_index)
     else:
         model_attention_rollout = ViTAttentionRollout(
@@ -87,7 +97,8 @@ def model_rollout(
     return heatmap
 
 
-def mask_over_image():
+def mask_over_image(img, heatmap):
+    """merges the original image and the generated"""
     imgt = img[0].numpy()
     heatmap = heatmap / 255.0
     imgt = imgt / 255.0
@@ -95,7 +106,25 @@ def mask_over_image():
     imgt = (imgt / np.max(imgt)) * 255
     imgt = torch.from_numpy(imgt)
     imgt = F.to_pil_image(imgt)
+    return imgt
 
 
-args = get_args()
-img = open_image(args.image_path)
+if __name__ == "__main__":
+    args = get_args()
+    img = open_image(args.image_path, args.image_size)
+    if args.model_path == None:
+        model = VanillaViT(img_size=256, patch_size=32, n_classes=10, in_channels=3)
+    else:
+        model = torch.load(args.model_path)
+    print(args.discard_ratio)
+    heatmap = model_rollout(
+        img,
+        model,
+        args.layer,
+        args.head_fusion,
+        args.discard_ratio,
+        args.grad_rollout,
+        args.category_index,
+    )
+    final_image = mask_over_image(img, heatmap)
+    final_image.show()
