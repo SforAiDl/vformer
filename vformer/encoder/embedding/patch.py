@@ -3,6 +3,7 @@ import torch.nn as nn
 from ...utils import pair
 
 
+# overlappatch and patch are kind of similar will merge them eventually
 class PatchEmbedding(nn.Module):
     """
     Parameters:
@@ -19,7 +20,15 @@ class PatchEmbedding(nn.Module):
         Normalization layer
     """
 
-    def __init__(self, img_size, patch_size, in_channels, embed_dim, norm_layer=None):
+    def __init__(
+        self,
+        img_size,
+        patch_size,
+        in_channels,
+        embed_dim,
+        norm_layer=nn.LayerNorm,
+        **kwargs,
+    ):
         super(PatchEmbedding, self).__init__()
         self.img_size = pair(img_size)
         self.patch_size = pair(patch_size)
@@ -34,8 +43,7 @@ class PatchEmbedding(nn.Module):
             kernel_size=patch_size,
             stride=patch_size,
         )
-        if norm_layer is not None:
-            self.norm = norm_layer(embed_dim)
+        self.norm = norm_layer(embed_dim)
 
     def forward(self, x):
         B, C, H, W = x.shape
@@ -44,6 +52,5 @@ class PatchEmbedding(nn.Module):
             H == self.img_size[0] and W == self.img_size[1]
         ), f"Input Image Size {H}*{W} doesnt match model {self.img_size[0]}*{self.img_size[1]}"
         x = self.proj(x).flatten(2).transpose(1, 2)
-        if self.norm is not None:
-            x = self.norm(x)
+        x = self.norm(x)
         return x

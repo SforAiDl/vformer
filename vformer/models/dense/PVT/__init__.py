@@ -1,2 +1,2 @@
-from .detection import PyramidVisionTransformerDetectionV2
-from .segmentation import PVTVisionTransformerSegmentationV2
+from .detection import PVTDetection, PVTDetectionV2
+from .segmentation import PVTSegmentation, PVTSegmentationV2
