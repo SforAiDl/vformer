@@ -13,22 +13,20 @@ class SpatialAttention(nn.Module):
         Dimension of the input tensor
     num_heads: int
         Number of attention heads
-    dim_head: int
-        Dimension of the attention head
     sr_ratio :int
         Spatial Reduction ratio
-    qkv_bias : bool
-
+    qkv_bias : bool, default is True
+        If True, add a learnable bias to query, key, value.
     qk_scale : float, optional
-
-    attn_drop : float
-
-    proj_drop :float
-
+        Override default qk scale of head_dim ** -0.5 if set
+    attn_drop : float, optional
+        Dropout rate
+    proj_drop :float, optional
+        Dropout rate
     linear : bool
 
-    act_fn : activation function
-
+    act_fn : activation function, default=nn.GELU
+        Activation function
     """
 
     def __init__(
@@ -44,13 +42,15 @@ class SpatialAttention(nn.Module):
         act_fn=nn.GELU,
     ):
         super(SpatialAttention, self).__init__()
+        assert (
+            dim % num_heads == 0
+        ), f"dim {dim} should be divided by num_heads {num_heads}."
         self.num_heads = num_heads
         self.sr_ratio = sr_ratio
         head_dim = dim // num_heads
         self.scale = qk_scale or (head_dim) ** (0.5)
 
-        dim_head = dim // num_heads
-        inner_dim = dim_head * num_heads
+        inner_dim = head_dim * num_heads
 
         self.q = nn.Linear(dim, inner_dim, bias=qkv_bias)
         self.kv = nn.Linear(dim, inner_dim * 2, bias=qkv_bias)
@@ -99,6 +99,7 @@ class SpatialAttention(nn.Module):
                 .reshape(B, -1, 2, self.num_heads, C // self.num_heads)
                 .permute(2, 0, 3, 1, 4)
             )
+
         k, v = kv[0], kv[1]
 
         attn = (q @ k.transpose(-2, -1)) * self.scale

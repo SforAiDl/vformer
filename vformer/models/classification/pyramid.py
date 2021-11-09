@@ -1,13 +1,55 @@
+import numpy as np
 import torch
 import torch.nn as nn
+from timm.models.layers import trunc_normal_
 
 from ...decoder import MLPDecoder
-from ...encoder import OverlapPatchEmbed, PVTEncoder
+from ...encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
 
 
-class PyramidVisionTransformerClassificationV2(nn.Module):
+class PVTClassification(nn.Module):
     """
-    https://arxiv.org/abs/2106.13797v2
+    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
+
+    Parameters:
+    -----------
+    img_size: int
+        Image size
+    patch_size: list(int)
+        List of patch size
+    in_channels: int
+        Input channels in image, default=3
+    num_classes: int
+        Number of classes for classification
+    embed_dims:  int
+        Patch Embedding dimension
+    num_heads:tuple[int]
+        Number of heads in each transformer layer
+    depths: tuple[int]
+        Depth in each Transformer layer
+    mlp_ratio: float
+        Ratio of mlp heads to embedding dimension
+    qkv_bias: bool, default= True
+        Adds bias to the qkv if true
+    qk_scale: float, optional
+    p_dropout: float,
+        Dropout rate,default is 0.0
+    attn_drop_rate:  float,
+        Attention dropout rate, default is 0.0
+    drop_path_rate: float
+        Stochastic depth rate, default is 0.1
+    norm_layer:
+        Normalization layer, default is nn.LayerNorm
+    sr_ratio:
+
+    decoder_config:
+
+    linear: bool
+
+    use_dwconv: bool
+
+    use_abs_pos_embed: bool
+
     """
 
     def __init__(
@@ -21,7 +63,7 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
         mlp_ratio=[4, 4, 4, 4],
         qkv_bias=False,
         qk_scale=None,
-        drop_rate=0.0,
+        p_dropout=0.0,
         attn_drop_rate=0.0,
         drop_path_rate=0.0,
         norm_layer=nn.LayerNorm,
@@ -29,8 +71,11 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
         sr_ratios=[8, 4, 2, 1],
         decoder_config=None,
         linear=False,
+        use_dwconv=False,
+        ape=True,
     ):
-        super(PyramidVisionTransformerClassificationV2, self).__init__()
+        super(PVTClassification, self).__init__()
+        self.ape = ape
         self.depths = depths
         assert (
             len(depths) == len(num_heads) == len(embed_dims)
@@ -39,7 +84,7 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
         self.patch_embeds = nn.ModuleList([])
         self.blocks = nn.ModuleList([])
         self.norms = nn.ModuleList()
-
+        self.pos_embeds = nn.ModuleList()
         for i in range(len(depths)):
             self.patch_embeds.append(
                 nn.ModuleList(
@@ -54,6 +99,26 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
                     ]
                 )
             )
+            if ape:
+                if i != len(depths) - 1:
+                    self.pos_embeds.append(
+                        nn.ModuleList(
+                            [
+                                AbsolutePositionEmbedding(
+                                    pos_shape=img_size // np.prod(patch_size[: i + 1]),
+                                    pos_dim=embed_dims[i],
+                                )
+                            ]
+                        )
+                    )
+                self.last_pos = nn.Parameter(
+                    torch.randn(
+                        1,
+                        (img_size // np.prod(patch_size[: i + 1])) ** 2,
+                        embed_dims[-1],
+                    )
+                )
+
             self.blocks.append(
                 nn.ModuleList(
                     [
@@ -63,7 +128,7 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
                             mlp_ratio=mlp_ratio[i],
                             qkv_bias=qkv_bias,
                             qk_scale=qk_scale,
-                            drop=drop_rate,
+                            p_dropout=p_dropout,
                             depth=depths[i],
                             attn_drop=attn_drop_rate,
                             drop_path=dpr[sum(depths[:i]) : sum(depths[: i + 1])],
@@ -71,11 +136,15 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
                             sr_ratio=sr_ratios[i],
                             linear=linear,
                             act_layer=nn.GELU,
+                            use_dwconv=use_dwconv,
                         )
                     ]
                 )
             )
             self.norms.append(norm_layer(embed_dims[i]))
+        # cls_token
+        self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dims[-1]))
+        trunc_normal_(self.cls_token, std=0.02)
 
         if decoder_config is not None:
 
@@ -97,6 +166,15 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
             block = self.blocks[i]
             norm = self.norms[i]
             x, H, W = patch_embed[0](x)
+            N = x.shape[1]
+            if self.ape:
+                if i == len(self.depths) - 1:
+                    x = torch.cat((self.cls_token.expand(B, -1, -1), x), dim=1)
+
+                    x += self.last_pos[:, : (N + 1)]
+                else:
+                    pos_embed = self.pos_embeds[i]
+                    x = pos_embed[0](x, H=H, W=W)
 
             for blk in block:
                 x = blk(x, H=H, W=W)
@@ -108,3 +186,48 @@ class PyramidVisionTransformerClassificationV2(nn.Module):
 
         x = self.decoder(x)
         return x
+
+
+class PVTClassificationV2(PVTClassification):
+    def __init__(
+        self,
+        img_size=224,
+        patch_size=[7, 3, 3, 3],
+        in_channels=3,
+        num_classes=1000,
+        embed_dims=[64, 128, 256, 512],
+        num_heads=[1, 2, 4, 8],
+        mlp_ratio=[4, 4, 4, 4],
+        qkv_bias=False,
+        qk_scale=0.0,
+        p_dropout=0.0,
+        attn_drop_rate=0.0,
+        drop_path_rate=0.0,
+        norm_layer=nn.LayerNorm,
+        depths=[3, 4, 6, 3],
+        sr_ratios=[8, 4, 2, 1],
+        decoder_config=None,
+        use_dwconv=True,
+        linear=False,
+    ):
+        super(PVTClassificationV2, self).__init__(
+            img_size=img_size,
+            patch_size=patch_size,
+            in_channels=in_channels,
+            num_classes=num_classes,
+            embed_dims=embed_dims,
+            num_heads=num_heads,
+            mlp_ratio=mlp_ratio,
+            qkv_bias=qkv_bias,
+            qk_scale=qk_scale,
+            p_dropout=p_dropout,
+            attn_drop_rate=attn_drop_rate,
+            drop_path_rate=drop_path_rate,
+            norm_layer=norm_layer,
+            depths=depths,
+            sr_ratios=sr_ratios,
+            decoder_config=decoder_config,
+            ape=False,
+            use_dwconv=use_dwconv,
+            linear=linear,
+        )

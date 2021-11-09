@@ -2,9 +2,12 @@ import torch
 import torch.nn as nn
 
 from vformer.models import (
-    PVTVisionTransformerSegmentationV2,
-    PyramidVisionTransformerClassificationV2,
-    PyramidVisionTransformerDetectionV2,
+    PVTClassification,
+    PVTClassificationV2,
+    PVTDetection,
+    PVTDetectionV2,
+    PVTSegmentation,
+    PVTSegmentationV2,
     SwinTransformer,
     VanillaViT,
 )
@@ -137,7 +140,7 @@ def test_SwinTransformer():
 
 def test_pvt():
     # classification
-    model = PyramidVisionTransformerClassificationV2(
+    model = PVTClassification(
         patch_size=[7, 3, 3, 3],
         embed_dims=[64, 128, 320, 512],
         num_heads=[1, 2, 5, 8],
@@ -153,7 +156,7 @@ def test_pvt():
     assert out.shape == (4, 10)
     del model
 
-    model = PyramidVisionTransformerClassificationV2(
+    model = PVTClassification(
         patch_size=[7, 3, 3, 3],
         embed_dims=[64, 128, 320, 512],
         num_heads=[1, 2, 5, 8],
@@ -164,22 +167,40 @@ def test_pvt():
         sr_ratios=[8, 4, 2, 1],
         decoder_config=512,
         num_classes=10,
-        linear=True,
     )
+
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
-    model = PyramidVisionTransformerClassificationV2(
-        patch_size=[7, 3, 3, 3],
-        embed_dims=[64, 128, 320, 512],
-        num_heads=[1, 2, 5, 8],
-        mlp_ratio=[8, 8, 4, 4],
-        qkv_bias=True,
-        norm_layer=nn.LayerNorm,
-        depths=[2, 2, 2, 2],
-        sr_ratios=[8, 4, 2, 1],
-        num_classes=10,
-    )
+
+    model = PVTClassificationV2(linear=False)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = PVTClassification(num_classes=10)
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
+
+    model = PVTClassificationV2(num_classes=10)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
+
+    model = PVTClassification(num_classes=12)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 12)
+
+    # detection
+    model = PVTDetection()
+    outs = model(img_3channels_224)
+
+    model = PVTDetectionV2()
+    outs = model(img_3channels_224)
+
+    # segmentation
+    model = PVTSegmentation()
+    outs = model(img_3channels_224)
+
+    model = PVTSegmentationV2(F4=True)
+    outs = model(img_3channels_224)

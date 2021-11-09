@@ -19,7 +19,7 @@ class SwinTransformer(BaseClassificationModel):
         Size of an Image
     patch_size: int
         Patch Size
-    in_channels:int
+    in_channels: int
         Input channels in image, default=3
     n_classes: int
         Number of classes for classification
@@ -34,16 +34,16 @@ class SwinTransformer(BaseClassificationModel):
     mlp_ratio : float
         Ratio of mlp heads to embedding dimension
     qkv_bias: bool, default= True
-        Adds biasto the qkv if true
+        Adds bias to the qkv if true
     qk_scale:  float, optional
     drop_rate: float
-        Dropout rate
+        Dropout rate, default is 0.0
     attn_drop_rate: float
-        Attension dropout rate
+        Attention dropout rate,default is 0.0
     drop_path_rate: float
-        Stochastic depth rate
-    norm_layer: nn.Module
-        Normalization layer
+        Stochastic depth rate, default is 0.1
+    norm_layer:
+        Normalization layer,default is nn.LayerNorm
     ape: bool, optional
         Whether to add relative/absolute position embedding to patch embedding, default is True
     decoder_config: int or tuple[int], optional
