@@ -43,7 +43,7 @@ model = SwinTransformer(
 logits = model(image)            
 ```
 
-`VFormer` is designed to be modular and allows for easy experimentation using blocks/modules of different architectures. For example, if desired, you can use just the encoder of the Swin Transformer model, or just the windowed attention layer of the Swin Transformer model.
+`VFormer` has a modular design and allows for easy experimentation using blocks/modules of different architectures. For example, if desired, you can use just the encoder or the windowed attention layer of the Swin Transformer model.
 
 ```python
 
