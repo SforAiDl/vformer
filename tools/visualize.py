@@ -3,9 +3,8 @@ import argparse
 import cv2
 import numpy as np
 import torch
-import torchvision.io
 import torchvision.transforms.functional as F
-from PIL import Image
+from torchvision import io
 
 from vformer.models import VanillaViT
 from vformer.viz import ViTAttentionGradRollout, ViTAttentionRollout
@@ -68,9 +67,7 @@ def get_args():
 
 def open_image(path, size=[256, 256]):
     """Opens the image in path and converts to tensor to act as input for the neural network"""
-    img = torchvision.io.read_image(path, torchvision.io.ImageReadMode.RGB).to(
-        torch.float32
-    )
+    img = io.read_image(path, io.ImageReadMode.RGB).to(torch.float32)
     img = F.resize(img, size)
     img.unsqueeze_(0)
     return img
