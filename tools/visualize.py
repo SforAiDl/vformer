@@ -3,6 +3,7 @@ import argparse
 import cv2
 import numpy as np
 import torch
+import torchvision.io
 import torchvision.transforms.functional as F
 from PIL import Image
 
@@ -67,8 +68,10 @@ def get_args():
 
 def open_image(path, size=[256, 256]):
     """Opens the image in path and converts to tensor to act as input for the neural network"""
-    img = Image.open(path)
-    img = F.to_tensor(F.resize(img, size))
+    img = torchvision.io.read_image(path, torchvision.io.ImageReadMode.RGB).to(
+        torch.float32
+    )
+    img = F.resize(img, size)
     img.unsqueeze_(0)
     return img
 
@@ -104,8 +107,6 @@ def mask_over_image(img, heatmap):
     imgt = imgt / 255.0
     imgt = imgt + heatmap
     imgt = (imgt / np.max(imgt)) * 255
-    imgt = torch.from_numpy(imgt)
-    imgt = F.to_pil_image(imgt)
     return imgt
 
 
@@ -116,7 +117,6 @@ if __name__ == "__main__":
         model = VanillaViT(img_size=256, patch_size=32, n_classes=10, in_channels=3)
     else:
         model = torch.load(args.model_path)
-    print(args.discard_ratio)
     heatmap = model_rollout(
         img,
         model,
@@ -127,4 +127,8 @@ if __name__ == "__main__":
         args.category_index,
     )
     final_image = mask_over_image(img, heatmap)
-    final_image.show()
+    final_image = np.swapaxes(final_image, 0, 2)
+    final_image = np.swapaxes(final_image, 0, 1)
+    final_image = np.uint8(final_image)
+    cv2.imshow("", final_image)
+    cv2.waitKey(0)
