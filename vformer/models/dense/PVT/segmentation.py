@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from ....decoder import SegmentationHead
 from ....encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
 
 
@@ -67,6 +68,7 @@ class PVTSegmentation(nn.Module):
         depths=[3, 4, 6, 3],
         sr_ratios=[8, 4, 2, 1],
         linear=False,
+        out_channels=1,
         use_dwconv=False,
         ape=True,
         F4=False,
@@ -132,8 +134,7 @@ class PVTSegmentation(nn.Module):
                 )
             )
             self.norms.append(norm_layer(embed_dims[i]))
-        # cls_token
-        self.pool = nn.Parameter(torch.zeros(1, 1, embed_dims[-1]))
+        self.head = SegmentationHead(out_channels=out_channels, embed_dims=embed_dims)
 
     def forward(self, x):
         B = x.shape[0]
@@ -154,6 +155,7 @@ class PVTSegmentation(nn.Module):
             out.append(x)
         if self.F4:
             out = out[3:4]
+        out = self.head(out)
         return out
 
 

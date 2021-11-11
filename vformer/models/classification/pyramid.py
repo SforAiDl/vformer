@@ -46,6 +46,7 @@ class PVTClassification(nn.Module):
 
     linear: bool
 
+
     use_dwconv: bool
 
     use_abs_pos_embed: bool
@@ -111,13 +112,14 @@ class PVTClassification(nn.Module):
                             ]
                         )
                     )
-                self.last_pos = nn.Parameter(
-                    torch.randn(
-                        1,
-                        (img_size // np.prod(patch_size[: i + 1])) ** 2,
-                        embed_dims[-1],
+                else:
+                    self.last_pos = nn.Parameter(
+                        torch.randn(
+                            1,
+                            (img_size // np.prod(patch_size[: i + 1])) ** 2,
+                            embed_dims[-1],
+                        )
                     )
-                )
 
             self.blocks.append(
                 nn.ModuleList(
@@ -175,7 +177,6 @@ class PVTClassification(nn.Module):
                 else:
                     pos_embed = self.pos_embeds[i]
                     x = pos_embed[0](x, H=H, W=W)
-
             for blk in block:
                 x = blk(x, H=H, W=W)
             x = norm(x)
@@ -183,7 +184,6 @@ class PVTClassification(nn.Module):
                 x = x.mean(dim=1)
             else:
                 x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
-
         x = self.decoder(x)
         return x
 
@@ -209,6 +209,7 @@ class PVTClassificationV2(PVTClassification):
         decoder_config=None,
         use_dwconv=True,
         linear=False,
+        ape=False,
     ):
         super(PVTClassificationV2, self).__init__(
             img_size=img_size,
@@ -227,7 +228,7 @@ class PVTClassificationV2(PVTClassification):
             depths=depths,
             sr_ratios=sr_ratios,
             decoder_config=decoder_config,
-            ape=False,
+            ape=ape,
             use_dwconv=use_dwconv,
             linear=linear,
         )
