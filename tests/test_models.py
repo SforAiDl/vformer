@@ -178,7 +178,7 @@ def test_pvt():
     assert out.shape == (4, 1000)
     del model
 
-    model = PVTClassification(num_classes=10)
+    model = PVTClassificationV2(num_classes=10)
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
@@ -201,6 +201,16 @@ def test_pvt():
     # segmentation
     model = PVTSegmentation()
     outs = model(img_3channels_224)
+    assert outs.shape == (4, 1, 224, 224)
 
-    model = PVTSegmentationV2(F4=True)
+    model = PVTSegmentation()
+    outs = model(img_3channels_256)
+    assert outs.shape == (2, 1, 256, 256)
+
+    model = PVTSegmentationV2(F4=False)
     outs = model(img_3channels_224)
+    assert outs.shape == (4, 1, 224, 224)
+
+    model = PVTSegmentationV2(F4=False)
+    outs = model(img_3channels_256)
+    assert outs.shape == (2, 1, 256, 256)
