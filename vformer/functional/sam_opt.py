@@ -1,9 +1,9 @@
-# Copyright (c) 2021 David Samuel
-
 import torch
 
 class SAM(torch.optim.Optimizer):
     """
+    Copyright (c) 2021 David Samuel
+    
     Parameters :
     ------------
     params: iterable
@@ -30,6 +30,14 @@ class SAM(torch.optim.Optimizer):
 
     @torch.no_grad()
     def first_step(self, zero_grad=False):
+        """
+        Parameters :
+        ------------
+        zero_grad: bool, optional
+                   Set to True if you want to automatically zero-out all gradients after this step (default: False)
+                
+        """
+        
         grad_norm = self._grad_norm()
         for group in self.param_groups:
             scale = group["rho"] / (grad_norm + 1e-12)
@@ -44,6 +52,14 @@ class SAM(torch.optim.Optimizer):
 
     @torch.no_grad()
     def second_step(self, zero_grad=False):
+        """
+        Parameters :
+        ------------
+        zero_grad: bool, optional
+                   Set to True if you want to automatically zero-out all gradients after this step (default: False)
+                
+        """
+        
         for group in self.param_groups:
             for p in group["params"]:
                 if p.grad is None: continue
@@ -55,6 +71,14 @@ class SAM(torch.optim.Optimizer):
 
     @torch.no_grad()
     def step(self, closure=None):
+        """
+        Parameters :
+        ------------
+        closure: callable
+                   The closure should do an additional full forward and backward pass on the optimized model (default: None)
+                
+        """
+        
         assert closure is not None, "Sharpness Aware Minimization requires closure, but it was not provided"
         closure = torch.enable_grad()(closure)  # the closure should do a full forward-backward pass
 
