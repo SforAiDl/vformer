@@ -4,8 +4,6 @@ import torch.nn as nn
 from vformer.models import (
     PVTClassification,
     PVTClassificationV2,
-    PVTDetection,
-    PVTDetectionV2,
     PVTSegmentation,
     PVTSegmentationV2,
     SwinTransformer,
@@ -140,6 +138,7 @@ def test_SwinTransformer():
 
 def test_pvt():
     # classification
+
     model = PVTClassification(
         patch_size=[7, 3, 3, 3],
         embed_dims=[64, 128, 320, 512],
@@ -191,26 +190,48 @@ def test_pvt():
     out = model(img_3channels_224)
     assert out.shape == (4, 12)
 
-    # detection
-    model = PVTDetection()
-    outs = model(img_3channels_224)
-
-    model = PVTDetectionV2()
-    outs = model(img_3channels_224)
-
     # segmentation
     model = PVTSegmentation()
     outs = model(img_3channels_224)
-    assert outs.shape == (4, 1, 224, 224)
+    assert outs.shape == (
+        4,
+        1,
+        224,
+        224,
+    ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
 
     model = PVTSegmentation()
     outs = model(img_3channels_256)
-    assert outs.shape == (2, 1, 256, 256)
+    assert outs.shape == (
+        2,
+        1,
+        256,
+        256,
+    ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+
+    model = PVTSegmentation()
+    outs = model(img_3channels_256)
+    assert outs.shape == (
+        2,
+        1,
+        256,
+        256,
+    ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
 
     model = PVTSegmentationV2(F4=False)
     outs = model(img_3channels_224)
-    assert outs.shape == (4, 1, 224, 224)
+    assert outs.shape == (
+        4,
+        1,
+        224,
+        224,
+    ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
 
     model = PVTSegmentationV2(F4=False)
     outs = model(img_3channels_256)
-    assert outs.shape == (2, 1, 256, 256)
+    assert outs.shape == (
+        2,
+        1,
+        256,
+        256,
+    ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
