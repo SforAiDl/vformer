@@ -35,8 +35,6 @@ class PVTSegmentation(nn.Module):
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    norm_layer:
-        Normalization layer, default is nn.LayerNorm
     sr_ratio: float
         Spatial reduction ratio
     linear: bool
@@ -184,8 +182,6 @@ class PVTSegmentationV2(PVTSegmentation):
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    norm_layer:
-        Normalization layer, default is nn.LayerNorm
     sr_ratio: float
         Spatial reduction ratio
     linear: bool

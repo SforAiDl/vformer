@@ -4,6 +4,8 @@ import torch.nn as nn
 from vformer.models import (
     PVTClassification,
     PVTClassificationV2,
+    PVTDetection,
+    PVTDetectionV2,
     PVTSegmentation,
     PVTSegmentationV2,
     SwinTransformer,
@@ -241,4 +243,15 @@ def test_pvt():
         256,
         256,
     ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+    del model
+
+    # detection
+
+    model = PVTDetection()
+    outs = model(img_3channels_224)
+
+    del model
+
+    model = PVTSegmentationV2()
+    outs = model(img_3channels_224)
     del model
