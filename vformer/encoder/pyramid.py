@@ -2,11 +2,104 @@ import torch.nn as nn
 from timm.models.layers import DropPath
 
 from ..attention import SpatialAttention
+from ..common.blocks import DWConv
 from ..functional import PreNorm
-from .pvtfeedforward import PVTFeedForward
+
+
+class PVTFeedForward(nn.Module):
+    """
+    dim: int
+        Dimension of the input tensor
+    hidden_dim: int, optional
+        Dimension of hidden layer
+    out_dim:int, optional
+        Dimension of output tensor
+    act_layer: Activation class
+        Activation Layer, default is nn.GELU
+    p_dropout: float
+        Dropout probability/rate, default is 0.0
+    linear: bool
+        default=False
+    use_dwconv: bool
+        default=False
+
+
+    Kwargs:
+    ----------
+    kernel_size_dwconv: int,optional
+        `kernel_size` parameter for 2D convolution used in Depth wise convolution
+    stride_dwconv: int
+        `stride` parameter for 2D convolution used in Depth wise convolution
+    padding_dwconv: int
+        `padding` parameter for 2D convolution used in Depth wise convolution
+    bias_dwconv:bool
+        `bias` parameter for 2D convolution used in Depth wise convolution
+    """
+
+    def __init__(
+        self,
+        dim,
+        hidden_dim=None,
+        out_dim=None,
+        act_layer=nn.GELU,
+        p_dropout=0.0,
+        linear=False,
+        use_dwconv=False,
+        **kwargs
+    ):
+        super(PVTFeedForward, self).__init__()
+        out_dim = out_dim if out_dim is not None else dim
+        hidden_dim = hidden_dim if hidden_dim is not None else dim
+        self.use_dwconv = use_dwconv
+        self.fc1 = nn.Linear(dim, hidden_dim)
+        self.relu = nn.ReLU(inplace=True) if linear else nn.Identity()
+        if use_dwconv:
+            self.dw_conv = DWConv(dim=hidden_dim, **kwargs)
+        self.to_out = nn.Sequential(
+            act_layer(),
+            nn.Dropout(p=p_dropout),
+            nn.Linear(hidden_dim, out_dim),
+            nn.Dropout(p=p_dropout),
+        )
+
+    def forward(self, x, **kwargs):
+        x = self.relu(self.fc1(x))
+        if self.use_dwconv:
+            x = self.dw_conv(x, **kwargs)
+        return self.to_out(x)
 
 
 class PVTEncoder(nn.Module):
+    """
+    Parameters:
+    ------------
+    dim: int
+        Dimension of the input tensor
+    num_heads: int
+        Number of attention heads
+    mlp_ratio:
+        Ratio of MLP hidden dimension to embedding dimension
+    depth: int
+        Number of attention layers in the encoder
+    qkv_bias: bool
+        Whether to add a bias vector to the q,k, and v matrices
+    qk_scale:float, optional
+    p_dropout: float
+        Dropout probability
+    attn_drop: float
+        Dropout probability
+    drop_path: tuple(float)
+        List of stochastic drop rate
+    act_layer: activation layer
+        Activation layer
+    use_dwconv:bool
+        Whether to use depth-wise convolutions in overlap-patch embedding
+    sr_ratio: float
+        Spatial Reduction ratio
+    linear: bool
+
+    """
+
     def __init__(
         self,
         dim,
@@ -19,7 +112,6 @@ class PVTEncoder(nn.Module):
         attn_drop,
         drop_path,
         act_layer,
-        norm_layer,
         use_dwconv,
         sr_ratio,
         linear=False,

@@ -3,7 +3,12 @@ import torch.nn as nn
 from torchvision.transforms.functional import resize
 
 
+# U-net like structre is used here
 class DoubleConv(nn.Module):
+    """
+    This is a module consisting two convolution layers and activations, we will use this in up-sampling block
+    """
+
     def __init__(
         self,
         in_channels,
@@ -24,6 +29,10 @@ class DoubleConv(nn.Module):
 
 
 class SegmentationHead(nn.Module):
+    """
+    U-net like up-sampling block
+    """
+
     def __init__(
         self,
         out_channels=1,

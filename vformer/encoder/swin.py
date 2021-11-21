@@ -22,7 +22,7 @@ class SwinEncoderBlock(nn.Module):
     shift_size: int
         Shift size for Shifted Window Masked Self Attention (SW_MSA)
     mlp_ratio: float
-        Ratio of MLP hidden dimension to embedding dim
+        Ratio of MLP hidden dimension to embedding dimension
     qkv_bias: bool, default= True
         Whether to add a bias vector to the q,k, and v matrices
     qk_scale: float, Optional
@@ -33,7 +33,7 @@ class SwinEncoderBlock(nn.Module):
     drop_path: float
         stochastic depth rate
     norm_layer:nn.Module
-
+        Normalization layer
     """
 
     def __init__(

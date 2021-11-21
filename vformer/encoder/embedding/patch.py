@@ -3,7 +3,6 @@ import torch.nn as nn
 from ...utils import pair
 
 
-# overlappatch and patch are kind of similar will merge them eventually
 class PatchEmbedding(nn.Module):
     """
     Parameters:
@@ -27,7 +26,6 @@ class PatchEmbedding(nn.Module):
         in_channels,
         embed_dim,
         norm_layer=nn.LayerNorm,
-        **kwargs,
     ):
         super(PatchEmbedding, self).__init__()
         self.img_size = pair(img_size)

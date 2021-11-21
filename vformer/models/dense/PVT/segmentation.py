@@ -18,8 +18,6 @@ class PVTSegmentation(nn.Module):
         List of patch size
     in_channels: int
         Input channels in image, default=3
-    num_classes: int
-        Number of classes for classification
     embed_dims:  int
         Patch Embedding dimension
     num_heads:tuple[int]
@@ -39,16 +37,15 @@ class PVTSegmentation(nn.Module):
         Stochastic depth rate, default is 0.1
     norm_layer:
         Normalization layer, default is nn.LayerNorm
-    sr_ratio:
-
-    decoder_config:
-
+    sr_ratio: float
+        Spatial reduction ratio
     linear: bool
-
+        Whether to use linear spatial attention
     use_dwconv: bool
-
-    use_abs_pos_embed: bool
-
+        Whether to use Depth-wise convolutions in Overlap-patch embedding
+    ape: bool
+        Whether to use absolute position embedding
+    F4:bool
     """
 
     def __init__(
@@ -122,7 +119,6 @@ class PVTSegmentation(nn.Module):
                             qk_scale=qk_scale,
                             p_dropout=p_dropout,
                             depth=depths[i],
-                            norm_layer=norm_layer,
                             attn_drop=attn_drop_rate,
                             drop_path=dpr[sum(depths[:i]) : sum(depths[: i + 1])],
                             sr_ratio=sr_ratios[i],
@@ -160,6 +156,47 @@ class PVTSegmentation(nn.Module):
 
 
 class PVTSegmentationV2(PVTSegmentation):
+    """
+    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
+
+    Parameters:
+    -----------
+    img_size: int
+        Image size
+    patch_size: list(int)
+        List of patch size
+    in_channels: int
+        Input channels in image, default=3
+    embed_dims:  int
+        Patch Embedding dimension
+    num_heads:tuple[int]
+        Number of heads in each transformer layer
+    depths: tuple[int]
+        Depth in each Transformer layer
+    mlp_ratio: float
+        Ratio of mlp heads to embedding dimension
+    qkv_bias: bool, default= True
+        Adds bias to the qkv if true
+    qk_scale: float, optional
+    p_dropout: float,
+        Dropout rate,default is 0.0
+    attn_drop_rate:  float,
+        Attention dropout rate, default is 0.0
+    drop_path_rate: float
+        Stochastic depth rate, default is 0.1
+    norm_layer:
+        Normalization layer, default is nn.LayerNorm
+    sr_ratio: float
+        Spatial reduction ratio
+    linear: bool
+        Whether to use linear spatial attention
+    use_dwconv: bool
+        Whether to use Depth-wise convolutions in Overlap-patch embedding
+    ape: bool
+        Whether to use absolute position embedding
+    F4:bool
+    """
+
     def __init__(
         self,
         img_size=224,

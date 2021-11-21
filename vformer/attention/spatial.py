@@ -24,9 +24,9 @@ class SpatialAttention(nn.Module):
     proj_drop :float, optional
         Dropout rate
     linear : bool
-
-    act_fn : activation function, default=nn.GELU
-        Activation function
+        Whether to use linear spatial attention,default is False
+    act_fn : activation function
+        Activation function, default is False
     """
 
     def __init__(
