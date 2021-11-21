@@ -185,10 +185,12 @@ def test_pvt():
     model = PVTClassificationV2(num_classes=10)
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
+    del model
 
     model = PVTClassification(num_classes=12)
     out = model(img_3channels_224)
     assert out.shape == (4, 12)
+    del model
 
     # segmentation
     model = PVTSegmentation()
@@ -199,6 +201,7 @@ def test_pvt():
         224,
         224,
     ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
+    del model
 
     model = PVTSegmentation()
     outs = model(img_3channels_256)
@@ -208,6 +211,7 @@ def test_pvt():
         256,
         256,
     ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+    del model
 
     model = PVTSegmentation()
     outs = model(img_3channels_256)
@@ -217,6 +221,7 @@ def test_pvt():
         256,
         256,
     ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+    del model
 
     model = PVTSegmentationV2(F4=False)
     outs = model(img_3channels_224)
@@ -226,6 +231,7 @@ def test_pvt():
         224,
         224,
     ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
+    del model
 
     model = PVTSegmentationV2(F4=False)
     outs = model(img_3channels_256)
@@ -235,3 +241,4 @@ def test_pvt():
         256,
         256,
     ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+    del model
