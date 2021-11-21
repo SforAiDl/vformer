@@ -1,5 +1,6 @@
-import torch
+# Copyright (c) 2021 David Samuel
 
+import torch
 
 class SAM(torch.optim.Optimizer):
     def __init__(self, params, base_optimizer, rho=0.05, adaptive=False, **kwargs):
