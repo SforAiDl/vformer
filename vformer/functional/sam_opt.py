@@ -3,6 +3,22 @@
 import torch
 
 class SAM(torch.optim.Optimizer):
+    """
+    Parameters :
+    ------------
+    params: iterable
+            Iterable of parameters to optimize or dicts defining parameter groups
+    base_optimizer: torch.optim.Optimizer
+                    Underlying optimizer that does the "sharpness-aware" update
+    rho: float, optional
+         Size of the neighborhood for computing the max loss (default: 0.05)
+    adaptive: bool, optional
+              Set this argument to True if you want to use an experimental implementation of element-wise Adaptive SAM (default: False)
+    **kwargs : dict
+               Keyword arguments passed to the __init__ method of base_optimizer
+                
+    """
+    
     def __init__(self, params, base_optimizer, rho=0.05, adaptive=False, **kwargs):
         assert rho >= 0.0, f"Invalid rho, should be non-negative: {rho}"
 
