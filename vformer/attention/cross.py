@@ -1,8 +1,5 @@
-from typing import ForwardRef
-
 import torch
 import torch.nn as nn
-from torch.nn.modules.activation import Softmax
 
 
 class Projection(nn.Module):
@@ -25,18 +22,24 @@ class CrossAttention(nn.Module):
         self.to_k = nn.Linear(patch_dim, inner_dim)
         self.to_v = nn.Linear(patch_dim, patch_dim)
         self.to_q = nn.Linear(patch_dim, inner_dim)
-        self.softmax = nn.Softmax(dim=2)
+        self.softmax = nn.Softmax(dim=-1)
 
     def forward(self, cls, patches):
-        # cls (batch,data,1,embedding) patch (batch,data,patch,embedding)
+        # cls (data,1,cls_dim) patch (data,patch,patch_dim)
         cls = self.fl(cls)
-        x = torch.cat([cls, patches], dim=2)
-        q = self.to_q(cls)  # (batch,data,1,inner_embedding)
-        k = self.to_k(x)  # (batch,data,patch+1,inner_embedding)
-        v = self.to_v(x)  # (batch,data,patch+1,patch_dim)
-        k = torch.transpose(k, 2, 3)  # (batch,data,inner_embedding,patch+1)
-        attention = v @ q  # (batch,data,patch+1,1)
+        x = torch.cat([cls, patches], dim=-2)
+        q = self.to_q(cls)  # (data,1,inner_embedding)
+        k = self.to_k(x)  # (data,patch+1,inner_embedding)
+        v = self.to_v(x)  # (data,patch+1,patch_dim)
+        k = torch.transpose(k, -2, -1)  # (data,inner_embedding,patch+1)
+        attention = q @ k  # (data,1,patch+1)
         attention = self.softmax(attention)
-        attention_value = v * attention  # (batch,data,patch+1,patch_dim)
+        attention_value = attention @ v  # (data,1,patch_dim)
         ycls = cls + attention_value
+        ycls = self.gl(ycls)  # (data,patch+1,cls_dim)
         return ycls
+
+
+model = CrossAttention(5, 6, 20)
+cls = torch.randn([1, 1, 5])
+patch = torch.randn([1, 1, 6])
