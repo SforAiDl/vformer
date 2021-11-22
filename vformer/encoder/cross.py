@@ -4,7 +4,8 @@ from einops import repeat
 
 from vformer.attention import CrossAttention
 from vformer.common import BaseClassificationModel
-from vformer.encoder import LinearEmbedding, VanillaEncoder
+from vformer.encoder.embedding import LinearEmbedding
+from vformer.encoder.vanilla import VanillaEncoder
 
 
 class _cross_p(BaseClassificationModel):
