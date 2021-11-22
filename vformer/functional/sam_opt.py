@@ -1,9 +1,9 @@
+# Copyright (c) 2021 David Samuel
+
 import torch
 
 class SAM(torch.optim.Optimizer):
     """
-    Copyright (c) 2021 David Samuel
-    
     Parameters :
     ------------
     params: iterable
