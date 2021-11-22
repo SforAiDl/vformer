@@ -106,5 +106,4 @@ class SpatialAttention(nn.Module):
         attn = self.attn(attn)
 
         x = (attn @ v).transpose(1, 2).reshape(B, N, C)
-
         return self.to_out(x)

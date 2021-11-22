@@ -55,7 +55,9 @@ class SegmentationHead(nn.Module):
 
         self.bottleneck = DoubleConv(embed_dims[-1], embed_dims[-1] * 2)
         self.conv1 = nn.Conv2d(embed_dims[0], out_channels, kernel_size=1)
-        self.conv2 = nn.ConvTranspose2d(1, 1, kernel_size=4, stride=4)
+        self.conv2 = nn.ConvTranspose2d(
+            out_channels, out_channels, kernel_size=4, stride=4
+        )
 
     def forward(self, skip_connections):
 

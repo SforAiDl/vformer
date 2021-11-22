@@ -43,7 +43,8 @@ class PVTSegmentation(nn.Module):
         Whether to use Depth-wise convolutions in Overlap-patch embedding
     ape: bool
         Whether to use absolute position embedding
-    F4:bool
+    return_pyramid:bool
+        Whether to use all pyramid feature layers for up-sampling, default is true
     """
 
     def __init__(
@@ -66,12 +67,12 @@ class PVTSegmentation(nn.Module):
         out_channels=1,
         use_dwconv=False,
         ape=True,
-        F4=False,
+        return_pyramid=False,
     ):
         super(PVTSegmentation, self).__init__()
         self.ape = ape
         self.depths = depths
-        self.F4 = F4
+        self.return_pyramid = return_pyramid
         assert (
             len(depths) == len(num_heads) == len(embed_dims)
         ), "Configurations do not match"
@@ -128,7 +129,10 @@ class PVTSegmentation(nn.Module):
                 )
             )
             self.norms.append(norm_layer(embed_dims[i]))
-        self.head = SegmentationHead(out_channels=out_channels, embed_dims=embed_dims)
+        self.head = SegmentationHead(
+            out_channels=out_channels,
+            embed_dims=embed_dims if not return_pyramid else [embed_dims[-1]],
+        )
 
     def forward(self, x):
         B = x.shape[0]
@@ -147,8 +151,9 @@ class PVTSegmentation(nn.Module):
             x = norm(x)
             x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
             out.append(x)
-        if self.F4:
+        if self.return_pyramid:
             out = out[3:4]
+
         out = self.head(out)
         return out
 
@@ -190,7 +195,8 @@ class PVTSegmentationV2(PVTSegmentation):
         Whether to use Depth-wise convolutions in Overlap-patch embedding
     ape: bool
         Whether to use absolute position embedding
-    F4:bool
+    return_pyramid: bool
+        Whether to use all pyramid feature layers for up-sampling, default is true
     """
 
     def __init__(
@@ -212,7 +218,7 @@ class PVTSegmentationV2(PVTSegmentation):
         use_abs_pos_embed=False,
         use_dwconv=True,
         linear=False,
-        F4=False,
+        return_pyramid=False,
     ):
         super(PVTSegmentationV2, self).__init__(
             img_size=img_size,
@@ -232,5 +238,5 @@ class PVTSegmentationV2(PVTSegmentation):
             linear=linear,
             ape=use_abs_pos_embed,
             use_dwconv=use_dwconv,
-            F4=F4,
+            return_pyramid=return_pyramid,
         )

@@ -194,6 +194,17 @@ def test_pvt():
     assert out.shape == (4, 12)
     del model
 
+    model = PVTClassificationV2(
+        embed_dims=[64, 128, 320, 512],
+        num_heads=[1, 2, 5, 8],
+        mlp_ratio=[8, 8, 4, 4],
+        qkv_bias=True,
+        norm_layer=nn.LayerNorm,
+        depths=[3, 4, 6, 3],
+        sr_ratios=[8, 4, 2, 1],
+        linear=True,
+    )
+    out = model(img_3channels_224)
     # segmentation
     model = PVTSegmentation()
     outs = model(img_3channels_224)
@@ -225,7 +236,7 @@ def test_pvt():
     ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
     del model
 
-    model = PVTSegmentationV2(F4=False)
+    model = PVTSegmentationV2(return_pyramid=False)
     outs = model(img_3channels_224)
     assert outs.shape == (
         4,
@@ -235,7 +246,10 @@ def test_pvt():
     ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
     del model
 
-    model = PVTSegmentationV2(F4=False)
+    model = PVTSegmentationV2(return_pyramid=True)
+    out = model(img_3channels_224)
+
+    model = PVTSegmentationV2(return_pyramid=False)
     outs = model(img_3channels_256)
     assert outs.shape == (
         2,
@@ -252,6 +266,6 @@ def test_pvt():
 
     del model
 
-    model = PVTSegmentationV2()
+    model = PVTDetectionV2()
     outs = model(img_3channels_224)
     del model

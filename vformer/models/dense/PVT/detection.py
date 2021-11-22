@@ -188,7 +188,8 @@ class PVTDetectionV2(PVTDetection):
         Whether to use Depth-wise convolutions in Overlap-patch embedding
     ape: bool
         Whether to use absolute position embedding
-
+    return_pyramid: bool
+        Whether to return all pyramid feature layers, if false returns only last feature layer, default is True
     """
 
     def __init__(
