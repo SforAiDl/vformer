@@ -80,7 +80,7 @@ swin_encoder = SwinEncoder(
 - [vit-pytorch](https://github.com/lucidrains/vit-pytorch)
 - [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
 - [vit-explain](https://github.com/jacobgil/vit-explain)
-- [sam-optimizer](https://github.com/davda54/sam)
+- [SAM-optimizer](https://github.com/davda54/sam)
 
 <br>
 
