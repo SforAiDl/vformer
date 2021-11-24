@@ -9,6 +9,11 @@
 
 </div>
 
+## Library Features
+
+- Contains implementations of prominent ViT architectures broken down into modular components like encoder, attention mechanism, and decoder.
+- Makes it easy to develop custom models by composing components of different architectures.
+
 ## Installation
 
 ```shell
@@ -18,6 +23,12 @@ cd vformer/
 python setup.py install
 
 ```
+
+## Models supported
+
+- [x] [Vanilla ViT](https://arxiv.org/abs/2010.11929)
+- [x] [Swin Transformer](https://arxiv.org/abs/2103.14030)
+- [x] [Pyramid Vision Transformer](https://arxiv.org/abs/2102.12122)
 
 ## Example usage
 
@@ -79,6 +90,7 @@ swin_encoder = SwinEncoder(
 
 - [vit-pytorch](https://github.com/lucidrains/vit-pytorch)
 - [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
+- [PVT](https://github.com/whai362/PVT)
 - [vit-explain](https://github.com/jacobgil/vit-explain)
 
 <br>
@@ -108,4 +120,16 @@ swin_encoder = SwinEncoder(
 }
 ```
 
+<b>Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions</b>
+```bibtex
+@misc{wang2021pyramid,
+      title={Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions}, 
+      author={Wenhai Wang and Enze Xie and Xiang Li and Deng-Ping Fan and Kaitao Song and Ding Liang and Tong Lu and Ping Luo and Ling Shao},
+      year={2021},
+      eprint={2102.12122},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+    
 </details>
