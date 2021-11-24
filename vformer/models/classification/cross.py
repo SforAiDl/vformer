@@ -41,7 +41,7 @@ class _cross_p(BaseClassificationModel):
         return x
 
 
-class CrossViT(nn.Module):
+class CrossViT(BaseClassificationModel):
     def __init__(
         self,
         img_size,
@@ -73,7 +73,8 @@ class CrossViT(nn.Module):
         p_dropout_embedding_s=0.0,
         p_dropout_embedding_l=0.0,
     ):
-        super().__init__()
+        super().__init__(img_size, patch_size_s, in_channels_s, pool_s)
+        super().__init__(img_size, patch_size_l, in_channels_l, pool_l)
         self.s = _cross_p(
             img_size, patch_size_s, latent_dim_s, in_channels_s, p_dropout_embedding_s
         )

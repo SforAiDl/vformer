@@ -9,8 +9,6 @@ test_tensor1 = torch.randn(2, 65, 1024)
 test_tensor2 = torch.randn(2, 257, 1024)
 test_tensor3 = torch.randn(256, 49, 96)
 test_tensor4 = torch.randn(32, 64, 96)
-test_tensor5 = torch.randn(64, 1, 64)
-test_tensor6 = torch.randn(64, 24, 128)
 
 
 def test_VanillaSelfAttention():
@@ -42,6 +40,8 @@ def test_WindowAttention():
 
 
 def test_CrossAttention():
+    test_tensor5 = torch.randn(64, 1, 64)
+    test_tensor6 = torch.randn(64, 24, 128)
     attention = CrossAttention(64, 128, 64)
     out = attention(test_tensor5, test_tensor6)
     assert out.shape == test_tensor5.shape

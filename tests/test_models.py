@@ -143,6 +143,18 @@ def test_CrossVit():
     model = CrossViT(256, 16, 64, 10)
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
+    del model
+    model = CrossViT(
+        256,
+        16,
+        64,
+        10,
+        decoder_config_s=(1024, 256, 10),
+        decoder_config_l=(1024, 256, 10),
+    )
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
+    del model
 
 
 def test_pvt():

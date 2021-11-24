@@ -12,8 +12,6 @@ from vformer.functional import PatchMerging
 
 test_tensor1 = torch.randn(2, 65, 1024)
 test_tensor2 = torch.randn(3, 3136, 96)
-test_tensor3 = torch.randn(3, 5, 128)
-test_tensor4 = torch.randn(3, 5, 256)
 
 
 def test_VanillaEncoder():
@@ -63,6 +61,8 @@ def test_SwinEncoderBlock():
 
 
 def test_CrossEncoder():
+    test_tensor3 = torch.randn(3, 5, 128)
+    test_tensor4 = torch.randn(3, 5, 256)
     encoder = CrossEncoder(128, 256)
     out = encoder(test_tensor3, test_tensor4)
     assert out[0].shape == test_tensor3.shape
