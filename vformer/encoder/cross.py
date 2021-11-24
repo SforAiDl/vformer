@@ -52,15 +52,18 @@ class _cross_p(BaseClassificationModel):
 class CrossEncoder(nn.Module):
     def __init__(
         self,
-        cross_dim=1024,
         latent_dim_s=1024,
         latent_dim_l=1024,
         dim_head_s=64,
         dim_head_l=64,
+        cross_dim_head_s=64,
+        cross_dim_head_l=64,
         depth_s=6,
         depth_l=6,
         attn_heads_s=16,
         attn_heads_l=16,
+        cross_head_s=8,
+        cross_head_l=8,
         encoder_mlp_dim_s=2048,
         encoder_mlp_dim_l=2048,
         p_dropout_encoder_s=0.0,
@@ -83,8 +86,12 @@ class CrossEncoder(nn.Module):
             encoder_mlp_dim_l,
             p_dropout_encoder_l,
         )
-        self.attend_s = CrossAttention(latent_dim_s, latent_dim_l, cross_dim)
-        self.attend_l = CrossAttention(latent_dim_l, latent_dim_s, cross_dim)
+        self.attend_s = CrossAttention(
+            latent_dim_s, latent_dim_l, cross_head_s, cross_dim_head_s
+        )
+        self.attend_l = CrossAttention(
+            latent_dim_l, latent_dim_s, cross_head_l, cross_dim_head_l
+        )
 
     def forward(self, emb_s, emb_l):
         emb_s = self.s(emb_s)

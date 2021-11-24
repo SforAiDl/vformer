@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from vformer.models import SwinTransformer, VanillaViT
+from vformer.models import CrossViT, SwinTransformer, VanillaViT
 
 img_3channels_256 = torch.randn(2, 3, 256, 256)
 img_3channels_224 = torch.randn(4, 3, 224, 224)
@@ -126,4 +126,11 @@ def test_SwinTransformer():
     )
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
+    del model
+
+
+def test_CrossVit():
+    model = CrossViT(256, 16, 64, 10)
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
     del model

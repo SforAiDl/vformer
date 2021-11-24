@@ -56,7 +56,7 @@ def test_SwinEncoderBlock():
 
 
 def test_CrossEncoder():
-    encoder = CrossEncoder(1024, 128, 256)
+    encoder = CrossEncoder(128, 256)
     out = encoder(test_tensor3, test_tensor4)
     assert out[0].shape == test_tensor3.shape
     assert out[1].shape == test_tensor4.shape  # shape remains same
