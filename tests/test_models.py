@@ -1,7 +1,17 @@
 import torch
 import torch.nn as nn
 
-from vformer.models import CrossViT, SwinTransformer, VanillaViT
+from vformer.models import (
+    CrossViT,
+    PVTClassification,
+    PVTClassificationV2,
+    PVTDetection,
+    PVTDetectionV2,
+    PVTSegmentation,
+    PVTSegmentationV2,
+    SwinTransformer,
+    VanillaViT,
+)
 
 img_3channels_256 = torch.randn(2, 3, 256, 256)
 img_3channels_224 = torch.randn(4, 3, 224, 224)
@@ -133,4 +143,136 @@ def test_CrossVit():
     model = CrossViT(256, 16, 64, 10)
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
+
+
+def test_pvt():
+    # classification
+
+    model = PVTClassification(
+        patch_size=[7, 3, 3, 3],
+        embed_dims=[64, 128, 320, 512],
+        num_heads=[1, 2, 5, 8],
+        mlp_ratio=[8, 8, 4, 4],
+        qkv_bias=True,
+        norm_layer=nn.LayerNorm,
+        depths=[2, 2, 2, 2],
+        sr_ratios=[8, 4, 2, 1],
+        decoder_config=[512, 10],
+        num_classes=10,
+    )
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
+    del model
+
+    model = PVTClassification(
+        patch_size=[7, 3, 3, 3],
+        embed_dims=[64, 128, 320, 512],
+        num_heads=[1, 2, 5, 8],
+        mlp_ratio=[8, 8, 4, 4],
+        qkv_bias=True,
+        norm_layer=nn.LayerNorm,
+        depths=[2, 2, 2, 2],
+        sr_ratios=[8, 4, 2, 1],
+        decoder_config=512,
+        num_classes=10,
+    )
+
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
+    del model
+
+    model = PVTClassificationV2(linear=False)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = PVTClassificationV2(num_classes=10)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
+    del model
+
+    model = PVTClassificationV2(num_classes=10)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
+    del model
+
+    model = PVTClassification(num_classes=12)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 12)
+    del model
+
+    model = PVTClassificationV2(
+        embed_dims=[64, 128, 320, 512],
+        num_heads=[1, 2, 5, 8],
+        mlp_ratio=[8, 8, 4, 4],
+        qkv_bias=True,
+        norm_layer=nn.LayerNorm,
+        depths=[3, 4, 6, 3],
+        sr_ratios=[8, 4, 2, 1],
+        linear=True,
+    )
+    out = model(img_3channels_224)
+    # segmentation
+    model = PVTSegmentation()
+    outs = model(img_3channels_224)
+    assert outs.shape == (
+        4,
+        1,
+        224,
+        224,
+    ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
+    del model
+
+    model = PVTSegmentation()
+    outs = model(img_3channels_256)
+    assert outs.shape == (
+        2,
+        1,
+        256,
+        256,
+    ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+    del model
+
+    model = PVTSegmentation()
+    outs = model(img_3channels_256)
+    assert outs.shape == (
+        2,
+        1,
+        256,
+        256,
+    ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+    del model
+
+    model = PVTSegmentationV2(return_pyramid=False)
+    outs = model(img_3channels_224)
+    assert outs.shape == (
+        4,
+        1,
+        224,
+        224,
+    ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
+    del model
+
+    model = PVTSegmentationV2(return_pyramid=True)
+    out = model(img_3channels_224)
+
+    model = PVTSegmentationV2(return_pyramid=False)
+    outs = model(img_3channels_256)
+    assert outs.shape == (
+        2,
+        1,
+        256,
+        256,
+    ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
+    del model
+
+    # detection
+
+    model = PVTDetection()
+    outs = model(img_3channels_224)
+
+    del model
+
+    model = PVTDetectionV2()
+    outs = model(img_3channels_224)
     del model

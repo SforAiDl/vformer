@@ -1,6 +1,12 @@
 import torch
 
-from vformer.encoder import CrossEncoder, SwinEncoder, SwinEncoderBlock, VanillaEncoder
+from vformer.encoder import (
+    CrossEncoder,
+    PVTEncoder,
+    SwinEncoder,
+    SwinEncoderBlock,
+    VanillaEncoder,
+)
 from vformer.functional import PatchMerging
 
 test_tensor1 = torch.randn(2, 65, 1024)
@@ -61,3 +67,24 @@ def test_CrossEncoder():
     assert out[0].shape == test_tensor3.shape
     assert out[1].shape == test_tensor4.shape  # shape remains same
     del encoder
+
+
+def test_PVTEncoder():
+    test_tensor = torch.randn(4, 3136, 64)
+    encoder = PVTEncoder(
+        dim=64,
+        depth=3,
+        qkv_bias=True,
+        qk_scale=0.0,
+        p_dropout=0.0,
+        attn_drop=0.1,
+        drop_path=[0.0] * 3,
+        act_layer=nn.GELU,
+        sr_ratio=1,
+        linear=False,
+        use_dwconv=False,
+        num_heads=1,
+        mlp_ratio=4,
+    )
+    out = encoder(test_tensor, H=56, W=56)
+    assert out.shape == test_tensor.shape
