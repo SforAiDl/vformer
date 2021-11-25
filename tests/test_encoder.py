@@ -10,20 +10,20 @@ from vformer.encoder import (
 )
 from vformer.functional import PatchMerging
 
-test_tensor1 = torch.randn(2, 65, 1024)
-test_tensor2 = torch.randn(3, 3136, 96)
-
 
 def test_VanillaEncoder():
+    test_tensor = torch.randn(2, 65, 1024)
     encoder = VanillaEncoder(
         latent_dim=1024, depth=6, heads=16, dim_head=64, mlp_dim=2048
     )
-    out = encoder(test_tensor1)
-    assert out.shape == test_tensor1.shape  # shape remains same
+    out = encoder(test_tensor)
+    assert out.shape == test_tensor.shape  # shape remains same
     del encoder
+    del test_tensor
 
 
 def test_SwinEncoder():
+    test_tensor = torch.randn(3, 3136, 96)
     # when downsampled
     encoder = SwinEncoder(
         dim=96,
@@ -33,7 +33,7 @@ def test_SwinEncoder():
         window_size=7,
         downsample=PatchMerging,
     )
-    out = encoder(test_tensor2)
+    out = encoder(test_tensor)
 
     assert out.shape == (3, 784, 192)
     del encoder
@@ -47,27 +47,15 @@ def test_SwinEncoder():
         downsample=None,
         use_checkpoint=True,
     )
-    out = encoder(test_tensor2)
+    out = encoder(test_tensor)
     assert out.shape == (3, 3136, 96)
     del encoder
 
-
-def test_SwinEncoderBlock():
-    encoder = SwinEncoderBlock(
+    encoder_block = SwinEncoderBlock(
         dim=96, input_resolution=(224 // 4, 224 // 4), num_heads=3, window_size=7
     )
-    out = encoder(test_tensor2)
-    assert out.shape == test_tensor2.shape
-
-
-def test_CrossEncoder():
-    test_tensor3 = torch.randn(3, 5, 128)
-    test_tensor4 = torch.randn(3, 5, 256)
-    encoder = CrossEncoder(128, 256)
-    out = encoder(test_tensor3, test_tensor4)
-    assert out[0].shape == test_tensor3.shape
-    assert out[1].shape == test_tensor4.shape  # shape remains same
-    del encoder
+    out = encoder_block(test_tensor)
+    assert out.shape == test_tensor.shape
 
 
 def test_PVTEncoder():
@@ -89,3 +77,13 @@ def test_PVTEncoder():
     )
     out = encoder(test_tensor, H=56, W=56)
     assert out.shape == test_tensor.shape
+
+
+def test_CrossEncoder():
+    test_tensor1 = torch.randn(3, 5, 128)
+    test_tensor2 = torch.randn(3, 5, 256)
+    encoder = CrossEncoder(128, 256)
+    out = encoder(test_tensor1, test_tensor2)
+    assert out[0].shape == test_tensor1.shape
+    assert out[1].shape == test_tensor2.shape  # shape remains same
+    del encoder
