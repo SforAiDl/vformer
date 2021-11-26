@@ -42,6 +42,69 @@ class _cross_p(BaseClassificationModel):
 
 
 class CrossViT(BaseClassificationModel):
+    """
+        Implementation of 'CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image
+    Classification'
+        https://arxiv.org/abs/2103.14899
+
+        Parameters:
+        -----------
+        img_size: int
+            Size of the image
+        patch_size_s: int
+            Size of the smaller patches
+        patch_size_l: int
+            Size of the larger patches
+        n_classes: int
+            Number of classes for classification
+        cross_dim_head_s: int
+            Dimension of the head of the cross-attention for the smaller patches
+        cross_dim_head_l: int
+            Dimension of the head of the cross-attention for the larger patches
+        latent_dim_s: int
+            Dimension of the hidden layer for the smaller patches
+        latent_dim_l: int
+            Dimension of the hidden layer for the larger patches
+        dim_head_s: int
+            Dimension of the head of the attention for the smaller patches
+        dim_head_l: int
+            Dimension of the head of the attention for the larger patches
+        depth_s: int
+            Number of attention layers in encoder for the smaller patches
+        depth_l: int
+            Number of attention layers in encoder for the larger patches
+        attn_heads_s: int
+            Number of attention heads for the smaller patches
+        attn_heads_l: int
+            Number of attention heads for the larger patches
+        cross_head_s: int
+            Number of CrossAttention heads for the smaller patches
+        cross_head_l: int
+            Number of CrossAttention heads for the larger patches
+        encoder_mlp_dim_s: int
+            Dimension of hidden layer in the encoder for the smaller patches
+        encoder_mlp_dim_l: int
+            Dimension of hidden layer in the encoder for the larger patches
+        in_channels: int
+            Number of input channels
+        decoder_config_s: int or tuple or list, optional
+            Configuration of the decoder for the smaller patches
+        decoder_config_l: int or tuple or list, optional
+            Configuration of the decoder for the larger patches
+        pool_s: {"cls","mean"}
+            Feature pooling type for the smaller patches
+        pool_l: {"cls","mean"}
+            Feature pooling type for the larger patches
+        p_dropout_encoder_s: float
+            Dropout probability in the encoder for the smaller patches
+        p_dropout_encoder_l: float
+            Dropout probability in the encoder for the larger patches
+        p_dropout_embedding_s: float
+            Dropout probability in the embedding layer for the smaller patches
+        p_dropout_embedding_l: float
+            Dropout probability in the embedding layer for the larger patches
+    """
+
     def __init__(
         self,
         img_size,
@@ -62,8 +125,7 @@ class CrossViT(BaseClassificationModel):
         cross_head_l=8,
         encoder_mlp_dim_s=2048,
         encoder_mlp_dim_l=2048,
-        in_channels_s=3,
-        in_channels_l=3,
+        in_channels=3,
         decoder_config_s=None,
         decoder_config_l=None,
         pool_s="cls",
@@ -73,13 +135,13 @@ class CrossViT(BaseClassificationModel):
         p_dropout_embedding_s=0.0,
         p_dropout_embedding_l=0.0,
     ):
-        super().__init__(img_size, patch_size_s, in_channels_s, pool_s)
-        super().__init__(img_size, patch_size_l, in_channels_l, pool_l)
+        super().__init__(img_size, patch_size_s, in_channels, pool_s)
+        super().__init__(img_size, patch_size_l, in_channels, pool_l)
         self.s = _cross_p(
-            img_size, patch_size_s, latent_dim_s, in_channels_s, p_dropout_embedding_s
+            img_size, patch_size_s, latent_dim_s, in_channels, p_dropout_embedding_s
         )
         self.l = _cross_p(
-            img_size, patch_size_l, latent_dim_l, in_channels_l, p_dropout_embedding_l
+            img_size, patch_size_l, latent_dim_l, in_channels, p_dropout_embedding_l
         )
         self.encoder = CrossEncoder(
             latent_dim_s,
