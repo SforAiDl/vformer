@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 
 from vformer.models import (
+    CrossViT,
     PVTClassification,
     PVTClassificationV2,
     PVTDetection,
@@ -135,6 +136,24 @@ def test_SwinTransformer():
     )
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
+    del model
+
+
+def test_CrossVit():
+    model = CrossViT(256, 16, 64, 10)
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
+    del model
+    model = CrossViT(
+        256,
+        16,
+        64,
+        10,
+        decoder_config_s=(1024, 256, 10),
+        decoder_config_l=(1024, 256, 10),
+    )
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
     del model
 
 
