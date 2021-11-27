@@ -56,8 +56,7 @@ class CVTEncoderBlock(nn.Module):
 
     def forward(self, x):
         for attn, ff in self.encoder:
-            x = attn(x) + x
-            x = self.norm(x)
-            x = ff(x) + x
-        x = x + self.drop_path(x)
+            x = self.drop_path(attn(x)) + x
+            x = self.drop_path(ff(self.norm(x))) + x
+
         return x
