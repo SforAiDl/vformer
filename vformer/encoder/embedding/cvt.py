@@ -3,7 +3,9 @@ import torch.nn as nn
 
 
 class CVTEmbedding(nn.Module):
-    """"""
+    """
+    Embedding / Tokenizer for Compact Vision Transformer
+    """
 
     def __init__(
         self,
