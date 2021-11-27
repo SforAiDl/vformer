@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 
 from vformer.models import (
+    CCT,
     CVT,
-CCT,
     CrossViT,
     PVTClassification,
     PVTClassificationV2,
@@ -328,8 +328,8 @@ def test_cvt():
 
 
 def test_cct():
-    model = CCT(img_size=256,patch_size=4,in_chans=3)
+    model = CCT(img_size=256, patch_size=4, in_chans=3)
 
-    out= model(img_3channels_256)
+    out = model(img_3channels_256)
 
-    assert out.shape == (2,1000)
+    assert out.shape == (2, 1000)

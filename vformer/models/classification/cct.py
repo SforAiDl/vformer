@@ -31,7 +31,6 @@ class CCT(BaseClassificationModel):
         pooling_kernel_size=3,
         pooling_stride=2,
         pooling_padding=1,
-
     ):
         super().__init__(
             img_size=img_size,
