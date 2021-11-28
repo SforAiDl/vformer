@@ -292,8 +292,6 @@ class MultiScaleBlock(nn.Module):
                Dropout rate
     drop_path: float, optional
                Dropout rate for dropping paths in mlp
-    act_layer= nn.Module, optional
-               Normalization function
     norm_layer= nn.Module, optional
                 Normalization function
     up_rate= float, optional
@@ -326,7 +324,6 @@ class MultiScaleBlock(nn.Module):
         qk_scale=None,
         drop_rate=0.0,
         drop_path=0.0,
-        act_layer=nn.GELU,
         norm_layer=nn.LayerNorm,
         up_rate=None,
         kernel_q=(1, 1, 1),
@@ -368,11 +365,10 @@ class MultiScaleBlock(nn.Module):
         else:
             mlp_dim_out = dim_out
         self.mlp = Mlp(
-            in_features=dim,
-            hidden_features=mlp_hidden_dim,
-            out_features=mlp_dim_out,
-            act_layer=act_layer,
-            drop_rate=drop_rate,
+            dim=dim,
+            hidden_dim=mlp_hidden_dim,
+            out_dim=mlp_dim_out,
+            p_dropout=drop_rate,
         )
         if dim != dim_out:
             self.proj = nn.Linear(dim, dim_out)
