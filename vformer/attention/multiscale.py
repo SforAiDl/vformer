@@ -283,7 +283,7 @@ class MultiScaleBlock(nn.Module):
     num_heads: int
                Number of attention heads
     mlp_ratio: float, optional
-               Ratio of hidden dimension to input dimension for feedforward 
+               Ratio of hidden dimension to input dimension for feedforward
     qkv_bias: boolean, optional
 
     qk_scale:
