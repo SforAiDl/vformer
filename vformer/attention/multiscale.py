@@ -17,7 +17,7 @@ def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
           Pooling function
     thw_shape: list of int
                Reduced space-time resolution
-    has_cls_embed: boolean, optional
+    has_cls_embed: bool, optional
                    Set to true if classification embeddding is provided
     norm : nn.Module, optional
            Normalization function
@@ -66,8 +66,8 @@ class MultiScaleAttention(nn.Module):
          Dimension of the embedding
     num_heads: int
                Number of attention heads
-    qkv_bias: boolean,optional
-
+    qkv_bias :bool, optional
+              If True, add a learnable bias to query, key, value
     drop_rate: float, optional
                Dropout rate
     kernel_q: tuple of int, optional
@@ -80,11 +80,11 @@ class MultiScaleAttention(nn.Module):
                Kernel size of key and value
     norm_layer: nn.Module, optional
                 Normalization function
-    has_cls_embed: boolean, optional
+    has_cls_embed: bool, optional
                    Set to true if classification embeddding is provided
     mode: str, optional
           Pooling function to be used. Options include `conv`, `avg`, and `max'
-    pool_first: boolean, optional
+    pool_first: bool, optional
                 Set to True to perform pool before projection
     """
 
@@ -283,11 +283,11 @@ class MultiScaleBlock(nn.Module):
     num_heads: int
                Number of attention heads
     mlp_ratio: float, optional
-               Ratio of hidden dimension to input dimension for feedforward
-    qkv_bias: boolean, optional
-
-    qk_scale:
-
+               Ratio of hidden dimension to input dimension for MLP
+    qkv_bias :bool, optional
+              If True, add a learnable bias to query, key, value.
+    qk_scale: float, optional
+              Override default qk scale of head_dim ** -0.5 if set
     drop_rate: float, optional
                Dropout rate
     drop_path: float, optional
@@ -295,7 +295,7 @@ class MultiScaleBlock(nn.Module):
     norm_layer= nn.Module, optional
                 Normalization function
     up_rate= float, optional
-             Ratio of output dimension to input dimension for feedforward
+             Ratio of output dimension to input dimension for MLP
     kernel_q: tuple of int, optional
               Kernel size of query
     kernel_kv: tuple of int, optional
@@ -308,9 +308,9 @@ class MultiScaleBlock(nn.Module):
                 Normalization function
     mode: str, optional
           Pooling function to be used. Options include `conv`, `avg`, and `max'
-    has_cls_embed: boolean, optional
+    has_cls_embed: bool, optional
                    Set to true if classification embeddding is provided
-    pool_first: boolean, optional
+    pool_first: bool, optional
                 Set to True to perform pool before projection
     """
 
