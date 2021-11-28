@@ -18,6 +18,7 @@ class Mlp(nn.Module):
     drop_rate: float, optional
                Dropout rate
     """
+
     def __init__(
         self,
         in_features,

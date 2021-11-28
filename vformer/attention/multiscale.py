@@ -2,8 +2,9 @@ import numpy
 import torch
 import torch.nn as nn
 
-from vformer.vformer.common.mlp import Mlp
 from vformer.vformer.common.dropapath import DropPath
+from vformer.vformer.common.mlp import Mlp
+
 
 def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
     """
@@ -21,7 +22,7 @@ def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
     norm : nn.Module, optional
            Normalization function
     """
-    
+
     if pool is None:
         return tensor, thw_shape
     tensor_dim = tensor.ndim
@@ -37,9 +38,7 @@ def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
 
     B, N, L, C = tensor.shape
     T, H, W = thw_shape
-    tensor = (
-        tensor.reshape(B * N, T, H, W, C).permute(0, 4, 1, 2, 3).contiguous()
-    )
+    tensor = tensor.reshape(B * N, T, H, W, C).permute(0, 4, 1, 2, 3).contiguous()
 
     tensor = pool(tensor)
 
@@ -68,7 +67,7 @@ class MultiScaleAttention(nn.Module):
     num_heads: int
                Number of attention heads
     qkv_bias: boolean,optional
-    
+
     drop_rate: float, optional
                Dropout rate
     kernel_q: tuple of int, optional
@@ -88,11 +87,11 @@ class MultiScaleAttention(nn.Module):
     pool_first: boolean, optional
                 Set to True to perform pool before projection
     """
-    
+
     def __init__(
         self,
         dim,
-        num_heads = 8,
+        num_heads=8,
         qkv_bias=False,
         drop_rate=0.0,
         kernel_q=(1, 1, 1),
@@ -193,9 +192,7 @@ class MultiScaleAttention(nn.Module):
     def forward(self, x, thw_shape):
         B, N, C = x.shape
         if self.pool_first:
-            x = x.reshape(B, N, self.num_heads, C // self.num_heads).permute(
-                0, 2, 1, 3
-            )
+            x = x.reshape(B, N, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
             q = k = v = x
         else:
             q = k = v = x
@@ -238,21 +235,9 @@ class MultiScaleAttention(nn.Module):
         )
 
         if self.pool_first:
-            q_N = (
-                numpy.prod(q_shape) + 1
-                if self.has_cls_embed
-                else numpy.prod(q_shape)
-            )
-            k_N = (
-                numpy.prod(k_shape) + 1
-                if self.has_cls_embed
-                else numpy.prod(k_shape)
-            )
-            v_N = (
-                numpy.prod(v_shape) + 1
-                if self.has_cls_embed
-                else numpy.prod(v_shape)
-            )
+            q_N = numpy.prod(q_shape) + 1 if self.has_cls_embed else numpy.prod(q_shape)
+            k_N = numpy.prod(k_shape) + 1 if self.has_cls_embed else numpy.prod(k_shape)
+            v_N = numpy.prod(v_shape) + 1 if self.has_cls_embed else numpy.prod(v_shape)
 
             q = q.permute(0, 2, 1, 3).reshape(B, q_N, C)
             q = (
@@ -298,11 +283,11 @@ class MultiScaleBlock(nn.Module):
     num_heads: int
                Number of attention heads
     mlp_ratio: float, optional
-    
+
     qkv_bias: boolean, optional
-    
+
     qk_scale:
-    
+
     drop_rate: float, optional
                Dropout rate
     drop_path: float, optional
@@ -312,7 +297,7 @@ class MultiScaleBlock(nn.Module):
     norm_layer= nn.Module, optional
                 Normalization function
     p_rate=
-    
+
     kernel_q: tuple of int, optional
               Kernel size of query
     kernel_kv: tuple of int, optional
@@ -330,7 +315,7 @@ class MultiScaleBlock(nn.Module):
     pool_first: boolean, optional
                 Set to True to perform pool before projection
     """
-    
+
     def __init__(
         self,
         dim,
@@ -373,9 +358,7 @@ class MultiScaleBlock(nn.Module):
             mode=mode,
             pool_first=pool_first,
         )
-        self.drop_path = (
-            DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
-        )
+        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = norm_layer(dim)
         mlp_hidden_dim = int(dim * mlp_ratio)
         self.has_cls_embed = has_cls_embed
@@ -395,9 +378,7 @@ class MultiScaleBlock(nn.Module):
             self.proj = nn.Linear(dim, dim_out)
 
         self.pool_skip = (
-            nn.MaxPool3d(
-                kernel_skip, stride_skip, padding_skip, ceil_mode=False
-            )
+            nn.MaxPool3d(kernel_skip, stride_skip, padding_skip, ceil_mode=False)
             if len(kernel_skip) > 0
             else None
         )
