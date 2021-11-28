@@ -3,6 +3,21 @@ import torch.nn as nn
 
 
 class Mlp(nn.Module):
+    """
+    Multilayer Perceptron
+    Parameters:
+    -----------
+    in_features: int
+                 Size of input
+    hidden_features:  int, optional
+                      Size of hidden layer
+    out_features: int, optional
+                  Size of output
+    act_layer: nn.Module, optional
+               Activation function
+    drop_rate: float, optional
+               Dropout rate
+    """
     def __init__(
         self,
         in_features,
