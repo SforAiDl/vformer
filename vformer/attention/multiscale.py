@@ -2,7 +2,7 @@ import numpy
 import torch
 import torch.nn as nn
 
-from vformer.vformer.common.dropapath import DropPath
+from timm.models.layers import DropPath
 from vformer.vformer.common.mlp import Mlp
 
 
