@@ -6,6 +6,22 @@ from slowfast.models.common import DropPath, Mlp
 
 
 def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
+    """
+    Attention pooling
+    Parameters:
+    -----------
+    tensor: tensor
+            Input tensor
+    pool: nn.Module
+          Pooling function
+    thw_shape: list of int
+               Reduced space-time resolution
+    has_cls_embed: boolean, optional
+                   Set to true if classification embeddding is provided
+    norm : nn.Module, optional
+           Normalization function
+    """
+    
     if pool is None:
         return tensor, thw_shape
     tensor_dim = tensor.ndim
@@ -43,10 +59,40 @@ def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
 
 
 class MultiScaleAttention(nn.Module):
+    """
+    Multiscale Attention
+    Parameters:
+    -----------
+    dim: int
+         Dimension of the embedding
+    num_heads: int
+               Number of attention heads
+    qkv_bias: boolean,optional
+    
+    drop_rate: float, optional
+               Dropout rate
+    kernel_q: tuple of int, optional
+              Kernel size of query
+    kernel_kv: tuple of int, optional
+               Kernel size of key and value
+    stride_q: tuple of int, optional
+              Kernel size of query
+    stride_kv: tuple of int, optional
+               Kernel size of key and value
+    norm_layer: nn.Module, optional
+                Normalization function
+    has_cls_embed: boolean, optional
+                   Set to true if classification embeddding is provided
+    mode: str, optional
+          Pooling function to be used. Options include `conv`, `avg`, and `max'
+    pool_first: boolean, optional
+                Set to True to perform pool before projection
+    """
+    
     def __init__(
         self,
         dim,
-        num_heads=8,
+        num_heads = 8,
         qkv_bias=False,
         drop_rate=0.0,
         kernel_q=(1, 1, 1),
@@ -55,9 +101,7 @@ class MultiScaleAttention(nn.Module):
         stride_kv=(1, 1, 1),
         norm_layer=nn.LayerNorm,
         has_cls_embed=True,
-        # Options include `conv`, `avg`, and `max`.
         mode="conv",
-        # If True, perform pool before projection.
         pool_first=False,
     ):
         super().__init__()
@@ -243,6 +287,50 @@ class MultiScaleAttention(nn.Module):
 
 
 class MultiScaleBlock(nn.Module):
+    """
+    Multiscale Attention Block
+    Parameters:
+    -----------
+    dim: int
+         Dimension of the embedding
+    dim_out: int
+             Output dimension of the embedding
+    num_heads: int
+               Number of attention heads
+    mlp_ratio: float, optional
+    
+    qkv_bias: boolean, optional
+    
+    qk_scale:
+    
+    drop_rate: float, optional
+               Dropout rate
+    drop_path: float, optional
+               Dropout rate for dropping paths in mlp
+    act_layer= nn.Module, optional
+               Normalization function
+    norm_layer= nn.Module, optional
+                Normalization function
+    p_rate=
+    
+    kernel_q: tuple of int, optional
+              Kernel size of query
+    kernel_kv: tuple of int, optional
+               Kernel size of key and value
+    stride_q: tuple of int, optional
+              Kernel size of query
+    stride_kv: tuple of int, optional
+               Kernel size of key and value
+    norm_layer: nn.Module, optional
+                Normalization function
+    mode: str, optional
+          Pooling function to be used. Options include `conv`, `avg`, and `max'
+    has_cls_embed: boolean, optional
+                   Set to true if classification embeddding is provided
+    pool_first: boolean, optional
+                Set to True to perform pool before projection
+    """
+    
     def __init__(
         self,
         dim,
