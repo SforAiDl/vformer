@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 from timm.models.layers import DropPath
-from vformer.vformer.common.mlp import Mlp
+from vformer.vformer.encoder.nn import FeedForward as Mlp
 
 
 def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
