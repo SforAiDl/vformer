@@ -1,3 +1,6 @@
+import torch
+import torch.nn as nn
+
 class DropPath(nn.Module):
     """
     Drop paths (Stochastic Depth) per sample  (when applied in main path of residual blocks)
