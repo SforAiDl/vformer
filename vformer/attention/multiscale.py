@@ -2,8 +2,8 @@ import numpy
 import torch
 import torch.nn as nn
 
-from slowfast.models.common import DropPath, Mlp
-
+from vformer.vformer.common.mlp import Mlp
+from vformer.vformer.common.dropapath import DropPath
 
 def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
     """
