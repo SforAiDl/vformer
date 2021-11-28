@@ -1,5 +1,6 @@
 import torch
 
+from vformer.attention.cross import CrossAttention
 from vformer.attention.spatial import SpatialAttention
 from vformer.attention.vanilla import VanillaSelfAttention
 from vformer.attention.window import WindowAttention
@@ -30,6 +31,15 @@ def test_WindowAttention():
     attention = WindowAttention(dim=96, window_size=8, num_heads=4)
     out = attention(test_tensor2)
     assert out.shape == test_tensor2.shape
+    del attention
+
+
+def test_CrossAttention():
+    test_tensor1 = torch.randn(64, 1, 64)
+    test_tensor2 = torch.randn(64, 24, 128)
+    attention = CrossAttention(64, 128, 64)
+    out = attention(test_tensor1, test_tensor2)
+    assert out.shape == test_tensor1.shape
     del attention
 
 
