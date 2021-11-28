@@ -283,7 +283,7 @@ class MultiScaleBlock(nn.Module):
     num_heads: int
                Number of attention heads
     mlp_ratio: float, optional
-
+               Ratio of hidden dimension to input dimension for feedforward 
     qkv_bias: boolean, optional
 
     qk_scale:
@@ -296,8 +296,8 @@ class MultiScaleBlock(nn.Module):
                Normalization function
     norm_layer= nn.Module, optional
                 Normalization function
-    p_rate=
-
+    up_rate= float, optional
+             Ratio of output dimension to input dimension for feedforward
     kernel_q: tuple of int, optional
               Kernel size of query
     kernel_kv: tuple of int, optional
