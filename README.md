@@ -30,6 +30,7 @@ python setup.py install
 - [x] [Vanilla ViT](https://arxiv.org/abs/2010.11929)
 - [x] [Swin Transformer](https://arxiv.org/abs/2103.14030)
 - [x] [Pyramid Vision Transformer](https://arxiv.org/abs/2102.12122)
+- [x] [CrossViT](https://arxiv.org/abs/2103.14899) 
 
 ## Example usage
 
