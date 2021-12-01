@@ -301,7 +301,17 @@ def test_cvt():
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
 
+    model = CVT(
+        img_size=224,
+        in_chans=3,
+        patch_size=4,
+        positional_embedding="None",
+        seq_pool=False,
+    )
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+
     model = CVT(img_size=224, in_chans=3, patch_size=4, positional_embedding="None")
-    f = model(img_3channels_224)
-    assert f.shape == (4, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
     del model
