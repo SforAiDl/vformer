@@ -308,6 +308,7 @@ def test_cvt():
         positional_embedding="None",
         seq_pool=False,
     )
+
     out = model(img_3channels_224)
     assert out.shape == (4, 1000)
 
