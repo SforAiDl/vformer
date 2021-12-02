@@ -293,15 +293,12 @@ def test_pvt():
 
 
 def test_cvt():
-    model = CVT(
-        img_size=224,
-        in_chans=3,
-        patch_size=4,
-    )
-    out = model(img_3channels_224)
-    assert out.shape == (4, 1000)
-    del model
+    model = CVT(img_size=256, patch_size=4, in_chans=3)
 
+    out = model(img_3channels_256)
+
+    assert out.shape == (2, 1000)
+    del model
     model = CVT(
         img_size=224,
         patch_size=4,
@@ -322,24 +319,16 @@ def test_cvt():
     assert out.shape == (4, 10)
     del model
 
-    model = CVT(img_size=256, patch_size=4, in_chans=3)
-
-    out = model(img_3channels_256)
-
-    assert out.shape == (2, 1000)
-    del model
-
     model = CVT(
         img_size=224,
         in_chans=3,
         patch_size=4,
-        positional_embedding="None",
+        positional_embedding="none",
         seq_pool=False,
     )
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
     del model
-
     model = CVT(
         img_size=224,
         in_chans=3,
@@ -350,6 +339,7 @@ def test_cvt():
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
     del model
+
 
 
 def test_cct():
