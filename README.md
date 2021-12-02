@@ -30,7 +30,7 @@ python setup.py install
 - [x] [Vanilla ViT](https://arxiv.org/abs/2010.11929)
 - [x] [Swin Transformer](https://arxiv.org/abs/2103.14030)
 - [x] [Pyramid Vision Transformer](https://arxiv.org/abs/2102.12122)
-- [x] [CrossViT](https://arxiv.org/abs/2103.14899) 
+- [x] [CrossViT](https://arxiv.org/abs/2103.14899)
 
 ## Example usage
 
@@ -53,7 +53,7 @@ model = SwinTransformer(
         window_size=7,
         drop_rate=0.2,
     )
-logits = model(image)            
+logits = model(image)
 ```
 
 `VFormer` has a modular design and allows for easy experimentation using blocks/modules of different architectures. For example, if desired, you can use just the encoder or the windowed attention layer of the Swin Transformer model.
@@ -94,6 +94,8 @@ swin_encoder = SwinEncoder(
 - [Swin-Transformer](https://github.com/microsoft/Swin-Transformer)
 - [PVT](https://github.com/whai362/PVT)
 - [vit-explain](https://github.com/jacobgil/vit-explain)
+- [CrossViT](https://github.com/IBM/CrossViT)
+- [Compact-Transformers](https://github.com/SHI-Labs/Compact-Transformers)
 
 <br>
 
@@ -125,7 +127,7 @@ swin_encoder = SwinEncoder(
 <b>Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions</b>
 ```bibtex
 @misc{wang2021pyramid,
-      title={Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions}, 
+      title={Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions},
       author={Wenhai Wang and Enze Xie and Xiang Li and Deng-Ping Fan and Kaitao Song and Ding Liang and Tong Lu and Ping Luo and Ling Shao},
       year={2021},
       eprint={2102.12122},
@@ -133,5 +135,28 @@ swin_encoder = SwinEncoder(
       primaryClass={cs.CV}
 }
 ```
-    
+<b> CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification </b>
+
+```bibtex
+@inproceedings{chen2021crossvit,
+    title={{CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification}},
+    author={Chun-Fu (Richard) Chen and Quanfu Fan and Rameswar Panda},
+    booktitle={International Conference on Computer Vision (ICCV)},
+    year={2021}
+}
+```
+
+<b> Escaping the Big Data Paradigm with Compact Transformers </b>
+
+```bibtex
+@article{hassani2021escaping,
+	title        = {Escaping the Big Data Paradigm with Compact Transformers},
+	author       = {Ali Hassani and Steven Walton and Nikhil Shah and Abulikemu Abuduweili and Jiachen Li and Humphrey Shi},
+	year         = 2021,
+	url          = {https://arxiv.org/abs/2104.05704},
+	eprint       = {2104.05704},
+	archiveprefix = {arXiv},
+	primaryclass = {cs.CV}
+}
+```
 </details>
