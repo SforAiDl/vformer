@@ -341,7 +341,6 @@ def test_cvt():
     del model
 
 
-
 def test_cct():
     model = CCT(img_size=256, patch_size=4, in_chans=3)
 
