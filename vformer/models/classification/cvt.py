@@ -9,6 +9,37 @@ from ...utils import pair
 
 
 class CVT(BaseClassificationModel):
+    """
+    img_size: int
+        Size of the image
+    patch_size:int
+        Size of the single patch in the image
+    in_chans:int
+        Number of input channels in image
+    seq_pool:bool
+        Whether to use sequence pooling or not
+    embedding_dim: int
+        Patch embedding dimension
+    num_layers: int
+        Number of Encoders in encoder block
+    num_heads: int
+        Number of heads in each transformer layer
+    mlp_ratio:float
+        Ratio of mlp heads to embedding dimension
+    num_classes: int
+        Number of classes for classification
+    p_dropout: float
+        Dropout probability
+    attn_dropout: float
+        Dropout probability
+    drop_path: float
+        Stochastic depth rate, default is 0.1
+    positional_embedding: str
+        One of the string values {'learnable','sine','None'}, default is learnable
+    decoder_config: tuple(int) or int
+        Configuration of the decoder. If None, the default configuration is used.
+    """
+
     def __init__(
         self,
         img_size=224,
@@ -44,10 +75,10 @@ class CVT(BaseClassificationModel):
             kernel_size=patch_size,
             stride=patch_size,
             padding=0,
-            max_pool=False,
+            is_max_pool=False,
             activation=None,
             n_conv_layers=1,
-            conv_bias=True,
+            is_conv_bias=True,
         )
 
         positional_embedding = (
@@ -103,7 +134,18 @@ class CVT(BaseClassificationModel):
                 for i in range(num_layers)
             ]
         )
-        self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+        if decoder_config is not None:
+
+            if not isinstance(decoder_config, list) and not isinstance(
+                decoder_config, tuple
+            ):
+                decoder_config = [decoder_config]
+            assert (
+                decoder_config[0] == embedding_dim
+            ), f"Configurations do not match for MLPDecoder, First element of `decoder_config` expected to be {embedding_dim}, got {decoder_config[0]} "
+            self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+        else:
+            self.decoder = MLPDecoder(config=embedding_dim, n_classes=num_classes)
 
     def forward(self, x):
         x = self.embedding(x)
