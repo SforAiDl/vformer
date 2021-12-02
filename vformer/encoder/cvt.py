@@ -21,8 +21,6 @@ class CVTEncoderBlock(nn.Module):
         Dropout probability
     hidden_dim: int, optional
         Dimension of the hidden layer
-    out_dim:int, optional
-        Dimension of the output
     drop_path_rate:float
         Stochastic drop path rate
     """
@@ -34,7 +32,6 @@ class CVTEncoderBlock(nn.Module):
         p_dropout,
         attn_dropout,
         hidden_dim=None,
-        out_dim=None,
         drop_path_rate=0.0,
         **kwargs,
     ):
@@ -56,7 +53,7 @@ class CVTEncoderBlock(nn.Module):
                         fn=FeedForward(
                             dim=dim,
                             hidden_dim=hidden_dim,
-                            out_dim=out_dim,
+                            out_dim=dim,
                             p_dropout=p_dropout,
                             **kwargs,
                         ),

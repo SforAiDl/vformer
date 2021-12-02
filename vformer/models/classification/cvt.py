@@ -69,6 +69,7 @@ class CVT(BaseClassificationModel):
             img_size % patch_size == 0
         ), f"Image size ({img_size}) has to be divisible by patch size ({patch_size})"
         img_size = pair(img_size)
+        self.in_chans = in_chans
         self.embedding = CVTEmbedding(
             in_chans=in_chans,
             out_chans=embedding_dim,
@@ -139,9 +140,7 @@ class CVT(BaseClassificationModel):
     def forward(self, x):
         x = self.embedding(x)
         if self.positional_emb is None and x.size(1) < self.sequence_length:
-            x = F.pad(
-                x, (0, 0, 0, self.n_channels - x.size(1)), mode="constant", value=0
-            )
+            x = F.pad(x, (0, 0, 0, self.in_chans - x.size(1)), mode="constant", value=0)
 
         if not self.seq_pool:
             cls_token = self.class_emb.expand(x.shape[0], -1, -1)
