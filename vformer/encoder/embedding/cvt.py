@@ -4,7 +4,32 @@ import torch.nn as nn
 
 class CVTEmbedding(nn.Module):
     """
-    Embedding / Tokenizer for Compact Vision Transformer
+    parameters:
+    -----------
+    kernel_size: int or tuple
+        Size of the kernel used in convolution
+    stride: int or tuple
+        Stride of the convolution operation
+    padding: int
+        Padding to all sides of the input
+    pooling_kernel_size: int|tuple
+        Size of the kernel used in  MaxPool2D,default is 3
+    pooling_stride: int|tuple
+        Size of the stride in MaxPool2D, default is 2
+    n_conv_layers: int
+        Number of Convolution layers in the encoder,default is 1
+    in_chans: int
+        Number of input channels in image, default is 3
+    out_chans: int
+        Number of output channels
+    in_planes: int
+        This will be number of channels in the self.conv_layer's convolution except 1st layer and last layer.
+    activation: Activation Layer, optional
+        Activation Layer, default is None
+    max_pool: bool
+        Whether to have max-pooling or not
+    conv_bias:bool, optional
+        Whether to add learnable bias in the convolution operation,
     """
 
     def __init__(

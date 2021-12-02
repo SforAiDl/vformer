@@ -9,6 +9,37 @@ from ...utils import pair
 
 
 class CVT(BaseClassificationModel):
+    """
+    img_size: int
+        Size of the image
+    patch_size:int
+        Size of the single patch in the image
+    in_chans:int
+        Number of input channels in image
+    seq_pool:bool
+        Whether to use sequence pooling or not
+    embedding_dim: int
+        Patch embedding dimension
+    num_layers: int
+        Number of Encoders in encoder block
+    num_heads: int
+        Number of heads in each transformer layer
+    mlp_ratio:float
+        Ratio of mlp heads to embedding dimension
+    num_classes: int
+        Number of classes for classification
+    p_dropout: float
+        Dropout probability
+    attn_dropout: float
+        Dropout probability
+    drop_path: float
+        Stochastic depth rate, default is 0.1
+    positional_embedding: str
+        One of the string values {'learnable','sine','None'}, default is learnable
+    decoder_config: tuple(int) or int
+        Configuration of the decoder. If None, the default configuration is used.
+    """
+
     def __init__(
         self,
         img_size=224,

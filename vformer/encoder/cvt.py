@@ -10,6 +10,23 @@ from .nn import FeedForward
 
 
 class CVTEncoderBlock(nn.Module):
+    """
+    parameters:
+    -----------
+    dim:int
+        Dimension of the input tensor
+    p_dropout: float
+        Dropout probability
+    attn_dropout: float
+        Dropout probability
+    hidden_dim: int, optional
+        Dimension of the hidden layer
+    out_dim:int, optional
+        Dimension of the output
+    drop_path_rate:float
+        Stochastic drop path rate
+    """
+
     def __init__(
         self,
         dim,
