@@ -10,6 +10,10 @@ from ...utils import pair
 
 class CCT(BaseClassificationModel):
     """
+    Implementation of Escaping the Big Data Paradigm with Compact Transformers - https://arxiv.org/abs/2104.05704
+
+    Parameters:
+    ------------
     img_size: int
         Size of the image
     patch_size:int

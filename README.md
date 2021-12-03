@@ -31,6 +31,8 @@ python setup.py install
 - [x] [Swin Transformer](https://arxiv.org/abs/2103.14030)
 - [x] [Pyramid Vision Transformer](https://arxiv.org/abs/2102.12122)
 - [x] [CrossViT](https://arxiv.org/abs/2103.14899)
+- [x] [Compact Vision Transformer](https://arxiv.org/abs/2104.05704)
+- [x] [Compact Convolutional Transformer](https://arxiv.org/abs/2104.05704)
 
 ## Example usage
 
