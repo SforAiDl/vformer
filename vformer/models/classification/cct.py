@@ -154,7 +154,18 @@ class CCT(BaseClassificationModel):
                 for i in range(num_layers)
             ]
         )
-        self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+        if decoder_config is not None:
+
+            if not isinstance(decoder_config, list) and not isinstance(
+                decoder_config, tuple
+            ):
+                decoder_config = [decoder_config]
+            assert (
+                decoder_config[0] == embedding_dim
+            ), f"Configurations do not match for MLPDecoder, First element of `decoder_config` expected to be {embedding_dim}, got {decoder_config[0]} "
+            self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+        else:
+            self.decoder = MLPDecoder(config=embedding_dim, n_classes=num_classes)
 
     def forward(self, x):
         x = self.embedding(x)

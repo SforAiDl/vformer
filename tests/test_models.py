@@ -332,6 +332,7 @@ def test_cvt():
         patch_size=4,
         positional_embedding="none",
         seq_pool=False,
+        decoder_config=None,
     )
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
@@ -343,6 +344,7 @@ def test_cvt():
         patch_size=4,
         positional_embedding="none",
         seq_pool=True,
+        decoder_config=768,
     )
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
@@ -380,6 +382,7 @@ def test_cct():
         patch_size=4,
         positional_embedding="none",
         seq_pool=False,
+        decoder_config=None,
     )
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
@@ -391,6 +394,7 @@ def test_cct():
         patch_size=4,
         positional_embedding="none",
         seq_pool=True,
+        decoder_config=768,
     )
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)

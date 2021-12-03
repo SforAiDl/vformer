@@ -24,7 +24,7 @@ class SpatialAttention(nn.Module):
     proj_drop :float, optional
         Dropout rate
     linear : bool
-        Whether to use linear spatial attention,default is False
+        Whether to use linear Spatial attention,default is False
     act_fn : activation function
         Activation function, default is False
     """
