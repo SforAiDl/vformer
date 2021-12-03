@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 
 from vformer.models import (
+    CCT,
+    CVT,
     CrossViT,
     PVTClassification,
     PVTClassificationV2,
@@ -24,6 +26,7 @@ def test_VanillaViT():
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
     del model
+
     model = VanillaViT(
         img_size=256,
         patch_size=32,
@@ -59,6 +62,7 @@ def test_SwinTransformer():
     out = model(img_3channels_224)
     assert out.shape == (4, 1000)
     del model
+
     # tiny_patch4_window7_224
     model = SwinTransformer(
         img_size=224,
@@ -74,6 +78,7 @@ def test_SwinTransformer():
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
+
     # tiny_c24_patch4_window8_256
     model = SwinTransformer(
         img_size=256,
@@ -89,6 +94,7 @@ def test_SwinTransformer():
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
     del model
+
     # for greyscale image
     model = SwinTransformer(
         img_size=224,
@@ -104,6 +110,7 @@ def test_SwinTransformer():
     out = model(img_1channels_224)
     assert out.shape == (2, 10)
     del model
+
     # testing for decoder_config parameter
     model = SwinTransformer(
         img_size=224,
@@ -120,6 +127,7 @@ def test_SwinTransformer():
     out = model(img_3channels_224)
     del model
     assert out.shape == (4, 10)
+
     # ape=false
     model = SwinTransformer(
         img_size=224,
@@ -144,6 +152,7 @@ def test_CrossVit():
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
     del model
+
     model = CrossViT(
         256,
         16,
@@ -224,6 +233,8 @@ def test_pvt():
         linear=True,
     )
     out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+
     # segmentation
     model = PVTSegmentation()
     outs = model(img_3channels_224)
@@ -287,4 +298,104 @@ def test_pvt():
 
     model = PVTDetectionV2()
     outs = model(img_3channels_224)
+    del model
+
+
+def test_cvt():
+    model = CVT(img_size=256, patch_size=4, in_chans=3)
+    out = model(img_3channels_256)
+    assert out.shape == (2, 1000)
+    del model
+
+    model = CVT(
+        img_size=224,
+        patch_size=4,
+        in_chans=3,
+        seq_pool=False,
+        embedding_dim=768,
+        num_heads=1,
+        mlp_ratio=4.0,
+        num_classes=10,
+        p_dropout=0.5,
+        attn_dropout=0.3,
+        drop_path=0.2,
+        positional_embedding="sine",
+        decoder_config=(768, 12024, 512, 256, 128, 64, 32),
+    )
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
+    del model
+
+    model = CVT(
+        img_size=224,
+        in_chans=3,
+        patch_size=4,
+        positional_embedding="none",
+        seq_pool=False,
+        decoder_config=None,
+    )
+    f = model(img_3channels_224)
+    assert f.shape == (4, 1000)
+    del model
+
+    model = CVT(
+        img_size=224,
+        in_chans=3,
+        patch_size=4,
+        positional_embedding="none",
+        seq_pool=True,
+        decoder_config=768,
+    )
+    f = model(img_3channels_224)
+    assert f.shape == (4, 1000)
+    del model
+
+
+def test_cct():
+    model = CCT(img_size=256, patch_size=4, in_chans=3)
+    out = model(img_3channels_256)
+    assert out.shape == (2, 1000)
+    del model
+
+    model = CCT(
+        img_size=224,
+        patch_size=4,
+        in_chans=3,
+        seq_pool=False,
+        embedding_dim=768,
+        num_heads=1,
+        mlp_ratio=4.0,
+        num_classes=10,
+        p_dropout=0.5,
+        attn_dropout=0.3,
+        drop_path=0.2,
+        positional_embedding="sine",
+        decoder_config=(768, 12024, 512, 256, 128, 64, 32),
+    )
+    out = model(img_3channels_224)
+    assert out.shape == (4, 10)
+    del model
+
+    model = CCT(
+        img_size=224,
+        in_chans=3,
+        patch_size=4,
+        positional_embedding="none",
+        seq_pool=False,
+        decoder_config=None,
+    )
+    f = model(img_3channels_224)
+    assert f.shape == (4, 1000)
+    del model
+
+    model = CCT(
+        img_size=224,
+        in_chans=3,
+        patch_size=4,
+        positional_embedding="none",
+        seq_pool=True,
+        decoder_config=768,
+    )
+    f = model(img_3channels_224)
+    assert f.shape == (4, 1000)
     del model

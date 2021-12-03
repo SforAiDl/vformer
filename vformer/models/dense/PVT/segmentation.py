@@ -44,7 +44,7 @@ class PVTSegmentation(nn.Module):
     ape: bool
         Whether to use absolute position embedding
     return_pyramid:bool
-        Whether to use all pyramid feature layers for up-sampling, default is true
+        Whether to use all pyramid feature layers for up-sampling, default is False
     """
 
     def __init__(
