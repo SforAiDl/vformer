@@ -131,7 +131,7 @@ class CVT(BaseClassificationModel):
             [
                 VanillaEncoder(
                     latent_dim=embedding_dim,
-                    heads=num_heads,
+                    num_heads=num_heads,
                     depth=1,
                     mlp_dim=hidden_dim,
                     dim_head=dim_head,

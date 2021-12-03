@@ -143,7 +143,7 @@ class CCT(BaseClassificationModel):
             [
                 VanillaEncoder(
                     latent_dim=embedding_dim,
-                    heads=num_heads,
+                    num_heads=num_heads,
                     depth=1,
                     dim_head=dim_head,
                     mlp_dim=hidden_dim,

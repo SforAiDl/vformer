@@ -2,7 +2,6 @@ import torch
 import torch.nn as nn
 
 from vformer.attention import CrossAttention
-from vformer.encoder.embedding import LinearEmbedding
 from vformer.encoder.vanilla import VanillaEncoder
 
 
