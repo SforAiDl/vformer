@@ -89,7 +89,7 @@ class CCT(BaseClassificationModel):
             kernel_size=patch_size,
             stride=patch_size,
             padding=0,
-            max_pool=False,
+            max_pool=True,
             pooling_kernel_size=pooling_kernel_size,
             pooling_stride=pooling_stride,
             pooling_padding=pooling_padding,

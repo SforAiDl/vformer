@@ -1,17 +1,16 @@
-import torch
-import torch.functional as F
 import torch.nn as nn
 from timm.models.layers import DropPath
 
 from ..attention import VanillaSelfAttention
-from ..decoder import MLPDecoder
 from ..functional.norm import PreNorm
 from .nn import FeedForward
 
 
 class CVTEncoderBlock(nn.Module):
     """
-    parameters:
+    This encoder class encodes the information (read tensors) coming from patch embedding, If `hidden_dim` parameter is none, then size of tensor do not change thorughout the forward pass.
+
+    Parameters:
     -----------
     dim:int
         Dimension of the input tensor

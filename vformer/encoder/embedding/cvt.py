@@ -4,7 +4,9 @@ import torch.nn as nn
 
 class CVTEmbedding(nn.Module):
     """
-    parameters:
+    This class converts the image patches to tensors. Size of the image patches is controlled by `stride` parameter.
+
+    Parameters:
     -----------
     kernel_size: int or tuple
         Size of the kernel used in convolution
@@ -27,7 +29,7 @@ class CVTEmbedding(nn.Module):
     activation: Activation Layer, optional
         Activation Layer, default is None
     max_pool: bool
-        Whether to have max-pooling or not
+        Whether to have max-pooling or not, change this parameter to False when using in CVT model
     conv_bias:bool, optional
         Whether to add learnable bias in the convolution operation,
     """
