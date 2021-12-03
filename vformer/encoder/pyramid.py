@@ -99,7 +99,7 @@ class PVTEncoder(nn.Module):
     sr_ratio: float
         Spatial Reduction ratio
     linear: bool
-
+        Whether to use linear Spatial attention
     """
 
     def __init__(
