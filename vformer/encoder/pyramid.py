@@ -8,6 +8,8 @@ from ..functional import PreNorm
 
 class PVTFeedForward(nn.Module):
     """
+    Parameters
+    ----------
     dim: int
         Dimension of the input tensor
     hidden_dim: int, optional

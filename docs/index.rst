@@ -8,9 +8,21 @@ Welcome to vformer's documentation!
    readme
    installation
    usage
-   modules
    contributing
    history
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API References:
+   
+   api/attention/index
+   api/common/index
+   api/decoder/index
+   api/encoder/index
+   api/functional/index
+   api/models/index
+   api/utils/index
+   api/viz/index
 
 Indices and tables
 ==================
