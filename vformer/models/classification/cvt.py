@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
-from ...encoder import CVTEmbedding, CVTEncoderBlock
+from ...encoder import CVTEmbedding, VanillaEncoder
 from ...utils import pair
 
 
@@ -51,6 +51,7 @@ class CVT(BaseClassificationModel):
         in_chans=3,
         seq_pool=True,
         embedding_dim=768,
+        dim_head=96,
         num_layers=1,
         num_heads=1,
         mlp_ratio=4.0,
@@ -128,10 +129,12 @@ class CVT(BaseClassificationModel):
         dpr = [x.item() for x in torch.linspace(0, drop_path, num_layers)]
         self.encoder_blocks = nn.ModuleList(
             [
-                CVTEncoderBlock(
-                    dim=embedding_dim,
-                    num_head=num_heads,
-                    hidden_dim=hidden_dim,
+                VanillaEncoder(
+                    latent_dim=embedding_dim,
+                    heads=num_heads,
+                    depth=1,
+                    mlp_dim=hidden_dim,
+                    dim_head=dim_head,
                     p_dropout=p_dropout,
                     attn_dropout=attn_dropout,
                     drop_path_rate=dpr[i],
@@ -139,7 +142,18 @@ class CVT(BaseClassificationModel):
                 for i in range(num_layers)
             ]
         )
-        self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+        if decoder_config is not None:
+
+            if not isinstance(decoder_config, list) and not isinstance(
+                decoder_config, tuple
+            ):
+                decoder_config = [decoder_config]
+            assert (
+                decoder_config[0] == embedding_dim
+            ), f"Configurations do not match for MLPDecoder, First element of `decoder_config` expected to be {embedding_dim}, got {decoder_config[0]} "
+            self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+        else:
+            self.decoder = MLPDecoder(config=embedding_dim, n_classes=num_classes)
 
     def forward(self, x):
         x = self.embedding(x)

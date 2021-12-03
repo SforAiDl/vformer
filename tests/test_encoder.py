@@ -3,7 +3,6 @@ import torch.nn as nn
 
 from vformer.encoder import (
     CrossEncoder,
-    CVTEncoderBlock,
     PVTEncoder,
     SwinEncoder,
     SwinEncoderBlock,
@@ -88,11 +87,3 @@ def test_CrossEncoder():
     assert out[0].shape == test_tensor1.shape
     assert out[1].shape == test_tensor2.shape  # shape remains same
     del encoder
-
-
-def test_CVTEncoder():
-    test_tensor1 = torch.randn(4, 3136, 128)
-
-    encoder = CVTEncoderBlock(dim=128, num_head=8, p_dropout=0.0, attn_dropout=0.0)
-    out = encoder(test_tensor1)
-    assert out.shape == test_tensor1.shape

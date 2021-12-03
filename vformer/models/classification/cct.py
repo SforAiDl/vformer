@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
-from ...encoder import CVTEmbedding, CVTEncoderBlock
+from ...encoder import CVTEmbedding, VanillaEncoder
 from ...utils import pair
 
 
@@ -58,6 +58,7 @@ class CCT(BaseClassificationModel):
         seq_pool=True,
         embedding_dim=768,
         num_layers=1,
+        dim_head=96,
         num_heads=1,
         mlp_ratio=4.0,
         num_classes=1000,
@@ -140,10 +141,12 @@ class CCT(BaseClassificationModel):
         dpr = [x.item() for x in torch.linspace(0, drop_path, num_layers)]
         self.encoder_blocks = nn.ModuleList(
             [
-                CVTEncoderBlock(
-                    dim=embedding_dim,
-                    num_head=num_heads,
-                    hidden_dim=hidden_dim,
+                VanillaEncoder(
+                    latent_dim=embedding_dim,
+                    heads=num_heads,
+                    depth=1,
+                    dim_head=dim_head,
+                    mlp_dim=hidden_dim,
                     p_dropout=p_dropout,
                     attn_dropout=attn_dropout,
                     drop_path_rate=dpr[i],
