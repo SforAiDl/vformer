@@ -56,33 +56,33 @@ class CrossViT(BaseClassificationModel):
     n_classes: int
         Number of classes for classification
     cross_dim_head_s: int
-        Dimension of the head of the cross-attention for the smaller patches
+        Dimension of the head of the cross-attention for the smaller patches, default is 64
     cross_dim_head_l: int
-        Dimension of the head of the cross-attention for the larger patches
+        Dimension of the head of the cross-attention for the larger patches, default is 64
     latent_dim_s: int
-        Dimension of the hidden layer for the smaller patches
+        Dimension of the hidden layer for the smaller patches, default is 1024
     latent_dim_l: int
-        Dimension of the hidden layer for the larger patches
+        Dimension of the hidden layer for the larger patches, default is 1024
     dim_head_s: int
-        Dimension of the head of the attention for the smaller patches
+        Dimension of the head of the attention for the smaller patches, default is 64
     dim_head_l: int
-        Dimension of the head of the attention for the larger patches
+        Dimension of the head of the attention for the larger patches, default is 64
     depth_s: int
-        Number of attention layers in encoder for the smaller patches
+        Number of attention layers in encoder for the smaller patches, default is 6
     depth_l: int
-        Number of attention layers in encoder for the larger patches
+        Number of attention layers in encoder for the larger patches, default is 6
     attn_heads_s: int
-        Number of attention heads for the smaller patches
+        Number of attention heads for the smaller patches, default is 16
     attn_heads_l: int
-        Number of attention heads for the larger patches
+        Number of attention heads for the larger patches, default is 16
     cross_head_s: int
-        Number of CrossAttention heads for the smaller patches
+        Number of CrossAttention heads for the smaller patches, default is 8
     cross_head_l: int
-        Number of CrossAttention heads for the larger patches
+        Number of CrossAttention heads for the larger patches, default is 8
     encoder_mlp_dim_s: int
-        Dimension of hidden layer in the encoder for the smaller patches
+        Dimension of hidden layer in the encoder for the smaller patches, default is 2048
     encoder_mlp_dim_l: int
-        Dimension of hidden layer in the encoder for the larger patches
+        Dimension of hidden layer in the encoder for the larger patches, default is 2048
     in_channels: int
         Number of input channels
     decoder_config_s: int or tuple or list, optional
@@ -90,17 +90,17 @@ class CrossViT(BaseClassificationModel):
     decoder_config_l: int or tuple or list, optional
         Configuration of the decoder for the larger patches
     pool_s: {"cls","mean"}
-        Feature pooling type for the smaller patches
+        Feature pooling type for the smaller patches, default is "cls"
     pool_l: {"cls","mean"}
-        Feature pooling type for the larger patches
+        Feature pooling type for the larger patches, default is "cls"
     p_dropout_encoder_s: float
-        Dropout probability in the encoder for the smaller patches
+        Dropout probability in the encoder for the smaller patches, default is 0.0
     p_dropout_encoder_l: float
-        Dropout probability in the encoder for the larger patches
+        Dropout probability in the encoder for the larger patches, default is 0.0
     p_dropout_embedding_s: float
-        Dropout probability in the embedding layer for the smaller patches
+        Dropout probability in the embedding layer for the smaller patches, default is 0.0
     p_dropout_embedding_l: float
-        Dropout probability in the embedding layer for the larger patches
+        Dropout probability in the embedding layer for the larger patches, default is 0.0
     """
 
     def __init__(

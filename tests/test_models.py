@@ -223,7 +223,7 @@ def test_pvt():
     del model
 
     model = PVTClassificationV2(
-        embed_dims=[64, 128, 320, 512],
+        embedding_dims=[64, 128, 320, 512],
         num_heads=[1, 2, 5, 8],
         mlp_ratio=[8, 8, 4, 4],
         qkv_bias=True,

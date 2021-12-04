@@ -8,30 +8,32 @@ class CVTEmbedding(nn.Module):
 
     Parameters:
     -----------
-    kernel_size: int or tuple
+    kernel_size: int or tuple(int)
         Size of the kernel used in convolution
-    stride: int or tuple
+    stride: int or tuple(int)
         Stride of the convolution operation
     padding: int
         Padding to all sides of the input
-    pooling_kernel_size: int|tuple
+    pooling_kernel_size: int or tuple(int)
         Size of the kernel used in  MaxPool2D,default is 3
-    pooling_stride: int|tuple
+    pooling_stride: int or tuple(int)
         Size of the stride in MaxPool2D, default is 2
+    pooling_padding: int
+        padding in the MaxPool2D
     num_conv_layers: int
         Number of Convolution layers in the encoder,default is 1
     in_channels: int
         Number of input channels in image, default is 3
     out_channels: int
-        Number of output channels
+        Number of output channels, default is 64
     in_planes: int
         This will be number of channels in the self.conv_layer's convolution except 1st layer and last layer.
     activation: nn.Module, optional
         Activation Layer, default is None
     max_pool: bool
-        Whether to have max-pooling or not, change this parameter to False when using in CVT model
-    conv_bias:bool, optional
-        Whether to add learnable bias in the convolution operation,
+        Whether to have max-pooling or not, change this parameter to False when using in CVT model, default is True
+    conv_bias:bool
+        Whether to add learnable bias in the convolution operation,default is False
     """
 
     def __init__(

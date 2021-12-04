@@ -14,14 +14,14 @@ class PVTFeedForward(nn.Module):
         Dimension of hidden layer
     out_dim:int, optional
         Dimension of output tensor
-    act_layer: Activation class
+    act_layer: nn.Module
         Activation Layer, default is nn.GELU
     p_dropout: float
         Dropout probability/rate, default is 0.0
     linear: bool
-        default=False
+        Whether to use linear Spatial attention,default is False
     use_dwconv: bool
-        default=False
+        Whether to use Depth-wise convolutions, default is False
 
 
     Kwargs:
@@ -86,7 +86,7 @@ class PVTEncoder(nn.Module):
     qk_scale:float, optional
     p_dropout: float
         Dropout probability
-    attn_drop: float
+    attn_dropout: float
         Dropout probability
     drop_path: tuple(float)
         List of stochastic drop rate
@@ -97,7 +97,7 @@ class PVTEncoder(nn.Module):
     sr_ratio: float
         Spatial Reduction ratio
     linear: bool
-        Whether to use linear Spatial attention
+        Whether to use linear Spatial attention, default is False
     """
 
     def __init__(
@@ -109,7 +109,7 @@ class PVTEncoder(nn.Module):
         qkv_bias,
         qk_scale,
         p_dropout,
-        attn_drop,
+        attn_dropout,
         drop_path,
         act_layer,
         use_dwconv,
@@ -129,7 +129,7 @@ class PVTEncoder(nn.Module):
                                 num_heads=num_heads,
                                 qkv_bias=qkv_bias,
                                 qk_scale=qk_scale,
-                                attn_drop=attn_drop,
+                                attn_drop=attn_dropout,
                                 proj_drop=p_dropout,
                                 sr_ratio=sr_ratio,
                                 linear=linear,

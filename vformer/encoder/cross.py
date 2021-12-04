@@ -10,37 +10,37 @@ class CrossEncoder(nn.Module):
     Parameters
     ----------
     embedding_dim_s : int
-        Dimension of the embedding of smaller patches
+        Dimension of the embedding of smaller patches, default is 1024
     embedding_dim_l : int
-        Dimension of the embedding of larger patches
+        Dimension of the embedding of larger patches, default is 1024
     attn_heads_s : int
-        Number of self-attention heads for the smaller patches
+        Number of self-attention heads for the smaller patches, default is 16
     attn_heads_l : int
-        Number of self-attention heads for the larger patches
+        Number of self-attention heads for the larger patches, default is 16
     cross_head_s : int
-        Number of cross-attention heads for the smaller patches
+        Number of cross-attention heads for the smaller patches, default is 8
     cross_head_l : int
-        Number of cross-attention heads for the larger patches
+        Number of cross-attention heads for the larger patches, default is 8
     head_dim_s : int
-        Dimension of the head of the attention for the smaller patches
+        Dimension of the head of the attention for the smaller patches, default is 64
     head_dim_l : int
-        Dimension of the head of the attention for the larger patches
+        Dimension of the head of the attention for the larger patches, default is 64
     cross_dim_head_s : int
-        Dimension of the head of the cross-attention for the smaller patches
+        Dimension of the head of the cross-attention for the smaller patches, default is 64
     cross_dim_head_l : int
-        Dimension of the head of the cross-attention for the larger patches
+        Dimension of the head of the cross-attention for the larger patches, default is 64
     depth_s : int
-        Number of self-attention layers in encoder for the smaller patches
+        Number of self-attention layers in encoder for the smaller patches, default is 6
     depth_l : int
-        Number of self-attention layers in encoder for the larger patches
+        Number of self-attention layers in encoder for the larger patches, default is 6
     mlp_dim_s : int
-        Dimension of the hidden layer in the feed-forward layer for the smaller patches
+        Dimension of the hidden layer in the feed-forward layer for the smaller patches, default is 2048
     mlp_dim_l : int
-        Dimension of the hidden layer in the feed-forward layer for the larger patches
+        Dimension of the hidden layer in the feed-forward layer for the larger patches, default is 2048
     p_dropout_s : float
-        Dropout probability for the smaller patches
+        Dropout probability for the smaller patches, default is 0.0
     p_dropout_l : float
-        Dropout probability for the larger patches
+        Dropout probability for the larger patches, default is 0.0
     """
 
     def __init__(

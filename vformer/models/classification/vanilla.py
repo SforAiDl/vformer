@@ -71,7 +71,12 @@ class VanillaViT(BaseClassificationModel):
         self.embedding_dropout = nn.Dropout(p_dropout_embedding)
 
         self.encoder = VanillaEncoder(
-            embedding_dim, depth, attn_heads, head_dim, encoder_mlp_dim, p_dropout_encoder
+            embedding_dim,
+            depth,
+            attn_heads,
+            head_dim,
+            encoder_mlp_dim,
+            p_dropout_encoder,
         )
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 

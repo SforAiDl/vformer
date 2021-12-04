@@ -66,7 +66,7 @@ def test_PVTEncoder():
         qkv_bias=True,
         qk_scale=0.0,
         p_dropout=0.0,
-        attn_drop=0.1,
+        attn_dropout=0.1,
         drop_path=[0.0] * 3,
         act_layer=nn.GELU,
         sr_ratio=1,

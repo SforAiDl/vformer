@@ -7,9 +7,9 @@ class OverlapPatchEmbed(nn.Module):
     """
     Parameters:
     -----------
-    img_size: int
+    img_size: int or tuple(int)
         Image Size
-    patch_size: int
+    patch_size: int or tuple(int)
         Patch Size
     stride: int
         Stride of the convolution, default is 4

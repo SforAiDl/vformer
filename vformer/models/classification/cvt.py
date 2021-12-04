@@ -15,27 +15,27 @@ class CVT(BaseClassificationModel):
     Parameters:
     ------------
     img_size: int
-        Size of the image
+        Size of the image, default is 224
     patch_size:int
-        Size of the single patch in the image
+        Size of the single patch in the image, default is 4
     in_channels:int
-        Number of input channels in image
+        Number of input channels in image, default is 3
     seq_pool:bool
-        Whether to use sequence pooling or not
+        Whether to use sequence pooling, default is True
     embedding_dim: int
-        Patch embedding dimension
+        Patch embedding dimension, default is 768
     num_layers: int
-        Number of Encoders in encoder block
+        Number of Encoders in encoder block, default is 1
     num_heads: int
-        Number of heads in each transformer layer
+        Number of heads in each transformer layer, default is 1
     mlp_ratio:float
-        Ratio of mlp heads to embedding dimension
+        Ratio of mlp heads to embedding dimension, default is 4.0
     num_classes: int
-        Number of classes for classification
+        Number of classes for classification, default is 1000
     p_dropout: float
-        Dropout probability
+        Dropout probability, default is 0.0
     attn_dropout: float
-        Dropout probability
+        Dropout probability, defualt is 0.0
     drop_path: float
         Stochastic depth rate, default is 0.1
     positional_embedding: str
