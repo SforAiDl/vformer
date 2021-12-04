@@ -10,7 +10,7 @@ class CVTEmbedding(nn.Module):
     ----------
     kernel_size: int or tuple
         Size of the kernel used in convolution
-    stride: int or tuple(int)
+    stride: int or tuple
         Stride of the convolution operation
     padding: int
         Padding to all sides of the input
