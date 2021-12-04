@@ -8,6 +8,9 @@ from ..functional import PreNorm
 
 class PVTFeedForward(nn.Module):
     """
+
+    Parameters
+    ----------
     dim: int
         Dimension of the input tensor
     hidden_dim: int, optional
@@ -23,9 +26,8 @@ class PVTFeedForward(nn.Module):
     use_dwconv: bool
         default=False
 
-
-    Kwargs:
-    ----------
+    Kwargs
+    ------
     kernel_size_dwconv: int,optional
         `kernel_size` parameter for 2D convolution used in Depth wise convolution
     stride_dwconv: int
@@ -71,8 +73,8 @@ class PVTFeedForward(nn.Module):
 
 class PVTEncoder(nn.Module):
     """
-    Parameters:
-    ------------
+    Parameters
+    ----------
     dim: int
         Dimension of the input tensor
     num_heads: int

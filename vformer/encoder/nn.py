@@ -3,8 +3,9 @@ import torch.nn as nn
 
 class FeedForward(nn.Module):
     """
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     dim: int
         Dimension of the input tensor
     hidden_dim: int, optional

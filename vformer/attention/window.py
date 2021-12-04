@@ -7,8 +7,8 @@ from ..utils import get_relative_position_bias_index, pair
 
 class WindowAttention(nn.Module):
     """
-    Parameters:
-    -----------
+    Parameters
+    ----------
     dim: int
         Number of input channels.
     window_size : int or tuple[int]

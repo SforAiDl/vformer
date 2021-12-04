@@ -4,7 +4,7 @@ import torch.nn as nn
 class MLPDecoder(nn.Module):
     """
     Parameters
-    -----------
+    ----------
     config : int or tuple or list
         Configuration of the hidden layer(s)
     n_classes : int

@@ -4,8 +4,9 @@ from torch import nn
 
 class LinearEmbedding(nn.Module):
     """
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     embedding_dim: int
         Dimension of the resultant embedding
     patch_height: int

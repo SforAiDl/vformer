@@ -8,8 +8,9 @@ from ...utils import pair
 
 class AbsolutePositionEmbedding(nn.Module):
     """
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     pos_shape : int or tuple(int)
         The shape of the absolute position embedding.
     pos_dim : int
@@ -35,8 +36,8 @@ class AbsolutePositionEmbedding(nn.Module):
 
     def resize_pos_embed(self, pos_embed, shape, mode="bilinear", **kwargs):
         """
-        Parameters:
-        -----------
+        Parameters
+        ----------
             pos_embed : torch.Tensor
                 Position embedding weights
             shape : tuple

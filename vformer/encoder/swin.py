@@ -9,8 +9,8 @@ from .nn import FeedForward
 
 class SwinEncoderBlock(nn.Module):
     """
-    Parameters:
-    -----------
+    Parameters
+    ----------
     dim: int
         Number of the input channels
     input_resolution: int or tuple[int]

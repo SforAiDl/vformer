@@ -6,8 +6,9 @@ from einops import rearrange
 class VanillaSelfAttention(nn.Module):
     """
     Vanilla O(n^2) Self attention
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     dim: int
         Dimension of the embedding
     heads: int

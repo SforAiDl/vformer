@@ -3,14 +3,25 @@ Welcome to vformer's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    readme
    installation
    usage
-   modules
    contributing
-   history
+
+.. toctree::
+   :maxdepth: 2
+   :caption: API Reference
+   
+   api/attention/index
+   api/common/index
+   api/decoder/index
+   api/encoder/index
+   api/functional/index
+   api/models/index
+   api/utils/index
+   api/viz/index
 
 Indices and tables
 ==================

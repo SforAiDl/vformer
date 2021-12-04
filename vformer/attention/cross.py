@@ -18,8 +18,9 @@ class _Projection(nn.Module):
 class CrossAttention(nn.Module):
     """
     Cross-Attention Fusion
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     cls_dim: int
         Dimension of cls token embedding
     patch_dim: int
@@ -28,6 +29,7 @@ class CrossAttention(nn.Module):
         Number of cross-attention heads
     dim_head: int
         Dimension of each head
+
     """
 
     def __init__(self, cls_dim, patch_dim, heads=8, dim_head=64):

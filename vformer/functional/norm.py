@@ -3,8 +3,8 @@ import torch.nn as nn
 
 class PreNorm(nn.Module):
     """
-    Parameters:
-    -----------
+    Parameters
+    ----------
     dim: int
         Dimension of the embedding
     fn:
