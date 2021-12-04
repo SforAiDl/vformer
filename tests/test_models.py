@@ -352,7 +352,7 @@ def test_cvt():
 
 
 def test_cct():
-    model = CCT(img_size=256, patch_size=4, in_chans=3)
+    model = CCT(img_size=256, patch_size=4, in_channels=3)
     out = model(img_3channels_256)
     assert out.shape == (2, 1000)
     del model
@@ -360,7 +360,7 @@ def test_cct():
     model = CCT(
         img_size=224,
         patch_size=4,
-        in_chans=3,
+        in_channels=3,
         seq_pool=False,
         embedding_dim=768,
         num_heads=1,
@@ -378,7 +378,7 @@ def test_cct():
 
     model = CCT(
         img_size=224,
-        in_chans=3,
+        in_channels=3,
         patch_size=4,
         positional_embedding="none",
         seq_pool=False,
@@ -390,7 +390,7 @@ def test_cct():
 
     model = CCT(
         img_size=224,
-        in_chans=3,
+        in_channels=3,
         patch_size=4,
         positional_embedding="none",
         seq_pool=True,

@@ -20,9 +20,9 @@ class CVTEmbedding(nn.Module):
         Size of the stride in MaxPool2D, default is 2
     n_conv_layers: int
         Number of Convolution layers in the encoder,default is 1
-    in_chans: int
+    in_channels: int
         Number of input channels in image, default is 3
-    out_chans: int
+    out_channels: int
         Number of output channels
     in_planes: int
         This will be number of channels in the self.conv_layer's convolution except 1st layer and last layer.
@@ -42,9 +42,9 @@ class CVTEmbedding(nn.Module):
         pooling_kernel_size=3,
         pooling_stride=2,
         pooling_padding=1,
-        n_conv_layers=1,
-        in_chans=3,
-        out_chans=64,
+        num_conv_layers=1,
+        in_channels=3,
+        out_channels=64,
         in_planes=64,
         activation=None,
         max_pool=True,
@@ -53,10 +53,12 @@ class CVTEmbedding(nn.Module):
         super(CVTEmbedding, self).__init__()
 
         n_filter_list = (
-            [in_chans] + [in_planes for _ in range(n_conv_layers - 1)] + [out_chans]
+            [in_channels]
+            + [in_planes for _ in range(num_conv_layers - 1)]
+            + [out_channels]
         )
         self.conv_layers = nn.ModuleList([])
-        for i in range(n_conv_layers):
+        for i in range(num_conv_layers):
             self.conv_layers.append(
                 nn.ModuleList(
                     [

@@ -50,7 +50,7 @@ class VanillaEncoder(nn.Module):
                             fn=VanillaSelfAttention(
                                 dim=latent_dim,
                                 num_heads=num_heads,
-                                dim_head=dim_head,
+                                head_dim=dim_head,
                                 p_dropout=attn_dropout,
                             ),
                         ),

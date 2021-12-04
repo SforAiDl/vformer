@@ -26,15 +26,15 @@ class CrossAttention(nn.Module):
         Dimension of patch token embeddings cls token to be fused with
     num_heads: int
         Number of cross-attention heads
-    dim_head: int
+    head_dim: int
         Dimension of each head
     """
 
-    def __init__(self, cls_dim, patch_dim, num_heads=8, dim_head=64):
+    def __init__(self, cls_dim, patch_dim, num_heads=8, head_dim=64):
         super().__init__()
-        inner_dim = num_heads * dim_head
+        inner_dim = num_heads * head_dim
         self.num_heads = num_heads
-        self.scale = dim_head ** -0.5
+        self.scale = head_dim ** -0.5
         self.fl = _Projection(cls_dim, patch_dim)
         self.gl = _Projection(patch_dim, cls_dim)
         self.to_k = nn.Linear(patch_dim, inner_dim)

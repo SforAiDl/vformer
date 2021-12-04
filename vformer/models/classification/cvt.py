@@ -76,14 +76,14 @@ class CVT(BaseClassificationModel):
         img_size = pair(img_size)
         self.in_chans = in_chans
         self.embedding = CVTEmbedding(
-            in_chans=in_chans,
-            out_chans=embedding_dim,
+            in_channels=in_chans,
+            out_channels=embedding_dim,
             kernel_size=patch_size,
             stride=patch_size,
             padding=0,
             max_pool=False,
             activation=None,
-            n_conv_layers=1,
+            num_conv_layers=1,
             conv_bias=True,
         )
 
