@@ -23,7 +23,7 @@ class CrossEncoder(nn.Module):
         Number of cross-attention heads for the larger patches
     head_dim_s : int
         Dimension of the head of the attention for the smaller patches
-    dim_hed_l : int
+    head_dim_l : int
         Dimension of the head of the attention for the larger patches
     cross_dim_head_s : int
         Dimension of the head of the cross-attention for the smaller patches
