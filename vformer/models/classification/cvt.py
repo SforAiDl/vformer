@@ -15,27 +15,27 @@ class CVT(BaseClassificationModel):
     Parameters:
     ------------
     img_size: int
-        Size of the image
+        Size of the image, default is 224
     patch_size:int
-        Size of the single patch in the image
-    in_chans:int
-        Number of input channels in image
+        Size of the single patch in the image, default is 4
+    in_channels:int
+        Number of input channels in image, default is 3
     seq_pool:bool
-        Whether to use sequence pooling or not
+        Whether to use sequence pooling, default is True
     embedding_dim: int
-        Patch embedding dimension
+        Patch embedding dimension, default is 768
     num_layers: int
-        Number of Encoders in encoder block
+        Number of Encoders in encoder block, default is 1
     num_heads: int
-        Number of heads in each transformer layer
+        Number of heads in each transformer layer, default is 1
     mlp_ratio:float
-        Ratio of mlp heads to embedding dimension
+        Ratio of mlp heads to embedding dimension, default is 4.0
     num_classes: int
-        Number of classes for classification
+        Number of classes for classification, default is 1000
     p_dropout: float
-        Dropout probability
+        Dropout probability, default is 0.0
     attn_dropout: float
-        Dropout probability
+        Dropout probability, defualt is 0.0
     drop_path: float
         Stochastic depth rate, default is 0.1
     positional_embedding: str
@@ -48,7 +48,7 @@ class CVT(BaseClassificationModel):
         self,
         img_size=224,
         patch_size=4,
-        in_chans=3,
+        in_channels=3,
         seq_pool=True,
         embedding_dim=768,
         dim_head=96,
@@ -74,16 +74,16 @@ class CVT(BaseClassificationModel):
             img_size % patch_size == 0
         ), f"Image size ({img_size}) has to be divisible by patch size ({patch_size})"
         img_size = pair(img_size)
-        self.in_chans = in_chans
+        self.in_chans = in_channels
         self.embedding = CVTEmbedding(
-            in_chans=in_chans,
-            out_chans=embedding_dim,
+            in_channels=in_channels,
+            out_channels=embedding_dim,
             kernel_size=patch_size,
             stride=patch_size,
             padding=0,
             max_pool=False,
             activation=None,
-            n_conv_layers=1,
+            num_conv_layers=1,
             conv_bias=True,
         )
 
@@ -95,7 +95,7 @@ class CVT(BaseClassificationModel):
         hidden_dim = int(embedding_dim * mlp_ratio)
         self.embedding_dim = embedding_dim
         self.sequence_length = self.embedding.sequence_length(
-            n_channels=in_chans, height=img_size[0], width=img_size[1]
+            n_channels=in_channels, height=img_size[0], width=img_size[1]
         )
         self.seq_pool = seq_pool
 
@@ -131,7 +131,7 @@ class CVT(BaseClassificationModel):
             [
                 VanillaEncoder(
                     latent_dim=embedding_dim,
-                    heads=num_heads,
+                    num_heads=num_heads,
                     depth=1,
                     mlp_dim=hidden_dim,
                     dim_head=dim_head,

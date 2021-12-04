@@ -25,7 +25,7 @@ class SpatialAttention(nn.Module):
         Dropout rate
     linear : bool
         Whether to use linear Spatial attention,default is False
-    act_fn : activation function
+    act_fn : nn.Module
         Activation function, default is False
     """
 

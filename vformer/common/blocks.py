@@ -10,11 +10,11 @@ class DWConv(nn.Module):
     dim: int
         Dimension of the input tensor
     kernel_size_dwconv: int,optional
-        Size of the convolution kernel
+        Size of the convolution kernel, default is 3
     stride_dwconv: int
-        Stride of the convolution
+        Stride of the convolution, default is 1
     padding_dwconv: int or tuple or str
-        Padding added to all sides of the input
+        Padding added to all sides of the input, default is 1
     bias_dwconv:bool
         Whether to add learnable bias to the output,default is True.
     """

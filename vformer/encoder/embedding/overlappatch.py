@@ -10,13 +10,13 @@ class OverlapPatchEmbed(nn.Module):
     ----------
     img_size: int
         Image Size
-    patch_size: int
+    patch_size: int or tuple(int)
         Patch Size
     stride: int
         Stride of the convolution, default is 4
     in_channels: int
         Number of input channels in the image, default is 3
-    embed_dim: int
+    embedding_dim: int
         Number of linear projection output channels,default is 768
     norm_layer: nn.Module, optional
         Normalization layer, default is nn.LayerNorm
@@ -28,7 +28,7 @@ class OverlapPatchEmbed(nn.Module):
         patch_size,
         stride=4,
         in_channels=3,
-        embed_dim=768,
+        embedding_dim=768,
         norm_layer=nn.LayerNorm,
     ):
         super(OverlapPatchEmbed, self).__init__()
@@ -42,12 +42,12 @@ class OverlapPatchEmbed(nn.Module):
 
         self.proj = nn.Conv2d(
             in_channels=in_channels,
-            out_channels=embed_dim,
+            out_channels=embedding_dim,
             kernel_size=patch_size,
             stride=stride,
             padding=(patch_size[0] // 2, patch_size[1] // 2),
         )
-        self.norm = norm_layer(embed_dim)
+        self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
         x = self.proj(x)

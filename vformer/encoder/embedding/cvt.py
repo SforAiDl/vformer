@@ -14,24 +14,26 @@ class CVTEmbedding(nn.Module):
         Stride of the convolution operation
     padding: int
         Padding to all sides of the input
-    pooling_kernel_size: int|tuple
+    pooling_kernel_size: int or tuple(int)
         Size of the kernel used in  MaxPool2D,default is 3
-    pooling_stride: int|tuple
+    pooling_stride: int or tuple(int)
         Size of the stride in MaxPool2D, default is 2
-    n_conv_layers: int
+    pooling_padding: int
+        padding in the MaxPool2D
+    num_conv_layers: int
         Number of Convolution layers in the encoder,default is 1
-    in_chans: int
+    in_channels: int
         Number of input channels in image, default is 3
-    out_chans: int
-        Number of output channels
+    out_channels: int
+        Number of output channels, default is 64
     in_planes: int
         This will be number of channels in the self.conv_layer's convolution except 1st layer and last layer.
-    activation: Activation Layer, optional
+    activation: nn.Module, optional
         Activation Layer, default is None
     max_pool: bool
-        Whether to have max-pooling or not, change this parameter to False when using in CVT model
-    conv_bias:bool, optional
-        Whether to add learnable bias in the convolution operation,
+        Whether to have max-pooling or not, change this parameter to False when using in CVT model, default is True
+    conv_bias:bool
+        Whether to add learnable bias in the convolution operation,default is False
     """
 
     def __init__(
@@ -42,9 +44,9 @@ class CVTEmbedding(nn.Module):
         pooling_kernel_size=3,
         pooling_stride=2,
         pooling_padding=1,
-        n_conv_layers=1,
-        in_chans=3,
-        out_chans=64,
+        num_conv_layers=1,
+        in_channels=3,
+        out_channels=64,
         in_planes=64,
         activation=None,
         max_pool=True,
@@ -53,10 +55,12 @@ class CVTEmbedding(nn.Module):
         super(CVTEmbedding, self).__init__()
 
         n_filter_list = (
-            [in_chans] + [in_planes for _ in range(n_conv_layers - 1)] + [out_chans]
+            [in_channels]
+            + [in_planes for _ in range(num_conv_layers - 1)]
+            + [out_channels]
         )
         self.conv_layers = nn.ModuleList([])
-        for i in range(n_conv_layers):
+        for i in range(num_conv_layers):
             self.conv_layers.append(
                 nn.ModuleList(
                     [

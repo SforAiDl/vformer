@@ -23,7 +23,7 @@ class SwinTransformer(BaseClassificationModel):
         Input channels in image, default=3
     n_classes: int
         Number of classes for classification
-    embed_dim: int
+    embedding_dim: int
         Patch Embedding dimension
     depths: tuple[int]
         Depth in each Transformer layer
@@ -58,7 +58,7 @@ class SwinTransformer(BaseClassificationModel):
         patch_size,
         in_channels,
         n_classes,
-        embed_dim=96,
+        embedding_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=8,
@@ -81,17 +81,17 @@ class SwinTransformer(BaseClassificationModel):
             img_size=img_size,
             patch_size=patch_size,
             in_channels=in_channels,
-            embed_dim=embed_dim,
+            embedding_dim=embedding_dim,
             norm_layer=norm_layer if patch_norm else nn.Identity,
         )
         self.patch_resolution = self.patch_embed.patch_resolution
         num_patches = self.patch_resolution[0] * self.patch_resolution[1]
         self.ape = ape
-        num_features = int(embed_dim * 2 ** (len(depths) - 1))
+        num_features = int(embedding_dim * 2 ** (len(depths) - 1))
 
         if self.ape:
             self.absolute_pos_embed = nn.Parameter(
-                torch.zeros(1, num_patches, embed_dim)
+                torch.zeros(1, num_patches, embedding_dim)
             )
             trunc_normal_(self.absolute_pos_embed, std=0.02)
 
@@ -99,7 +99,7 @@ class SwinTransformer(BaseClassificationModel):
         self.encoder = nn.ModuleList()
         for i_layer in range(len(depths)):
             layer = SwinEncoder(
-                dim=int(embed_dim * (2 ** i_layer)),
+                dim=int(embedding_dim * (2 ** i_layer)),
                 input_resolution=(
                     (self.patch_resolution[0] // (2 ** i_layer)),
                     self.patch_resolution[1] // (2 ** i_layer),
@@ -110,8 +110,8 @@ class SwinTransformer(BaseClassificationModel):
                 mlp_ratio=mlp_ratio,
                 qkv_bias=qkv_bias,
                 qkv_scale=qk_scale,
-                drop=drop_rate,
-                attn_drop=attn_drop_rate,
+                p_dropout=drop_rate,
+                attn_dropout=attn_drop_rate,
                 drop_path=dpr[sum(depths[:i_layer]) : sum(depths[: i_layer + 1])],
                 norm_layer=norm_layer,
                 downsample=PatchMerging if i_layer < len(depths) - 1 else None,

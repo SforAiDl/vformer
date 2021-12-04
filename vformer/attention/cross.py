@@ -25,18 +25,18 @@ class CrossAttention(nn.Module):
         Dimension of cls token embedding
     patch_dim: int
         Dimension of patch token embeddings cls token to be fused with
-    heads: int
+    num_heads: int
         Number of cross-attention heads
-    dim_head: int
+    head_dim: int
         Dimension of each head
 
     """
 
-    def __init__(self, cls_dim, patch_dim, heads=8, dim_head=64):
+    def __init__(self, cls_dim, patch_dim, num_heads=8, head_dim=64):
         super().__init__()
-        inner_dim = heads * dim_head
-        self.heads = heads
-        self.scale = dim_head ** -0.5
+        inner_dim = num_heads * head_dim
+        self.num_heads = num_heads
+        self.scale = head_dim ** -0.5
         self.fl = _Projection(cls_dim, patch_dim)
         self.gl = _Projection(patch_dim, cls_dim)
         self.to_k = nn.Linear(patch_dim, inner_dim)
@@ -51,9 +51,9 @@ class CrossAttention(nn.Module):
         q = self.to_q(cls)
         k = self.to_k(x)
         v = self.to_v(x)
-        k = rearrange(k, "b n (h d) -> b h n d", h=self.heads)
-        q = rearrange(q, "b n (h d) -> b h n d", h=self.heads)
-        v = rearrange(v, "b n (h d) -> b h n d", h=self.heads)
+        k = rearrange(k, "b n (h d) -> b h n d", h=self.num_heads)
+        q = rearrange(q, "b n (h d) -> b h n d", h=self.num_heads)
+        v = rearrange(v, "b n (h d) -> b h n d", h=self.num_heads)
         k = torch.transpose(k, -2, -1)
         attention = (q @ k) * self.scale
         attention = self.attend(attention)

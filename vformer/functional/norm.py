@@ -7,7 +7,7 @@ class PreNorm(nn.Module):
     ----------
     dim: int
         Dimension of the embedding
-    fn:
+    fn:nn.Module
         Attention class
     """
 

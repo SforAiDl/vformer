@@ -19,9 +19,9 @@ class WindowAttention(nn.Module):
         If True, add a learnable bias to query, key, value.
     qk_scale: float, optional
         Override default qk scale of head_dim ** -0.5 if set
-    attn_drop: float, optional
+    attn_dropout: float, optional
         Dropout rate
-    proj_drop: float, optional
+    proj_dropout: float, optional
         Dropout rate
 
     """
@@ -33,8 +33,8 @@ class WindowAttention(nn.Module):
         num_heads,
         qkv_bias=True,
         qk_scale=None,
-        attn_drop=0.0,
-        proj_drop=0.0,
+        attn_dropout=0.0,
+        proj_dropout=0.0,
     ):
         super(WindowAttention, self).__init__()
         self.dim = dim
@@ -52,8 +52,8 @@ class WindowAttention(nn.Module):
         self.register_buffer("relative_position_index", relative_position_index)
 
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
-        self.to_out_1 = nn.Sequential(nn.Softmax(dim=-1), nn.Dropout(attn_drop))
-        self.to_out_2 = nn.Sequential(nn.Linear(dim, dim), nn.Dropout(proj_drop))
+        self.to_out_1 = nn.Sequential(nn.Softmax(dim=-1), nn.Dropout(attn_dropout))
+        self.to_out_2 = nn.Sequential(nn.Linear(dim, dim), nn.Dropout(proj_dropout))
         trunc_normal_(self.relative_position_bias_table, std=0.2)
 
     def forward(self, x, mask=None):

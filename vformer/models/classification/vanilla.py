@@ -20,9 +20,9 @@ class VanillaViT(BaseClassificationModel):
         Size of a patch
     n_classes: int
         Number of classes for classification
-    latent_dim: int
+    embedding_dim: int
         Dimension of hidden layer
-    dim_head: int
+    head_dim: int
         Dimension of the attention head
     depth: int
         Number of attention layers in the encoder
@@ -47,8 +47,8 @@ class VanillaViT(BaseClassificationModel):
         img_size,
         patch_size,
         n_classes,
-        latent_dim=1024,
-        dim_head=64,
+        embedding_dim=1024,
+        head_dim=64,
         depth=6,
         attn_heads=16,
         encoder_mlp_dim=2048,
@@ -61,17 +61,22 @@ class VanillaViT(BaseClassificationModel):
         super().__init__(img_size, patch_size, in_channels, pool)
 
         self.patch_embedding = LinearEmbedding(
-            latent_dim, self.patch_height, self.patch_width, self.patch_dim
+            embedding_dim, self.patch_height, self.patch_width, self.patch_dim
         )
 
         self.pos_embedding = nn.Parameter(
-            torch.randn(1, self.n_patches + 1, latent_dim)
+            torch.randn(1, self.n_patches + 1, embedding_dim)
         )
-        self.cls_token = nn.Parameter(torch.randn(1, 1, latent_dim))
+        self.cls_token = nn.Parameter(torch.randn(1, 1, embedding_dim))
         self.embedding_dropout = nn.Dropout(p_dropout_embedding)
 
         self.encoder = VanillaEncoder(
-            latent_dim, depth, attn_heads, dim_head, encoder_mlp_dim, p_dropout_encoder
+            embedding_dim,
+            depth,
+            attn_heads,
+            head_dim,
+            encoder_mlp_dim,
+            p_dropout_encoder,
         )
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
@@ -79,12 +84,12 @@ class VanillaViT(BaseClassificationModel):
             if not isinstance(decoder_config, list):
                 decoder_config = list(decoder_config)
             assert (
-                decoder_config[0] == latent_dim
-            ), "`latent_dim` should be equal to the first item of `decoder_config`"
+                decoder_config[0] == embedding_dim
+            ), "`embedding_dim` should be equal to the first item of `decoder_config`"
             self.decoder = MLPDecoder(decoder_config, n_classes)
 
         else:
-            self.decoder = MLPDecoder(latent_dim, n_classes)
+            self.decoder = MLPDecoder(embedding_dim, n_classes)
 
     def forward(self, x):
 

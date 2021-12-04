@@ -114,8 +114,8 @@ class CrossViT(BaseClassificationModel):
         cross_dim_head_l=64,
         latent_dim_s=1024,
         latent_dim_l=1024,
-        dim_head_s=64,
-        dim_head_l=64,
+        head_dim_s=64,
+        head_dim_l=64,
         depth_s=6,
         depth_l=6,
         attn_heads_s=16,
@@ -145,8 +145,8 @@ class CrossViT(BaseClassificationModel):
         self.encoder = CrossEncoder(
             latent_dim_s,
             latent_dim_l,
-            dim_head_s,
-            dim_head_l,
+            head_dim_s,
+            head_dim_l,
             cross_dim_head_s,
             cross_dim_head_l,
             depth_s,
@@ -164,22 +164,22 @@ class CrossViT(BaseClassificationModel):
         self.pool_l = lambda x: x.mean(dim=1) if pool_l == "mean" else x[:, 0]
         if decoder_config_s is not None:
             if not isinstance(decoder_config_s, list):
-                decoder_config = list(decoder_config_l)
+                decoder_config_s = list(decoder_config_s)
             assert (
-                decoder_config[0] == latent_dim_s
+                decoder_config_s[0] == latent_dim_s
             ), "`latent_dim` should be equal to the first item of `decoder_config`"
-            self.decoder_s = MLPDecoder(decoder_config, n_classes)
+            self.decoder_s = MLPDecoder(decoder_config_s, n_classes)
 
         else:
             self.decoder_s = MLPDecoder(latent_dim_s, n_classes)
 
         if decoder_config_l is not None:
             if not isinstance(decoder_config_l, list):
-                decoder_config = list(decoder_config_l)
+                decoder_config_l = list(decoder_config_l)
             assert (
-                decoder_config[0] == latent_dim_l
+                decoder_config_l[0] == latent_dim_l
             ), "`latent_dim` should be equal to the first item of `decoder_config`"
-            self.decoder_l = MLPDecoder(decoder_config, n_classes)
+            self.decoder_l = MLPDecoder(decoder_config_l, n_classes)
 
         else:
             self.decoder_l = MLPDecoder(latent_dim_l, n_classes)

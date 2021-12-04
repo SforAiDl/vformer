@@ -33,7 +33,7 @@ class VanillaEncoder(nn.Module):
         self,
         latent_dim,
         depth,
-        heads,
+        num_heads,
         dim_head,
         mlp_dim,
         p_dropout=0.0,
@@ -47,17 +47,19 @@ class VanillaEncoder(nn.Module):
                 nn.ModuleList(
                     [
                         PreNorm(
-                            latent_dim,
-                            VanillaSelfAttention(
-                                latent_dim,
-                                heads=heads,
-                                dim_head=dim_head,
+                            dim=latent_dim,
+                            fn=VanillaSelfAttention(
+                                dim=latent_dim,
+                                num_heads=num_heads,
+                                head_dim=dim_head,
                                 p_dropout=attn_dropout,
                             ),
                         ),
                         PreNorm(
-                            latent_dim,
-                            FeedForward(latent_dim, mlp_dim, p_dropout=p_dropout),
+                            dim=latent_dim,
+                            fn=FeedForward(
+                                dim=latent_dim, hidden_dim=mlp_dim, p_dropout=p_dropout
+                            ),
                         ),
                     ]
                 )

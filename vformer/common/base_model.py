@@ -7,7 +7,7 @@ class BaseClassificationModel(nn.Module):
     """
     img_size: int
         Size of the image
-    patch_size: int or list(int)
+    patch_size: int or tuple(int)
         Size of the patch
     in_channels: int
         Number of channels in input image

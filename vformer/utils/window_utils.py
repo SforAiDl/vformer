@@ -9,9 +9,9 @@ def cyclicshift(input, shift_size, dims=None):
     ----------
     input: torch.Tensor
         input tensor
-    shift_size: int or tuple[int]
+    shift_size: int or tuple(int)
         Number of places by which input tensor is shifted
-    dims: int or tuple[int],optional
+    dims: int or tuple(int),optional
         Axis along which to roll
     """
 
