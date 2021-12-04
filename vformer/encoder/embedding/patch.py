@@ -5,6 +5,7 @@ from ...utils import pair
 
 class PatchEmbedding(nn.Module):
     """
+
     Parameters
     ----------
     img_size: int
