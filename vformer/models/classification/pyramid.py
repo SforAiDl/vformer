@@ -94,7 +94,7 @@ class PVTClassification(nn.Module):
                             patch_size=patch_size[i],
                             stride=4 if i == 0 else 2,
                             in_channels=in_channels if i == 0 else embed_dims[i - 1],
-                            embed_dim=embed_dims[i],
+                            embedding_dim=embed_dims[i],
                         )
                     ]
                 )

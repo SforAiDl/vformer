@@ -12,11 +12,11 @@ class PatchEmbedding(nn.Module):
     patch_size: int
         Patch Size
     in_channels: int
-        Number of input channels in the image, default is 3
-    embed_dim: int
+        Number of input channels in the image
+    embedding_dim: int
         Number of linear projection output channels
-    norm_layer: nn.Module, optional
-        Normalization layer
+    norm_layer: nn.Module,
+        Normalization layer, Default is `nn.LayerNorm`
     """
 
     def __init__(
@@ -24,7 +24,7 @@ class PatchEmbedding(nn.Module):
         img_size,
         patch_size,
         in_channels,
-        embed_dim,
+        embedding_dim,
         norm_layer=nn.LayerNorm,
     ):
         super(PatchEmbedding, self).__init__()
@@ -37,11 +37,11 @@ class PatchEmbedding(nn.Module):
 
         self.proj = nn.Conv2d(
             in_channels=in_channels,
-            out_channels=embed_dim,
+            out_channels=embedding_dim,
             kernel_size=patch_size,
             stride=patch_size,
         )
-        self.norm = norm_layer(embed_dim)
+        self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
         B, C, H, W = x.shape

@@ -31,7 +31,7 @@ def test_VanillaViT():
         img_size=256,
         patch_size=32,
         n_classes=10,
-        latent_dim=1024,
+        embedding_dim=1024,
         decoder_config=(1024, 512),
     )
     out = model(img_3channels_256)

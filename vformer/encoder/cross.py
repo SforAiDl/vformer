@@ -9,9 +9,9 @@ class CrossEncoder(nn.Module):
     """
     Parameters
     ----------
-    latent_dim_s : int
+    embedding_dim_s : int
         Dimension of the embedding of smaller patches
-    latent_dim_l : int
+    embedding_dim_l : int
         Dimension of the embedding of larger patches
     attn_heads_s : int
         Number of self-attention heads for the smaller patches
@@ -45,8 +45,8 @@ class CrossEncoder(nn.Module):
 
     def __init__(
         self,
-        latent_dim_s=1024,
-        latent_dim_l=1024,
+        embedding_dim_s=1024,
+        embedding_dim_l=1024,
         attn_heads_s=16,
         attn_heads_l=16,
         cross_head_s=8,
@@ -64,7 +64,7 @@ class CrossEncoder(nn.Module):
     ):
         super().__init__()
         self.s = VanillaEncoder(
-            latent_dim_s,
+            embedding_dim_s,
             depth_s,
             attn_heads_s,
             head_dim_s,
@@ -72,7 +72,7 @@ class CrossEncoder(nn.Module):
             p_dropout_s,
         )
         self.l = VanillaEncoder(
-            latent_dim_l,
+            embedding_dim_l,
             depth_l,
             attn_heads_l,
             head_dim_l,
@@ -80,10 +80,10 @@ class CrossEncoder(nn.Module):
             p_dropout_l,
         )
         self.attend_s = CrossAttention(
-            latent_dim_s, latent_dim_l, cross_head_s, cross_dim_head_s
+            embedding_dim_s, embedding_dim_l, cross_head_s, cross_dim_head_s
         )
         self.attend_l = CrossAttention(
-            latent_dim_l, latent_dim_s, cross_head_l, cross_dim_head_l
+            embedding_dim_l, embedding_dim_s, cross_head_l, cross_dim_head_l
         )
 
     def forward(self, emb_s, emb_l):

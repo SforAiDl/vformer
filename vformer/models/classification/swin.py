@@ -81,7 +81,7 @@ class SwinTransformer(BaseClassificationModel):
             img_size=img_size,
             patch_size=patch_size,
             in_channels=in_channels,
-            embed_dim=embed_dim,
+            embedding_dim=embed_dim,
             norm_layer=norm_layer if patch_norm else nn.Identity,
         )
         self.patch_resolution = self.patch_embed.patch_resolution

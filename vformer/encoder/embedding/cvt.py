@@ -18,7 +18,7 @@ class CVTEmbedding(nn.Module):
         Size of the kernel used in  MaxPool2D,default is 3
     pooling_stride: int|tuple
         Size of the stride in MaxPool2D, default is 2
-    n_conv_layers: int
+    num_conv_layers: int
         Number of Convolution layers in the encoder,default is 1
     in_channels: int
         Number of input channels in image, default is 3
@@ -26,7 +26,7 @@ class CVTEmbedding(nn.Module):
         Number of output channels
     in_planes: int
         This will be number of channels in the self.conv_layer's convolution except 1st layer and last layer.
-    activation: Activation Layer, optional
+    activation: nn.Module, optional
         Activation Layer, default is None
     max_pool: bool
         Whether to have max-pooling or not, change this parameter to False when using in CVT model
