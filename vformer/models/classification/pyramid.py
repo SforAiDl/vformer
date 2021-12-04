@@ -11,8 +11,8 @@ class PVTClassification(nn.Module):
     """
     Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Image size
     patch_size: list(int)
@@ -190,8 +190,8 @@ class PVTClassificationV2(PVTClassification):
     """
     Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v2
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Image size
     patch_size: list(int)

@@ -5,8 +5,9 @@ from ...utils import pair
 
 class OverlapPatchEmbed(nn.Module):
     """
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     img_size: int
         Image Size
     patch_size: int

@@ -5,7 +5,7 @@ from .utils import pair
 
 def cyclicshift(input, shift_size, dims=None):
     """
-    Parameters:
+    Parameters
     ----------
     input: torch.Tensor
         input tensor
@@ -22,8 +22,8 @@ def cyclicshift(input, shift_size, dims=None):
 
 def window_partition(x, window_size):
     """
-    Parameters:
-    -----------
+    Parameters
+    ----------
     x: torch.Tensor
         input tensor
     window_size: int
@@ -40,8 +40,8 @@ def window_partition(x, window_size):
 
 def window_reverse(windows, window_size, H, W):
     """
-    Parameters:
-    -----------
+    Parameters
+    ----------
     windows: torch.Tensor
     window_size: int
     """
@@ -55,8 +55,8 @@ def window_reverse(windows, window_size, H, W):
 
 def get_relative_position_bias_index(window_size):
     """
-    Parameters:
-    ------------
+    Parameters
+    ----------
     window_size: int or tuple[int]
         Window size
     """
@@ -78,8 +78,8 @@ def get_relative_position_bias_index(window_size):
 
 def create_mask(window_size, shift_size, H, W):
     """
-    Parameters:
-    -----------
+    Parameters
+    ----------
     window_size: int
         Window Size
     shift_size: int

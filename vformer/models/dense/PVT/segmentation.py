@@ -9,8 +9,8 @@ from ....encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
 class PVTSegmentation(nn.Module):
     """
     Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Image size
     patch_size: list(int)
@@ -161,8 +161,8 @@ class PVTSegmentationV2(PVTSegmentation):
     """
     Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Image size
     patch_size: list(int)

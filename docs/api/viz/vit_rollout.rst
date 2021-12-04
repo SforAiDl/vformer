@@ -1,5 +1,5 @@
-ViT Gradient Rollout
-====================
+ViT Rollout
+===========
 
-.. automodule:: vformer.viz.vit_grad_rollout
+.. automodule:: vformer.viz.vit_rollout
     :members:

@@ -1,5 +1,5 @@
-Encoders
-========
+Functional
+==========
 
 .. toctree::
     :caption: Contents:

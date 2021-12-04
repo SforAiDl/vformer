@@ -13,8 +13,8 @@ class SwinTransformer(BaseClassificationModel):
     Implementation of `Swin Transformer: Hierarchical Vision Transformer using Shifted Windows`
     https://arxiv.org/abs/2103.14030v1
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Size of an Image
     patch_size: int

@@ -1,4 +1,4 @@
-MLP DECODER
+MLP Decoder
 ===========
 
 .. automodule:: vformer.decoder.mlp

@@ -8,8 +8,9 @@ from .nn import FeedForward
 
 class VanillaEncoder(nn.Module):
     """
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     latent_dim: int
         Dimension of the embedding
     depth: int

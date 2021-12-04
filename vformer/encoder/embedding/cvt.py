@@ -6,8 +6,8 @@ class CVTEmbedding(nn.Module):
     """
     This class converts the image patches to tensors. Size of the image patches is controlled by `stride` parameter.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     kernel_size: int or tuple
         Size of the kernel used in convolution
     stride: int or tuple
