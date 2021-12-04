@@ -1,4 +1,4 @@
-Cross Attention
+Cross
 =================
 
 .. automodule:: vformer.attention.cross

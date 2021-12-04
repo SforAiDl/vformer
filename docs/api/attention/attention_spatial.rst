@@ -1,4 +1,4 @@
-Spatial Attention
+Spatial
 =================
 
 .. automodule:: vformer.attention.spatial

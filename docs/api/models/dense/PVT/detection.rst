@@ -1,4 +1,4 @@
-PVT Detection
+Detecttion
 ================
 
 .. automodule:: vformer.models.dense.PVT.detection

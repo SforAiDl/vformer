@@ -1,8 +1,8 @@
-Classification Models
-=====================
+Classification
+======================
 
 .. toctree::
-    :caption: Contents:
+    :caption: Contents
     :maxdepth: 2
 
     cross

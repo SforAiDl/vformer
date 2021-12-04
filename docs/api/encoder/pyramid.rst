@@ -1,4 +1,4 @@
-PVT Encoder
+Pyramid
 =============
 
 .. automodule:: vformer.encoder.pyramid

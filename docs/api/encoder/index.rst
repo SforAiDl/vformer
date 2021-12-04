@@ -1,8 +1,8 @@
-Encoders
-========
+Encoder
+=========
 
 .. toctree::
-    :caption: Contents:
+    :caption: Contents
     :maxdepth: 2
 
     cross

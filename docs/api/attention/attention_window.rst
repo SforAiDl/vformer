@@ -1,4 +1,4 @@
-Window Attention
+Window
 =================
 
 .. automodule:: vformer.attention.window

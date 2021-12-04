@@ -1,4 +1,4 @@
-POS Embedding
+Positional
 ================
 
 .. automodule:: vformer.encoder.embedding.pos_embedding

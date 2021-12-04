@@ -1,8 +1,8 @@
-Dense Models
-============
+Dense Prediction
+==========================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    PVT/index

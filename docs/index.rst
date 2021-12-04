@@ -3,17 +3,16 @@ Welcome to vformer's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    readme
    installation
    usage
    contributing
-   history
 
 .. toctree::
    :maxdepth: 2
-   :caption: API References:
+   :caption: API Reference
    
    api/attention/index
    api/common/index

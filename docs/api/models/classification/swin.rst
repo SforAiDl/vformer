@@ -1,4 +1,4 @@
-Swin Classification
+Swin Transformer
 ===================
 
 .. automodule:: vformer.models.classification.swin

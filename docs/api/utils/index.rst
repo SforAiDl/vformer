@@ -1,9 +1,9 @@
-UTILITIES
+Utilities
 =========
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    utils
    window_utils

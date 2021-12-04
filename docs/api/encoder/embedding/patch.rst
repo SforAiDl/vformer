@@ -1,4 +1,4 @@
-Patch Embedding
+Patch
 ================
 
 .. automodule:: vformer.encoder.embedding.patch

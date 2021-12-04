@@ -1,8 +1,8 @@
-Task_Heads
+Task Heads
 ==========
 
 .. toctree::
-    :caption: contents
+    :caption: Contents
     :maxdepth: 2
 
     detection/index

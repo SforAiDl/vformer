@@ -1,4 +1,4 @@
-NN Encoder
+NN
 =============
 
 .. automodule:: vformer.encoder.nn

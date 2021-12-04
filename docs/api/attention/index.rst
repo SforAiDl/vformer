@@ -1,9 +1,9 @@
-Attention Module
+Attention
 ================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    attention_vanilla
    attention_cross

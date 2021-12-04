@@ -1,8 +1,8 @@
-Decoders
+Decoder
 ============
 
 .. toctree::
-    :caption: Contents:
+    :caption: Contents
     :maxdepth: 2
 
     mlp

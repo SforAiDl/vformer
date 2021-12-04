@@ -1,8 +1,8 @@
 Functional
-==========
+===========
 
 .. toctree::
-    :caption: Contents:
+    :caption: Contents
     :maxdepth: 2
 
     merge

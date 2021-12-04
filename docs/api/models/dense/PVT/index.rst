@@ -1,8 +1,8 @@
-PVT Models
-==========
+Pyramid Vision Transformer
+============
 
 .. toctree::
-    :caption: Contents:
+    :caption: Contents
     :maxdepth: 2
 
     detection

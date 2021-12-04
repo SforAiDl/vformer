@@ -1,4 +1,4 @@
-Cross Encoder
+Cross
 =============
 
 .. automodule:: vformer.encoder.cross

@@ -1,4 +1,4 @@
-PVT Classification
+Pyramid Vision Transformer
 ==================
 
 .. automodule:: vformer.models.classification.pyramid

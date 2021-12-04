@@ -1,4 +1,4 @@
-Vanilla Attention
+Vanilla O(n^2)
 =================
 
 .. automodule:: vformer.attention.vanilla

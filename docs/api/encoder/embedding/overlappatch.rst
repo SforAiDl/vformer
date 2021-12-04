@@ -1,4 +1,4 @@
-Overlap Patch Embedding
+Patch Overlap
 =======================
 
 .. automodule:: vformer.encoder.embedding.overlappatch
