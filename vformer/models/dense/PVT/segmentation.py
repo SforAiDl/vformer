@@ -31,7 +31,7 @@ class PVTSegmentation(nn.Module):
     qk_scale: float, optional
     p_dropout: float,
         Dropout rate,default is 0.0
-    attn_dropout:  float
+    attn_drop_rate:  float
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1

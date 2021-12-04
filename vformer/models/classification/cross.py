@@ -46,8 +46,8 @@ class CrossViT(BaseClassificationModel):
     Implementation of 'CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification'
     https://arxiv.org/abs/2103.14899
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Size of the image
     patch_size_s: int
