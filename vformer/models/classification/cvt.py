@@ -18,7 +18,7 @@ class CVT(BaseClassificationModel):
         Size of the image
     patch_size:int
         Size of the single patch in the image
-    in_chans:int
+    in_channels:int
         Number of input channels in image
     seq_pool:bool
         Whether to use sequence pooling or not
@@ -48,7 +48,7 @@ class CVT(BaseClassificationModel):
         self,
         img_size=224,
         patch_size=4,
-        in_chans=3,
+        in_channels=3,
         seq_pool=True,
         embedding_dim=768,
         dim_head=96,
@@ -74,9 +74,9 @@ class CVT(BaseClassificationModel):
             img_size % patch_size == 0
         ), f"Image size ({img_size}) has to be divisible by patch size ({patch_size})"
         img_size = pair(img_size)
-        self.in_chans = in_chans
+        self.in_chans = in_channels
         self.embedding = CVTEmbedding(
-            in_channels=in_chans,
+            in_channels=in_channels,
             out_channels=embedding_dim,
             kernel_size=patch_size,
             stride=patch_size,
@@ -95,7 +95,7 @@ class CVT(BaseClassificationModel):
         hidden_dim = int(embedding_dim * mlp_ratio)
         self.embedding_dim = embedding_dim
         self.sequence_length = self.embedding.sequence_length(
-            n_channels=in_chans, height=img_size[0], width=img_size[1]
+            n_channels=in_channels, height=img_size[0], width=img_size[1]
         )
         self.seq_pool = seq_pool
 

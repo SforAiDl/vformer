@@ -14,7 +14,7 @@ class SwinEncoderBlock(nn.Module):
     dim: int
         Number of the input channels
     input_resolution: int or tuple[int]
-        Input resolution
+        Input resolution of patches
     num_heads: int
         Number of attention heads
     window_size: int

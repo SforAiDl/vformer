@@ -45,7 +45,7 @@ def test_SwinTransformer():
         patch_size=4,
         in_channels=3,
         n_classes=1000,
-        embed_dim=96,
+        embedding_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
@@ -69,7 +69,7 @@ def test_SwinTransformer():
         patch_size=4,
         in_channels=3,
         n_classes=10,
-        embed_dim=96,
+        embedding_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
@@ -85,7 +85,7 @@ def test_SwinTransformer():
         patch_size=4,
         in_channels=3,
         n_classes=10,
-        embed_dim=96,
+        embedding_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[4, 8, 16, 32],
         window_size=8,
@@ -101,7 +101,7 @@ def test_SwinTransformer():
         patch_size=4,
         in_channels=1,
         n_classes=10,
-        embed_dim=96,
+        embedding_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
@@ -117,7 +117,7 @@ def test_SwinTransformer():
         patch_size=4,
         in_channels=3,
         n_classes=10,
-        embed_dim=96,
+        embedding_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
@@ -134,7 +134,7 @@ def test_SwinTransformer():
         patch_size=4,
         in_channels=3,
         n_classes=10,
-        embed_dim=96,
+        embedding_dim=96,
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
@@ -302,7 +302,7 @@ def test_pvt():
 
 
 def test_cvt():
-    model = CVT(img_size=256, patch_size=4, in_chans=3)
+    model = CVT(img_size=256, patch_size=4, in_channels=3)
     out = model(img_3channels_256)
     assert out.shape == (2, 1000)
     del model
@@ -310,7 +310,7 @@ def test_cvt():
     model = CVT(
         img_size=224,
         patch_size=4,
-        in_chans=3,
+        in_channels=3,
         seq_pool=False,
         embedding_dim=768,
         num_heads=1,
@@ -328,7 +328,7 @@ def test_cvt():
 
     model = CVT(
         img_size=224,
-        in_chans=3,
+        in_channels=3,
         patch_size=4,
         positional_embedding="none",
         seq_pool=False,
@@ -340,7 +340,7 @@ def test_cvt():
 
     model = CVT(
         img_size=224,
-        in_chans=3,
+        in_channels=3,
         patch_size=4,
         positional_embedding="none",
         seq_pool=True,

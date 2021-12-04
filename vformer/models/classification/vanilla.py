@@ -80,7 +80,7 @@ class VanillaViT(BaseClassificationModel):
                 decoder_config = list(decoder_config)
             assert (
                 decoder_config[0] == embedding_dim
-            ), "`latent_dim` should be equal to the first item of `decoder_config`"
+            ), "`embedding_dim` should be equal to the first item of `decoder_config`"
             self.decoder = MLPDecoder(decoder_config, n_classes)
 
         else:
