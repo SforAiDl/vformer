@@ -43,7 +43,8 @@ class _cross_p(BaseClassificationModel):
 
 class CrossViT(BaseClassificationModel):
     """
-    Implementation of 'CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification -https://arxiv.org/abs/2103.14899
+    Implementation of 'CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification'
+    https://arxiv.org/abs/2103.14899
 
     Parameters:
     -----------
@@ -56,33 +57,33 @@ class CrossViT(BaseClassificationModel):
     n_classes: int
         Number of classes for classification
     cross_dim_head_s: int
-        Dimension of the head of the cross-attention for the smaller patches, default is 64
+        Dimension of the head of the cross-attention for the smaller patches
     cross_dim_head_l: int
-        Dimension of the head of the cross-attention for the larger patches, default is 64
+        Dimension of the head of the cross-attention for the larger patches
     latent_dim_s: int
-        Dimension of the hidden layer for the smaller patches, default is 1024
+        Dimension of the hidden layer for the smaller patches
     latent_dim_l: int
-        Dimension of the hidden layer for the larger patches, default is 1024
+        Dimension of the hidden layer for the larger patches
     dim_head_s: int
-        Dimension of the head of the attention for the smaller patches, default is 64
+        Dimension of the head of the attention for the smaller patches
     dim_head_l: int
-        Dimension of the head of the attention for the larger patches, default is 64
+        Dimension of the head of the attention for the larger patches
     depth_s: int
-        Number of attention layers in encoder for the smaller patches, default is 6
+        Number of attention layers in encoder for the smaller patches
     depth_l: int
-        Number of attention layers in encoder for the larger patches, default is 6
+        Number of attention layers in encoder for the larger patches
     attn_heads_s: int
-        Number of attention heads for the smaller patches, default is 16
+        Number of attention heads for the smaller patches
     attn_heads_l: int
-        Number of attention heads for the larger patches, default is 16
+        Number of attention heads for the larger patches
     cross_head_s: int
-        Number of CrossAttention heads for the smaller patches, default is 8
+        Number of CrossAttention heads for the smaller patches
     cross_head_l: int
-        Number of CrossAttention heads for the larger patches, default is 8
+        Number of CrossAttention heads for the larger patches
     encoder_mlp_dim_s: int
-        Dimension of hidden layer in the encoder for the smaller patches, default is 2048
+        Dimension of hidden layer in the encoder for the smaller patches
     encoder_mlp_dim_l: int
-        Dimension of hidden layer in the encoder for the larger patches, default is 2048
+        Dimension of hidden layer in the encoder for the larger patches
     in_channels: int
         Number of input channels
     decoder_config_s: int or tuple or list, optional
@@ -90,17 +91,17 @@ class CrossViT(BaseClassificationModel):
     decoder_config_l: int or tuple or list, optional
         Configuration of the decoder for the larger patches
     pool_s: {"cls","mean"}
-        Feature pooling type for the smaller patches, default is "cls"
+        Feature pooling type for the smaller patches
     pool_l: {"cls","mean"}
-        Feature pooling type for the larger patches, default is "cls"
+        Feature pooling type for the larger patches
     p_dropout_encoder_s: float
-        Dropout probability in the encoder for the smaller patches, default is 0.0
+        Dropout probability in the encoder for the smaller patches
     p_dropout_encoder_l: float
-        Dropout probability in the encoder for the larger patches, default is 0.0
+        Dropout probability in the encoder for the larger patches
     p_dropout_embedding_s: float
-        Dropout probability in the embedding layer for the smaller patches, default is 0.0
+        Dropout probability in the embedding layer for the smaller patches
     p_dropout_embedding_l: float
-        Dropout probability in the embedding layer for the larger patches, default is 0.0
+        Dropout probability in the embedding layer for the larger patches
     """
 
     def __init__(
