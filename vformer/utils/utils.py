@@ -1,6 +1,6 @@
 def pair(t):
     """
-    Parameters:
+    Parameters
     -----------
     t: tuple(int) or int
     """
