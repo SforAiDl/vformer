@@ -5,11 +5,11 @@ from ...utils import pair
 
 class PatchEmbedding(nn.Module):
     """
-    Parameters:
-    -----------
-    img_size: int or tuple(int)
+    Parameters
+    ----------
+    img_size: int
         Image Size
-    patch_size: int or tuple(int)
+    patch_size: int
         Patch Size
     in_channels: int
         Number of input channels in the image
