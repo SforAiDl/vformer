@@ -5,7 +5,7 @@ class DWConv(nn.Module):
     """
     Depth Wise Convolution
 
-    Parameters:
+    Parameters
     -----------
     dim: int
         Dimension of the input tensor
