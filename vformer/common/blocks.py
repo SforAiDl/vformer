@@ -6,7 +6,7 @@ class DWConv(nn.Module):
     Depth Wise Convolution
 
     Parameters
-    -----------
+    ----------
     dim: int
         Dimension of the input tensor
     kernel_size_dwconv: int,optional
