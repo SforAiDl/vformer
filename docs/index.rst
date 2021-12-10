@@ -1,4 +1,4 @@
-Welcome to vformer's documentation!
+Welcome to VFormer's documentation!
 ======================================
 
 .. toctree::
@@ -7,7 +7,6 @@ Welcome to vformer's documentation!
 
    readme
    installation
-   usage
    contributing
 
 .. toctree::
