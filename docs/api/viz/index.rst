@@ -1,4 +1,4 @@
-Visualisation Tools
+Visualisation
 ====================
 
 .. toctree::
