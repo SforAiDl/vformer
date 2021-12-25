@@ -26,7 +26,8 @@ class PVTFeedForward(nn.Module):
     use_dwconv: bool
         Whether to use Depth-wise convolutions, default is False
 
-    Keyword Args:
+    Kwargs
+    ----------
 
     kernel_size_dwconv: int,optional
         `kernel_size` parameter for 2D convolution used in Depth wise convolution
@@ -67,16 +68,20 @@ class PVTFeedForward(nn.Module):
     def forward(self, x, **kwargs):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
-        Keyword Args:
+        Kwargs
+        --------
             H: int
                 Height of image patch
             W: int
                 Width of image patch
 
-        Returns: torch.Tensor
+        Returns
+        --------
+            torch.Tensor
             Returns output tensor
 
         """
@@ -180,7 +185,9 @@ class PVTEncoder(nn.Module):
         ----------
             x: torch.Tensor
                 Input tensor
-        Keyword Args:
+
+        Kwargs
+        ----------
             H: int
                 Height of image patch
             W: int
