@@ -130,11 +130,11 @@ class CVT(BaseClassificationModel):
         self.encoder_blocks = nn.ModuleList(
             [
                 VanillaEncoder(
-                    latent_dim=embedding_dim,
+                    embedding_dim=embedding_dim,
                     num_heads=num_heads,
                     depth=1,
                     mlp_dim=hidden_dim,
-                    dim_head=dim_head,
+                    head_dim=dim_head,
                     p_dropout=p_dropout,
                     attn_dropout=attn_dropout,
                     drop_path_rate=dpr[i],
@@ -156,6 +156,15 @@ class CVT(BaseClassificationModel):
             self.decoder = MLPDecoder(config=embedding_dim, n_classes=num_classes)
 
     def forward(self, x):
+        """
+
+        Args:
+            x: torch.Tensor
+                Input tensor
+        Returns:torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
         x = self.embedding(x)
         if self.positional_emb is None and x.size(1) < self.sequence_length:
             x = F.pad(x, (0, 0, 0, self.in_chans - x.size(1)), mode="constant", value=0)

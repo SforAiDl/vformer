@@ -5,6 +5,7 @@ from ...utils import pair
 
 class PatchEmbedding(nn.Module):
     """
+    Patch Embedding using convolution operation
 
     Parameters
     ----------
@@ -45,6 +46,17 @@ class PatchEmbedding(nn.Module):
         self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
+        """
+
+        Args:
+            x:torch.Tensor
+                Input tensor
+
+        Returns: torch.Tensor
+            Returns output tensor by applying convolution operation with same `kernel_size` and `stride` on input tensor.
+
+        """
+
         B, C, H, W = x.shape
 
         assert (

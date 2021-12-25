@@ -7,6 +7,7 @@ from vformer.encoder.vanilla import VanillaEncoder
 
 class CrossEncoder(nn.Module):
     """
+
     Parameters
     ----------
     embedding_dim_s : int

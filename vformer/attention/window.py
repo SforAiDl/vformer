@@ -7,6 +7,8 @@ from ..utils import get_relative_position_bias_index, pair
 
 class WindowAttention(nn.Module):
     """
+    Window Attention and Shifted Window Attention
+
     Parameters
     ----------
     dim: int
@@ -57,6 +59,20 @@ class WindowAttention(nn.Module):
         trunc_normal_(self.relative_position_bias_table, std=0.2)
 
     def forward(self, x, mask=None):
+        """
+
+        Args:
+            x: torch.Tensor
+                input Tensor
+            mask: torch.Tensor
+                Attention mask used for shifted window attention, if None, window attention will be used,
+                else attention mask will be considered while Shifted-Window-Attention
+                for more understanding you may refer (this)[https://github.com/microsoft/Swin-Transformer/issues/38]
+
+        Returns: torch.Tensor
+            Returns output tensor by applying Window-Attention / Shifted-Window-Attention on input tensor
+
+        """
         B_, N, C = x.shape
         qkv = (
             self.qkv(x)

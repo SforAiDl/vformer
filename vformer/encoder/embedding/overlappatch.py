@@ -5,6 +5,7 @@ from ...utils import pair
 
 class OverlapPatchEmbed(nn.Module):
     """
+    Overlap Patch Embedding using convolution operation
 
     Parameters
     ----------
@@ -50,6 +51,13 @@ class OverlapPatchEmbed(nn.Module):
         self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
+        """
+        Args:
+            x: torch.Tensor
+                Input tensor
+        Returns: torch.Tensor
+            Returns output tensor with the help of convolution operation
+        """
         x = self.proj(x)
         H, W = x.shape[2:]
 

@@ -4,6 +4,8 @@ from torch import nn
 
 class LinearEmbedding(nn.Module):
     """
+    Linear Patch Embedding encodes image patched into tensors by applying simple linear layers.
+    These linear Embeddings are high dimensional representation of image patches.
 
     Parameters
     ----------
@@ -36,5 +38,14 @@ class LinearEmbedding(nn.Module):
         )
 
     def forward(self, x):
+        """
 
+        Args:
+            x: torch.Tensor
+                Input tensor
+
+        Returns: torch.Tensor
+            Returns patch embeddings of size `embedding_dim`
+
+        """
         return self.patch_embedding(x)

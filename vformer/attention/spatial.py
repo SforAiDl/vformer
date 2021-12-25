@@ -69,6 +69,20 @@ class SpatialAttention(nn.Module):
             self.sr = nn.Conv2d(dim, dim, kernel_size=1, stride=1)
 
     def forward(self, x, H, W):
+        """
+
+        Args:
+            x: torch.Tensor
+                Input tensor
+            H: int
+                Height  of image patches
+            W: int
+                Width of image patches
+
+        Returns: torch.Tensor
+            Returns output tensor by applying spatial attention on input tensor
+
+        """
         B, N, C = x.shape
         q = (
             self.q(x)

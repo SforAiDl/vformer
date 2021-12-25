@@ -3,6 +3,7 @@ import torch.nn as nn
 
 class FeedForward(nn.Module):
     """
+    Basic Feedforward Network.
 
     Parameters
     ----------
@@ -30,4 +31,13 @@ class FeedForward(nn.Module):
         )
 
     def forward(self, x):
+        """
+
+        Args:
+            x: torch.Tensor
+                Input tensor
+        Returns:torch.Tensor
+            Returns output tensor by performing linear operations and activation on input tensor
+
+        """
         return self.net(x)

@@ -90,6 +90,16 @@ class CVTEmbedding(nn.Module):
         return self.forward(torch.zeros((1, n_channels, height, width))).shape[1]
 
     def forward(self, x):
+        """
+
+        Args:
+            x: torch.tensor
+                Input tensor
+
+        Returns: torch.Tensor
+            Returns output tensor (embedding) by applying multiple convolution and max-pooling operations on input tensor
+
+        """
         for conv2d, activation, maxpool in self.conv_layers:
 
             x = maxpool(activation(conv2d(x)))

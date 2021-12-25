@@ -64,9 +64,9 @@ class CrossViT(BaseClassificationModel):
         Dimension of the hidden layer for the smaller patches
     latent_dim_l: int
         Dimension of the hidden layer for the larger patches
-    dim_head_s: int
+    head_dim_s: int
         Dimension of the head of the attention for the smaller patches
-    dim_head_l: int
+    head_dim_l: int
         Dimension of the head of the attention for the larger patches
     depth_s: int
         Number of attention layers in encoder for the smaller patches
@@ -185,6 +185,15 @@ class CrossViT(BaseClassificationModel):
             self.decoder_l = MLPDecoder(latent_dim_l, n_classes)
 
     def forward(self, img):
+        """
+
+        Args:
+            img: torch.Tensor
+                Input tensor
+        Returns:torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
         emb_s = self.s(img)
         emb_l = self.l(img)
         emb_s, emb_l = self.encoder(emb_s, emb_l)

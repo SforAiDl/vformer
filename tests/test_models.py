@@ -52,8 +52,8 @@ def test_SwinTransformer():
         mlp_ratio=4.0,
         qkv_bias=True,
         qk_scale=None,
-        drop_rate=0.0,
-        attn_drop_rate=0.0,
+        p_dropout=0.0,
+        attn_dropout=0.0,
         drop_path_rate=0.1,
         norm_layer=nn.LayerNorm,
         ape=False,
@@ -73,7 +73,7 @@ def test_SwinTransformer():
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
-        drop_rate=0.2,
+        p_dropout=0.2,
     )
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
@@ -89,7 +89,7 @@ def test_SwinTransformer():
         depths=[2, 2, 6, 2],
         num_heads=[4, 8, 16, 32],
         window_size=8,
-        drop_rate=0.2,
+        p_dropout=0.2,
     )
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
@@ -105,7 +105,7 @@ def test_SwinTransformer():
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
-        drop_rate=0.2,
+        p_dropout=0.2,
     )
     out = model(img_1channels_224)
     assert out.shape == (2, 10)
@@ -121,7 +121,7 @@ def test_SwinTransformer():
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
-        drop_rate=0.2,
+        p_dropout=0.2,
         decoder_config=(768, 256, 10, 2),
     )
     out = model(img_3channels_224)
@@ -138,7 +138,7 @@ def test_SwinTransformer():
         depths=[2, 2, 6, 2],
         num_heads=[3, 6, 12, 24],
         window_size=7,
-        drop_rate=0.2,
+        p_dropout=0.2,
         decoder_config=(768, 256, 10, 2),
         ape=False,
     )

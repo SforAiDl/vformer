@@ -30,13 +30,14 @@ class PVTDetection(nn.Module):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in window-attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
     attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     linear: bool
         Whether to use linear spatial attention, default is False
@@ -176,13 +177,14 @@ class PVTDetectionV2(PVTDetection):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in window-attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
     attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     linear: bool
         Whether to use linear spatial attention

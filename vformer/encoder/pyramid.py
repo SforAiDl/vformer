@@ -26,8 +26,8 @@ class PVTFeedForward(nn.Module):
     use_dwconv: bool
         Whether to use Depth-wise convolutions, default is False
 
-    Kwargs
-    ------
+    Keyword Args:
+
     kernel_size_dwconv: int,optional
         `kernel_size` parameter for 2D convolution used in Depth wise convolution
     stride_dwconv: int
@@ -65,6 +65,21 @@ class PVTFeedForward(nn.Module):
         )
 
     def forward(self, x, **kwargs):
+        """
+
+        Args:
+            x: torch.Tensor
+                Input tensor
+        Keyword Args:
+            H: int
+                Height of image patch
+            W: int
+                Width of image patch
+
+        Returns: torch.Tensor
+            Returns output tensor
+
+        """
         x = self.relu(self.fc1(x))
         if self.use_dwconv:
             x = self.dw_conv(x, **kwargs)
@@ -86,6 +101,7 @@ class PVTEncoder(nn.Module):
     qkv_bias: bool
         Whether to add a bias vector to the q,k, and v matrices
     qk_scale:float, optional
+        Override default qk scale of head_dim ** -0.5 in spatial-attention if set
     p_dropout: float
         Dropout probability
     attn_dropout: float
@@ -158,6 +174,21 @@ class PVTEncoder(nn.Module):
             )
 
     def forward(self, x, **kwargs):
+        """
+
+        Args:
+            x: torch.Tensor
+                Input tensor
+        Keyword Args:
+            H: int
+                Height of image patch
+            W: int
+                Width of image patch
+
+        Returns: torch.Tensor
+            Returns output tensor
+
+        """
         for prenorm_attn, prenorm_ff in self.encoder:
             x = x + self.drop_path(prenorm_attn(x, **kwargs))
             x = x + self.drop_path(prenorm_ff(x, **kwargs))

@@ -14,7 +14,7 @@ from vformer.functional import PatchMerging
 def test_VanillaEncoder():
     test_tensor = torch.randn(2, 65, 1024)
     encoder = VanillaEncoder(
-        latent_dim=1024, depth=6, num_heads=16, dim_head=64, mlp_dim=2048
+        embedding_dim=1024, depth=6, num_heads=16, head_dim=64, mlp_dim=2048
     )
     out = encoder(test_tensor)
     assert out.shape == test_tensor.shape  # shape remains same

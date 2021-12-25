@@ -9,6 +9,8 @@ from .nn import FeedForward
 
 class SwinEncoderBlock(nn.Module):
     """
+    Swin Encoder Block
+
     Parameters
     ----------
     dim: int
@@ -26,6 +28,7 @@ class SwinEncoderBlock(nn.Module):
     qkv_bias: bool, default= True
         Whether to add a bias vector to the q,k, and v matrices
     qk_scale: float, Optional
+        Override default qk scale of head_dim ** -0.5 in window-attention if set
     p_dropout: float
         Dropout rate
     attn_drop: float
@@ -93,6 +96,15 @@ class SwinEncoderBlock(nn.Module):
         self.register_buffer("attn_mask", attn_mask)
 
     def forward(self, x):
+        """
+
+        Args:
+            x: torch.Tensor
+
+        Returns: torch.Tensor
+            Returns output tensor
+
+        """
         H, W = self.input_resolution
 
         B, L, C = x.shape
@@ -145,6 +157,7 @@ class SwinEncoder(nn.Module):
     qkv_bias: bool, default is True
        Whether to add a bias vector to the q,k, and v matrices
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in window-attention if set
     p_dropout: float,
         Dropout rate.
     attn_dropout: float, optional
@@ -210,6 +223,14 @@ class SwinEncoder(nn.Module):
             self.downsample = None
 
     def forward(self, x):
+        """
+        Args:
+            x: torch.Tensor
+
+        Returns: torch.Tensor
+            Returns output tensor
+        """
+
         for blk in self.blocks:
             if self.use_checkpoint:
                 x = checkpoint.checkpoint(blk, x)

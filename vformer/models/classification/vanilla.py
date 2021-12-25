@@ -30,7 +30,7 @@ class VanillaViT(BaseClassificationModel):
         Number of the attention heads
     encoder_mlp_dim: int
         Dimension of hidden layer in the encoder
-    in_channel: int
+    in_channels: int
         Number of input channels
     decoder_config: int or tuple or list, optional
         Configuration of the decoder. If None, the default configuration is used.
@@ -71,12 +71,12 @@ class VanillaViT(BaseClassificationModel):
         self.embedding_dropout = nn.Dropout(p_dropout_embedding)
 
         self.encoder = VanillaEncoder(
-            embedding_dim,
-            depth,
-            attn_heads,
-            head_dim,
-            encoder_mlp_dim,
-            p_dropout_encoder,
+            embedding_dim=embedding_dim,
+            depth=depth,
+            num_heads=attn_heads,
+            head_dim=head_dim,
+            mlp_dim=encoder_mlp_dim,
+            p_dropout=p_dropout_encoder,
         )
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
@@ -92,7 +92,15 @@ class VanillaViT(BaseClassificationModel):
             self.decoder = MLPDecoder(embedding_dim, n_classes)
 
     def forward(self, x):
+        """
 
+        Args:
+            x: torch.Tensor
+                Input tensor
+        Returns:torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
         x = self.patch_embedding(x)
         b, n, _ = x.shape
 
