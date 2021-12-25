@@ -61,7 +61,8 @@ class WindowAttention(nn.Module):
     def forward(self, x, mask=None):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 input Tensor
             mask: torch.Tensor
@@ -69,8 +70,10 @@ class WindowAttention(nn.Module):
                 else attention mask will be considered while Shifted-Window-Attention
                 for more understanding you may refer (this)[https://github.com/microsoft/Swin-Transformer/issues/38]
 
-        Returns: torch.Tensor
-            Returns output tensor by applying Window-Attention / Shifted-Window-Attention on input tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor by applying Window-Attention or Shifted-Window-Attention on input tensor
 
         """
         B_, N, C = x.shape

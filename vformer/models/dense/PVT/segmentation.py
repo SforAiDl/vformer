@@ -138,6 +138,18 @@ class PVTSegmentation(nn.Module):
         )
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+            x: torch.Tensor
+                Input tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns tensor of size `num_classes`
+
+        """
         B = x.shape[0]
         out = []
         for i in range(len(self.depths)):

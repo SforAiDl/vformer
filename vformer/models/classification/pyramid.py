@@ -162,11 +162,14 @@ class PVTClassification(nn.Module):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
-        Returns:torch.Tensor
-            Returns tensor of size `num_classes`
+        Returns
+        ----------
+            torch.Tensor
+                Returns tensor of size `num_classes`
 
         """
         B = x.shape[0]
@@ -220,6 +223,7 @@ class PVTClassificationV2(PVTClassification):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in spatial-attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
     attn_dropout:  float,

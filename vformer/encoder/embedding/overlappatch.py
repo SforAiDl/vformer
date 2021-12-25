@@ -52,11 +52,18 @@ class OverlapPatchEmbed(nn.Module):
 
     def forward(self, x):
         """
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
-        Returns: torch.Tensor
-            Returns output tensor with the help of convolution operation
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor with the help of convolution operation
+            int
+                Height of image Patch
+            int
+                Width of image patch
         """
         x = self.proj(x)
         H, W = x.shape[2:]

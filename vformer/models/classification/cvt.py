@@ -158,11 +158,14 @@ class CVT(BaseClassificationModel):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
-        Returns:torch.Tensor
-            Returns tensor of size `num_classes`
+        Returns
+        ----------
+            torch.Tensor
+                Returns tensor of size `num_classes`
 
         """
         x = self.embedding(x)

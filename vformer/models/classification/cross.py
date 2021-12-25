@@ -187,11 +187,14 @@ class CrossViT(BaseClassificationModel):
     def forward(self, img):
         """
 
-        Args:
+        Parameters
+        ----------
             img: torch.Tensor
                 Input tensor
-        Returns:torch.Tensor
-            Returns tensor of size `num_classes`
+        Returns
+        ----------
+            torch.Tensor
+                Returns tensor of size `num_classes`
 
         """
         emb_s = self.s(img)

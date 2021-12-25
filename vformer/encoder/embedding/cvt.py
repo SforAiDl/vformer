@@ -92,12 +92,15 @@ class CVTEmbedding(nn.Module):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.tensor
                 Input tensor
 
-        Returns: torch.Tensor
-            Returns output tensor (embedding) by applying multiple convolution and max-pooling operations on input tensor
+        Returns
+        -----------
+            torch.Tensor
+                Returns output tensor (embedding) by applying multiple convolution and max-pooling operations on input tensor
 
         """
         for conv2d, activation, maxpool in self.conv_layers:

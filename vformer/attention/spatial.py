@@ -71,7 +71,8 @@ class SpatialAttention(nn.Module):
     def forward(self, x, H, W):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
             H: int
@@ -79,7 +80,9 @@ class SpatialAttention(nn.Module):
             W: int
                 Width of image patches
 
-        Returns: torch.Tensor
+        Returns
+        ----------
+            torch.Tensor
             Returns output tensor by applying spatial attention on input tensor
 
         """

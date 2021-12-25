@@ -176,7 +176,8 @@ class PVTEncoder(nn.Module):
     def forward(self, x, **kwargs):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
         Keyword Args:
@@ -185,8 +186,10 @@ class PVTEncoder(nn.Module):
             W: int
                 Width of image patch
 
-        Returns: torch.Tensor
-            Returns output tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor
 
         """
         for prenorm_attn, prenorm_ff in self.encoder:

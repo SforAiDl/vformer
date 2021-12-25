@@ -40,11 +40,14 @@ class VanillaSelfAttention(nn.Module):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
-        Returns: torch.Tensor
-            Returns output tensor by applying self-attention on input tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor by applying self-attention on input tensor
 
         """
         qkv = self.to_qkv(x).chunk(3, dim=-1)

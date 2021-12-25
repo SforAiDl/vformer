@@ -133,6 +133,18 @@ class PVTDetection(nn.Module):
         self.pool = nn.Parameter(torch.zeros(1, 1, embedding_dims[-1]))
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+            x: torch.Tensor
+                Input tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns tensor of size `num_classes`
+
+        """
         B = x.shape[0]
         out = []
         for i in range(len(self.depths)):
@@ -191,9 +203,7 @@ class PVTDetectionV2(PVTDetection):
     use_dwconv: bool
         Whether to use Depth-wise convolutions in Overlap-patch embedding
     ape: bool
-        Whether to use absolute position embedding
-    return_pyramid: bool
-        Whether to return all pyramid feature layers, if false returns only last feature layer, default is True
+        Whether to use absolute position embedding, default is False
     """
 
     def __init__(
@@ -212,9 +222,9 @@ class PVTDetectionV2(PVTDetection):
         norm_layer=nn.LayerNorm,
         depths=[3, 4, 6, 3],
         sr_ratios=[8, 4, 2, 1],
-        use_abs_pos_embed=False,
         use_dwconv=True,
         linear=False,
+        ape=False,
     ):
         super(PVTDetectionV2, self).__init__(
             img_size=img_size,
@@ -232,6 +242,6 @@ class PVTDetectionV2(PVTDetection):
             depths=depths,
             sr_ratios=sr_ratios,
             linear=linear,
-            ape=use_abs_pos_embed,
+            ape=ape,
             use_dwconv=use_dwconv,
         )

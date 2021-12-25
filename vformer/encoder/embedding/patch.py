@@ -48,12 +48,15 @@ class PatchEmbedding(nn.Module):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x:torch.Tensor
                 Input tensor
 
-        Returns: torch.Tensor
-            Returns output tensor by applying convolution operation with same `kernel_size` and `stride` on input tensor.
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor by applying convolution operation with same `kernel_size` and `stride` on input tensor.
 
         """
 

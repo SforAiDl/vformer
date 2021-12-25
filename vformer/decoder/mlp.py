@@ -3,7 +3,7 @@ import torch.nn as nn
 
 class MLPDecoder(nn.Module):
     """
-    MLP based decoder head
+    MLP decoder head
 
     Parameters
     ----------
@@ -35,11 +35,15 @@ class MLPDecoder(nn.Module):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
-        Returns: torch.Tensor
-            Returns output tensor of size `n_classes`, Note that `torch.nn.Softmax` is not applied to the output tensor.
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor of size `n_classes`, Note that `torch.nn.Softmax` is not applied to the output tensor.
+
         """
 
         return self.decoder(x)

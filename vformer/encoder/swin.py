@@ -31,7 +31,7 @@ class SwinEncoderBlock(nn.Module):
         Override default qk scale of head_dim ** -0.5 in window-attention if set
     p_dropout: float
         Dropout rate
-    attn_drop: float
+    attn_dropout: float
         Dropout rate
     drop_path: float
         Stochastic depth rate
@@ -98,11 +98,14 @@ class SwinEncoderBlock(nn.Module):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
 
-        Returns: torch.Tensor
-            Returns output tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor
 
         """
         H, W = self.input_resolution
@@ -224,11 +227,14 @@ class SwinEncoder(nn.Module):
 
     def forward(self, x):
         """
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
 
-        Returns: torch.Tensor
-            Returns output tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor
         """
 
         for blk in self.blocks:

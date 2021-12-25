@@ -36,9 +36,10 @@ class SwinTransformer(BaseClassificationModel):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale:  float, optional
-    drop_rate: float
+        Override default qk scale of head_dim ** -0.5 in window-attention if set
+    p_dropout: float
         Dropout rate, default is 0.0
-    attn_drop_rate: float
+    attn_dropout: float
         Attention dropout rate,default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
@@ -134,11 +135,14 @@ class SwinTransformer(BaseClassificationModel):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
                 Input tensor
-        Returns:torch.Tensor
-            Returns tensor of size `num_classes`
+        Returns
+        ----------
+            torch.Tensor
+                Returns tensor of size `num_classes`
 
         """
         x = self.patch_embed(x)

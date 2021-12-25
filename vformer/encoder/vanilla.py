@@ -76,11 +76,14 @@ class VanillaEncoder(nn.Module):
     def forward(self, x):
         """
 
-        Args:
+        Parameters
+        ----------
             x: torch.Tensor
 
-        Returns: torch.Tensor
-            Returns output tensor
+        Returns
+        ----------
+            torch.Tensor
+                Returns output tensor
         """
         for attn, ff in self.encoder:
             x = attn(x) + x
