@@ -82,7 +82,7 @@ class PVTFeedForward(nn.Module):
         Returns
         --------
             torch.Tensor
-            Returns output tensor
+                Returns output tensor
 
         """
         x = self.relu(self.fc1(x))
