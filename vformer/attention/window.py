@@ -67,7 +67,7 @@ class WindowAttention(nn.Module):
                 input Tensor
             mask: torch.Tensor
                 Attention mask used for shifted window attention, if None, window attention will be used,
-                else attention mask will be considered while Shifted-Window-Attention
+                else attention mask will be taken into consideration.
                 for more understanding you may refer (this)[https://github.com/microsoft/Swin-Transformer/issues/38]
 
         Returns
