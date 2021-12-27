@@ -49,7 +49,7 @@ class Registry:
         if name is None:  # pragma: no cover
             name = obj.__name__
 
-        self._do_register(name, obj)
+        self._do_register(name, obj)  # pragma: no cover
 
     def get(self, name):
         """
