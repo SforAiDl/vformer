@@ -2,6 +2,8 @@ import torch
 
 from vformer.utils import DECODER_REGISTRY
 
+decoder_modules = DECODER_REGISTRY.get_list()
+
 
 def test_MLPDecoder():
 

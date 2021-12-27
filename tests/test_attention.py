@@ -2,6 +2,8 @@ import torch
 
 from vformer.utils import ATTENTION_REGISTRY
 
+attention_modules = ATTENTION_REGISTRY.get_list()
+
 
 def test_VanillaSelfAttention():
 

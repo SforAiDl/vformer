@@ -4,6 +4,8 @@ import torch.nn as nn
 from vformer.functional import PatchMerging
 from vformer.utils import ENCODER_REGISTRY
 
+encoder_modules = ENCODER_REGISTRY.get_list()
+
 
 def test_VanillaEncoder():
 

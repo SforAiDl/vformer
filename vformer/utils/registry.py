@@ -46,7 +46,7 @@ class Registry:
 
             return deco
 
-        if name is None:
+        if name is None:  # pragma: no cover
             name = obj.__name__
 
         self._do_register(name, obj)
@@ -65,7 +65,7 @@ class Registry:
         """
 
         ret = self._obj_map.get(name)
-        if ret is None:
+        if ret is None:  # pragma: no cover
             raise KeyError(
                 f"No object named '{name}' found in '{self._name}' registry!"
             )
@@ -84,10 +84,10 @@ class Registry:
         return list(self._obj_map.keys())
 
     def __contains__(self, name):
-        return name in self._obj_map
+        return name in self._obj_map  # pragma: no cover
 
     def __iter__(self):
-        return iter(self._obj_map.items())
+        return iter(self._obj_map.items())  # pragma: no cover
 
 
 ATTENTION_REGISTRY = Registry("ATTENTION")
