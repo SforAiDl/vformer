@@ -1,8 +1,10 @@
 import torch.nn as nn
 
 from ..functional import PreNorm
+from ..utils import ATTENTION_REGISTRY
 
 
+@ATTENTION_REGISTRY.register()
 class SpatialAttention(nn.Module):
     """
     Spatial Reduction Attention- Linear complexity attention layer
@@ -42,9 +44,11 @@ class SpatialAttention(nn.Module):
         act_fn=nn.GELU,
     ):
         super(SpatialAttention, self).__init__()
+
         assert (
             dim % num_heads == 0
         ), f"dim {dim} should be divided by num_heads {num_heads}."
+
         self.num_heads = num_heads
         self.sr_ratio = sr_ratio
         head_dim = dim // num_heads
@@ -61,6 +65,7 @@ class SpatialAttention(nn.Module):
         self.linear = linear
         self.sr_ratio = sr_ratio
         self.norm = PreNorm(dim=dim, fn=act_fn() if linear else nn.Identity())
+
         if not linear:
             if sr_ratio > 1:
                 self.sr = nn.Conv2d(dim, dim, kernel_size=sr_ratio, stride=sr_ratio)
@@ -69,6 +74,7 @@ class SpatialAttention(nn.Module):
             self.sr = nn.Conv2d(dim, dim, kernel_size=1, stride=1)
 
     def forward(self, x, H, W):
+
         B, N, C = x.shape
         q = (
             self.q(x)
@@ -106,4 +112,5 @@ class SpatialAttention(nn.Module):
         attn = self.attn(attn)
 
         x = (attn @ v).transpose(1, 2).reshape(B, N, C)
+
         return self.to_out(x)

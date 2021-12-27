@@ -5,8 +5,10 @@ from einops import repeat
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import LinearEmbedding, VanillaEncoder
+from ...utils import MODEL_REGISTRY
 
 
+@MODEL_REGISTRY.register()
 class VanillaViT(BaseClassificationModel):
     """
     Implementation of 'An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'
@@ -81,11 +83,14 @@ class VanillaViT(BaseClassificationModel):
         self.pool = lambda x: x.mean(dim=1) if pool == "mean" else x[:, 0]
 
         if decoder_config is not None:
+
             if not isinstance(decoder_config, list):
                 decoder_config = list(decoder_config)
+
             assert (
                 decoder_config[0] == embedding_dim
             ), "`embedding_dim` should be equal to the first item of `decoder_config`"
+
             self.decoder = MLPDecoder(decoder_config, n_classes)
 
         else:

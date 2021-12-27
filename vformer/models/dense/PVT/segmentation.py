@@ -4,11 +4,15 @@ import torch.nn as nn
 
 from ....decoder import SegmentationHead
 from ....encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
+from ....utils import MODEL_REGISTRY
 
 
+@MODEL_REGISTRY.register()
 class PVTSegmentation(nn.Module):
     """
-    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
+    Implementation of Pyramid Vision Transformer:
+    https://arxiv.org/abs/2102.12122v1
+
     Parameters
     ----------
     img_size: int
@@ -69,18 +73,23 @@ class PVTSegmentation(nn.Module):
         return_pyramid=False,
     ):
         super(PVTSegmentation, self).__init__()
+
         self.ape = ape
         self.depths = depths
         self.return_pyramid = return_pyramid
+
         assert (
             len(depths) == len(num_heads) == len(embedding_dims)
         ), "Configurations do not match"
+
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
         self.patch_embeds = nn.ModuleList([])
         self.blocks = nn.ModuleList([])
         self.norms = nn.ModuleList()
         self.pos_embeds = nn.ModuleList()
+
         for i in range(len(depths)):
+
             self.patch_embeds.append(
                 nn.ModuleList(
                     [
@@ -96,6 +105,7 @@ class PVTSegmentation(nn.Module):
                     ]
                 )
             )
+
             if ape:
                 self.pos_embeds.append(
                     nn.ModuleList(
@@ -130,35 +140,45 @@ class PVTSegmentation(nn.Module):
                 )
             )
             self.norms.append(norm_layer(embedding_dims[i]))
+
         self.head = SegmentationHead(
             out_channels=out_channels,
             embed_dims=embedding_dims if not return_pyramid else [embedding_dims[-1]],
         )
 
     def forward(self, x):
+
         B = x.shape[0]
         out = []
+
         for i in range(len(self.depths)):
+
             patch_embed = self.patch_embeds[i]
             block = self.blocks[i]
             norm = self.norms[i]
 
             x, H, W = patch_embed[0](x)
+
             if self.ape:
                 pos_embed = self.pos_embeds[i]
                 x = pos_embed[0](x, H=H, W=W)
+
             for blk in block:
                 x = blk(x, H=H, W=W)
+
             x = norm(x)
             x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
             out.append(x)
+
         if self.return_pyramid:
             out = out[3:4]
 
         out = self.head(out)
+
         return out
 
 
+@MODEL_REGISTRY.register()
 class PVTSegmentationV2(PVTSegmentation):
     """
     Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1

@@ -46,6 +46,7 @@ class AbsolutePositionEmbedding(nn.Module):
                 Algorithm used for up/down sampling, default is 'bilinear'
         """
         assert pos_embed.ndim == 3, "shape of pos_embed must be [B, L, C]"
+
         pos_h, pos_w = self.pos_shape
         pos_embed_weight = pos_embed[:, (-1 * pos_h * pos_w) :]
         pos_embed_weight = (
@@ -64,5 +65,7 @@ class AbsolutePositionEmbedding(nn.Module):
         return pos_embed
 
     def forward(self, x, H, W, mode="bilinear"):
+
         pos_embed = self.resize_pos_embed(self.pos_embed, (H, W), mode)
+
         return self.drop(x + pos_embed)

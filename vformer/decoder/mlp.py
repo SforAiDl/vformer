@@ -1,6 +1,9 @@
 import torch.nn as nn
 
+from ..utils import DECODER_REGISTRY
 
+
+@DECODER_REGISTRY.register()
 class MLPDecoder(nn.Module):
     """
     Parameters

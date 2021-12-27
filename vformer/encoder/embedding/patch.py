@@ -29,6 +29,7 @@ class PatchEmbedding(nn.Module):
         norm_layer=nn.LayerNorm,
     ):
         super(PatchEmbedding, self).__init__()
+
         self.img_size = pair(img_size)
         self.patch_size = pair(patch_size)
         self.patch_resolution = [
@@ -45,11 +46,14 @@ class PatchEmbedding(nn.Module):
         self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
+
         B, C, H, W = x.shape
 
         assert (
             H == self.img_size[0] and W == self.img_size[1]
         ), f"Input Image Size {H}*{W} doesnt match model {self.img_size[0]}*{self.img_size[1]}"
+
         x = self.proj(x).flatten(2).transpose(1, 2)
         x = self.norm(x)
+
         return x

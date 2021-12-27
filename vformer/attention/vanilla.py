@@ -2,7 +2,10 @@ import torch
 import torch.nn as nn
 from einops import rearrange
 
+from ..utils import ATTENTION_REGISTRY
 
+
+@ATTENTION_REGISTRY.register()
 class VanillaSelfAttention(nn.Module):
     """
     Vanilla O(n^2) Self attention
@@ -38,6 +41,7 @@ class VanillaSelfAttention(nn.Module):
         )
 
     def forward(self, x):
+
         qkv = self.to_qkv(x).chunk(3, dim=-1)
         q, k, v = map(
             lambda t: rearrange(t, "b n (h d) -> b h n d", h=self.num_heads), qkv

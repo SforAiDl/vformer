@@ -32,6 +32,7 @@ class OverlapPatchEmbed(nn.Module):
         norm_layer=nn.LayerNorm,
     ):
         super(OverlapPatchEmbed, self).__init__()
+
         img_size = pair(img_size)
         patch_size = pair(patch_size)
 
@@ -50,8 +51,9 @@ class OverlapPatchEmbed(nn.Module):
         self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
+
         x = self.proj(x)
         H, W = x.shape[2:]
-
         x = self.norm(x.flatten(2).transpose(1, 2))
+
         return x, H, W
