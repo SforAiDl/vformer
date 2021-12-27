@@ -7,7 +7,6 @@ Welcome to VFormer's documentation!
 
    readme
    installation
-   contributing
 
 .. toctree::
    :maxdepth: 2
