@@ -8,7 +8,7 @@ Installation
 From source (recommended)
 ------------
 
-VFormer can be installed from the `Github repo`_.
+VFormer can be installed from the `GitHub repo`_.
 
 Clone the public repository:
 
