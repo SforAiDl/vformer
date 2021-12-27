@@ -36,5 +36,4 @@ class LinearEmbedding(nn.Module):
         )
 
     def forward(self, x):
-
         return self.patch_embedding(x)

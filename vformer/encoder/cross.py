@@ -1,10 +1,12 @@
 import torch
 import torch.nn as nn
 
-from vformer.attention import CrossAttention
-from vformer.encoder.vanilla import VanillaEncoder
+from ..attention import CrossAttention
+from ..utils import ENCODER_REGISTRY
+from .vanilla import VanillaEncoder
 
 
+@ENCODER_REGISTRY.register()
 class CrossEncoder(nn.Module):
     """
     Parameters
@@ -63,6 +65,7 @@ class CrossEncoder(nn.Module):
         p_dropout_l=0.0,
     ):
         super().__init__()
+
         self.s = VanillaEncoder(
             embedding_dim_s,
             depth_s,
@@ -87,6 +90,7 @@ class CrossEncoder(nn.Module):
         )
 
     def forward(self, emb_s, emb_l):
+
         emb_s = self.s(emb_s)
         emb_l = self.l(emb_l)
         s_cls, s_patches = (lambda t: (t[:, 0:1, :], t[:, 1:, :]))(emb_s)
@@ -95,4 +99,5 @@ class CrossEncoder(nn.Module):
         l_cls = self.attend_l(l_cls, s_patches)
         emb_l = torch.cat([l_cls, l_patches], dim=1)
         emb_s = torch.cat([s_cls, s_patches], dim=1)
+
         return emb_s, emb_l

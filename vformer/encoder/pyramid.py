@@ -4,6 +4,7 @@ from timm.models.layers import DropPath
 from ..attention import SpatialAttention
 from ..common.blocks import DWConv
 from ..functional import PreNorm
+from ..utils import ENCODER_REGISTRY
 
 
 class PVTFeedForward(nn.Module):
@@ -50,13 +51,16 @@ class PVTFeedForward(nn.Module):
         **kwargs
     ):
         super(PVTFeedForward, self).__init__()
+
         out_dim = out_dim if out_dim is not None else dim
         hidden_dim = hidden_dim if hidden_dim is not None else dim
         self.use_dwconv = use_dwconv
         self.fc1 = nn.Linear(dim, hidden_dim)
         self.relu = nn.ReLU(inplace=True) if linear else nn.Identity()
+
         if use_dwconv:
             self.dw_conv = DWConv(dim=hidden_dim, **kwargs)
+
         self.to_out = nn.Sequential(
             act_layer(),
             nn.Dropout(p=p_dropout),
@@ -65,12 +69,16 @@ class PVTFeedForward(nn.Module):
         )
 
     def forward(self, x, **kwargs):
+
         x = self.relu(self.fc1(x))
+
         if self.use_dwconv:
             x = self.dw_conv(x, **kwargs)
+
         return self.to_out(x)
 
 
+@ENCODER_REGISTRY.register()
 class PVTEncoder(nn.Module):
     """
     Parameters
@@ -119,7 +127,9 @@ class PVTEncoder(nn.Module):
         linear=False,
     ):
         super(PVTEncoder, self).__init__()
+
         self.encoder = nn.ModuleList([])
+
         for i in range(depth):
             self.encoder.append(
                 nn.ModuleList(
@@ -158,7 +168,9 @@ class PVTEncoder(nn.Module):
             )
 
     def forward(self, x, **kwargs):
+
         for prenorm_attn, prenorm_ff in self.encoder:
             x = x + self.drop_path(prenorm_attn(x, **kwargs))
             x = x + self.drop_path(prenorm_ff(x, **kwargs))
+
         return x

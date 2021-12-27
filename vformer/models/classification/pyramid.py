@@ -5,11 +5,14 @@ from timm.models.layers import trunc_normal_
 
 from ...decoder import MLPDecoder
 from ...encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
+from ...utils import MODEL_REGISTRY
 
 
+@MODEL_REGISTRY.register()
 class PVTClassification(nn.Module):
     """
-    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
+    Implementation of Pyramid Vision Transformer:
+    https://arxiv.org/abs/2102.12122v1
 
     Parameters
     ----------
@@ -186,9 +189,11 @@ class PVTClassification(nn.Module):
         return x
 
 
+@MODEL_REGISTRY.register()
 class PVTClassificationV2(PVTClassification):
     """
-    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v2
+    Implementation of Pyramid Vision Transformer:
+    https://arxiv.org/abs/2102.12122v2
 
     Parameters
     ----------

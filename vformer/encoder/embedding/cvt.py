@@ -90,8 +90,8 @@ class CVTEmbedding(nn.Module):
         return self.forward(torch.zeros((1, n_channels, height, width))).shape[1]
 
     def forward(self, x):
-        for conv2d, activation, maxpool in self.conv_layers:
 
+        for conv2d, activation, maxpool in self.conv_layers:
             x = maxpool(activation(conv2d(x)))
 
             return self.flatten(x).transpose(-2, -1)

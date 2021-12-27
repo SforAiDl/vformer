@@ -5,12 +5,14 @@ import torch.nn.functional as F
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import CVTEmbedding, VanillaEncoder
-from ...utils import pair
+from ...utils import MODEL_REGISTRY, pair
 
 
+@MODEL_REGISTRY.register()
 class CVT(BaseClassificationModel):
     """
-    Implementation of Escaping the Big Data Paradigm with Compact Transformers - https://arxiv.org/abs/2104.05704
+    Implementation of Escaping the Big Data Paradigm with Compact Transformers:
+    https://arxiv.org/abs/2104.05704
 
     Parameters:
     ------------
@@ -73,8 +75,9 @@ class CVT(BaseClassificationModel):
         assert (
             img_size % patch_size == 0
         ), f"Image size ({img_size}) has to be divisible by patch size ({patch_size})"
+
         img_size = pair(img_size)
-        self.in_chans = in_channels
+        self.in_channels = in_channels
         self.embedding = CVTEmbedding(
             in_channels=in_channels,
             out_channels=embedding_dim,
@@ -112,6 +115,7 @@ class CVT(BaseClassificationModel):
             self.attention_pool = nn.Linear(self.embedding_dim, 1)
 
         if positional_embedding != "none":
+
             if positional_embedding == "learnable":
                 self.positional_emb = nn.Parameter(
                     torch.zeros(1, self.sequence_length, embedding_dim),
@@ -122,6 +126,7 @@ class CVT(BaseClassificationModel):
                     self.sinusoidal_embedding(self.sequence_length, embedding_dim),
                     requires_grad=False,
                 )
+
         else:
             self.positional_emb = None
 
@@ -156,16 +161,19 @@ class CVT(BaseClassificationModel):
             self.decoder = MLPDecoder(config=embedding_dim, n_classes=num_classes)
 
     def forward(self, x):
+
         x = self.embedding(x)
+
         if self.positional_emb is None and x.size(1) < self.sequence_length:
-            x = F.pad(x, (0, 0, 0, self.in_chans - x.size(1)), mode="constant", value=0)
+            x = F.pad(
+                x, (0, 0, 0, self.in_channels - x.size(1)), mode="constant", value=0
+            )
 
         if not self.seq_pool:
             cls_token = self.class_emb.expand(x.shape[0], -1, -1)
             x = torch.cat((cls_token, x), dim=1)
 
         if self.positional_emb is not None:
-
             x += self.positional_emb
 
         x = self.dropout(x)
@@ -180,10 +188,12 @@ class CVT(BaseClassificationModel):
             x = x[:, 0]
 
         x = self.decoder(x)
+
         return x
 
     @staticmethod
     def sinusoidal_embedding(n_channels, dim):
+
         pe = torch.FloatTensor(
             [
                 [p / (10000 ** (2 * (i // 2) / dim)) for i in range(dim)]
@@ -192,4 +202,5 @@ class CVT(BaseClassificationModel):
         )
         pe[:, 0::2] = torch.sin(pe[:, 0::2])
         pe[:, 1::2] = torch.cos(pe[:, 1::2])
+
         return pe.unsqueeze(0)

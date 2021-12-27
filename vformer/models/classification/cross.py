@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 from einops import repeat
 
-from vformer.common import BaseClassificationModel
-from vformer.decoder.mlp import MLPDecoder
-from vformer.encoder.cross import CrossEncoder
-from vformer.encoder.embedding import LinearEmbedding
+from ...common import BaseClassificationModel
+from ...decoder import MLPDecoder
+from ...encoder import CrossEncoder, LinearEmbedding
+from ...utils import MODEL_REGISTRY
 
 
 class _cross_p(BaseClassificationModel):
@@ -38,9 +38,11 @@ class _cross_p(BaseClassificationModel):
         x = torch.cat((cls_tokens, x), dim=1)
         x += self.pos_embedding[:, : (n + 1)]
         x = self.embedding_dropout(x)
+
         return x
 
 
+@MODEL_REGISTRY.register()
 class CrossViT(BaseClassificationModel):
     """
     Implementation of 'CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification'
@@ -136,6 +138,7 @@ class CrossViT(BaseClassificationModel):
     ):
         super().__init__(img_size, patch_size_s, in_channels, pool_s)
         super().__init__(img_size, patch_size_l, in_channels, pool_l)
+
         self.s = _cross_p(
             img_size, patch_size_s, latent_dim_s, in_channels, p_dropout_embedding_s
         )
@@ -162,29 +165,37 @@ class CrossViT(BaseClassificationModel):
         )
         self.pool_s = lambda x: x.mean(dim=1) if pool_s == "mean" else x[:, 0]
         self.pool_l = lambda x: x.mean(dim=1) if pool_l == "mean" else x[:, 0]
+
         if decoder_config_s is not None:
+
             if not isinstance(decoder_config_s, list):
                 decoder_config_s = list(decoder_config_s)
+
             assert (
                 decoder_config_s[0] == latent_dim_s
             ), "`latent_dim` should be equal to the first item of `decoder_config`"
+
             self.decoder_s = MLPDecoder(decoder_config_s, n_classes)
 
         else:
             self.decoder_s = MLPDecoder(latent_dim_s, n_classes)
 
         if decoder_config_l is not None:
+
             if not isinstance(decoder_config_l, list):
                 decoder_config_l = list(decoder_config_l)
+
             assert (
                 decoder_config_l[0] == latent_dim_l
             ), "`latent_dim` should be equal to the first item of `decoder_config`"
+
             self.decoder_l = MLPDecoder(decoder_config_l, n_classes)
 
         else:
             self.decoder_l = MLPDecoder(latent_dim_l, n_classes)
 
     def forward(self, img):
+
         emb_s = self.s(img)
         emb_l = self.l(img)
         emb_s, emb_l = self.encoder(emb_s, emb_l)
@@ -193,4 +204,5 @@ class CrossViT(BaseClassificationModel):
         n_s = self.decoder_s(cls_s)
         n_l = self.decoder_l(cls_l)
         n = n_s + n_l
+
         return n

@@ -2,7 +2,9 @@ import torch
 import torch.nn as nn
 from timm.models.layers import trunc_normal_
 
-from ..utils import get_relative_position_bias_index, pair
+from ..utils import ATTENTION_REGISTRY, get_relative_position_bias_index, pair
+
+ATTENTION_REGISTRY.register()
 
 
 class WindowAttention(nn.Module):
@@ -37,6 +39,7 @@ class WindowAttention(nn.Module):
         proj_dropout=0.0,
     ):
         super(WindowAttention, self).__init__()
+
         self.dim = dim
         self.window_size = pair(window_size)
         self.num_heads = num_heads
@@ -57,6 +60,7 @@ class WindowAttention(nn.Module):
         trunc_normal_(self.relative_position_bias_table, std=0.2)
 
     def forward(self, x, mask=None):
+
         B_, N, C = x.shape
         qkv = (
             self.qkv(x)
@@ -95,4 +99,5 @@ class WindowAttention(nn.Module):
         attn = self.to_out_1(attn)
         x = (attn @ v).transpose(1, 2).reshape(B_, N, C)
         x = self.to_out_2(x)
+
         return x

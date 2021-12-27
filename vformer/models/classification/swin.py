@@ -6,8 +6,10 @@ from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import PatchEmbedding, SwinEncoder
 from ...functional import PatchMerging
+from ...utils import MODEL_REGISTRY
 
 
+@MODEL_REGISTRY.register()
 class SwinTransformer(BaseClassificationModel):
     """
     Implementation of `Swin Transformer: Hierarchical Vision Transformer using Shifted Windows`
@@ -97,6 +99,7 @@ class SwinTransformer(BaseClassificationModel):
 
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
         self.encoder = nn.ModuleList()
+
         for i_layer in range(len(depths)):
             layer = SwinEncoder(
                 dim=int(embedding_dim * (2 ** i_layer)),
@@ -119,28 +122,37 @@ class SwinTransformer(BaseClassificationModel):
             self.encoder.append(layer)
 
         if decoder_config is not None:
+
             if not isinstance(decoder_config, list):
                 decoder_config = list(decoder_config)
+
             assert (
                 decoder_config[0] == num_features
             ), f"first item of `decoder_config` should be equal to the `num_features`; num_features=embed_dim * 2** (len(depths)-1) which is = {num_features} "
+
             self.decoder = MLPDecoder(decoder_config, n_classes)
+
         else:
             self.decoder = MLPDecoder(num_features, n_classes)
+
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.norm = norm_layer(num_features) if norm_layer is not None else nn.Identity
         self.pos_drop = nn.Dropout(p=drop_rate)
 
     def forward(self, x):
+
         x = self.patch_embed(x)
+
         if self.ape:
             x += self.absolute_pos_embed
+
         x = self.pos_drop(x)
+
         for layer in self.encoder:
             x = layer(x)
 
         x = self.norm(x)
-
         x = self.pool(x.transpose(1, 2)).flatten(1)
         x = self.decoder(x)
+
         return x

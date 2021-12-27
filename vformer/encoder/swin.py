@@ -3,7 +3,14 @@ import torch.utils.checkpoint as checkpoint
 from timm.models.layers import DropPath
 
 from ..attention.window import WindowAttention
-from ..utils import create_mask, cyclicshift, pair, window_partition, window_reverse
+from ..utils import (
+    ENCODER_REGISTRY,
+    create_mask,
+    cyclicshift,
+    pair,
+    window_partition,
+    window_reverse,
+)
 from .nn import FeedForward
 
 
@@ -52,6 +59,7 @@ class SwinEncoderBlock(nn.Module):
         norm_layer=nn.LayerNorm,
     ):
         super(SwinEncoderBlock, self).__init__()
+
         self.dim = dim
         self.input_resolution = pair(input_resolution)
         self.num_heads = num_heads
@@ -59,9 +67,11 @@ class SwinEncoderBlock(nn.Module):
         self.mlp_ratio = mlp_ratio
         self.shift_size = shift_size
         hidden_dim = int(dim * mlp_ratio)
+
         if min(self.input_resolution) <= self.window_size:
             self.shift_size = 0
             self.window_size = min(self.input_resolution)
+
         assert (
             0 <= self.shift_size < window_size
         ), "shift size must range from 0 to window size"
@@ -90,11 +100,12 @@ class SwinEncoderBlock(nn.Module):
             )
         else:
             attn_mask = None
+
         self.register_buffer("attn_mask", attn_mask)
 
     def forward(self, x):
-        H, W = self.input_resolution
 
+        H, W = self.input_resolution
         B, L, C = x.shape
         assert L == H * W, "Input tensor shape not compatible"
 
@@ -125,9 +136,11 @@ class SwinEncoderBlock(nn.Module):
 
         x = skip_connection + self.drop_path(x)
         x = x + self.drop_path(self.mlp(self.norm2(x)))
+
         return x
 
 
+@ENCODER_REGISTRY.register()
 class SwinEncoder(nn.Module):
     """
     dim: int
@@ -176,6 +189,7 @@ class SwinEncoder(nn.Module):
         use_checkpoint=False,
     ):
         super(SwinEncoder, self).__init__()
+
         self.dim = dim
         self.input_resolution = input_resolution
         self.depth = depth
@@ -210,11 +224,14 @@ class SwinEncoder(nn.Module):
             self.downsample = None
 
     def forward(self, x):
+
         for blk in self.blocks:
             if self.use_checkpoint:
                 x = checkpoint.checkpoint(blk, x)
             else:
                 x = blk(x)
+
         if self.downsample is not None:
             x = self.downsample(x)
+
         return x

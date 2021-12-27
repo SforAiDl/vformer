@@ -18,6 +18,7 @@ class FeedForward(nn.Module):
 
     def __init__(self, dim, hidden_dim=None, out_dim=None, p_dropout=0.0):
         super().__init__()
+
         out_dim = out_dim if out_dim is not None else dim
         hidden_dim = hidden_dim if hidden_dim is not None else dim
 
