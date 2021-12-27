@@ -170,8 +170,8 @@ class PVTSegmentation(nn.Module):
             x = x.reshape(B, H, W, -1).permute(0, 3, 1, 2).contiguous()
             out.append(x)
 
-        if not self.return_pyramid:
-            out = out[-1]
+        if self.return_pyramid:
+            out = out[3:4]
 
         out = self.head(out)
 

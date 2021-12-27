@@ -4,13 +4,15 @@ from vformer.attention.cross import CrossAttention
 from vformer.attention.spatial import SpatialAttention
 from vformer.attention.vanilla import VanillaSelfAttention
 from vformer.attention.window import WindowAttention
+from vformer.utils import ATTENTION_REGISTRY
 
 
 def test_VanillaSelfAttention():
+
     test_tensor1 = torch.randn(2, 65, 1024)
     test_tensor2 = torch.randn(2, 257, 1024)
 
-    attention = VanillaSelfAttention(dim=1024)
+    attention = ATTENTION_REGISTRY.get("VanillaSelfAttention")(dim=1024)
     out = attention(test_tensor1)
     assert out.shape == (2, 65, 1024)
     del attention
