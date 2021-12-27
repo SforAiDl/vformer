@@ -1,31 +1,27 @@
 import torch
 import torch.nn as nn
 
-from vformer.encoder import (
-    CrossEncoder,
-    PVTEncoder,
-    SwinEncoder,
-    SwinEncoderBlock,
-    VanillaEncoder,
-)
 from vformer.functional import PatchMerging
+from vformer.utils import ENCODER_REGISTRY
 
 
 def test_VanillaEncoder():
+
     test_tensor = torch.randn(2, 65, 1024)
-    encoder = VanillaEncoder(
+    encoder = ENCODER_REGISTRY.get("VanillaEncoder")(
         latent_dim=1024, depth=6, num_heads=16, dim_head=64, mlp_dim=2048
     )
     out = encoder(test_tensor)
     assert out.shape == test_tensor.shape  # shape remains same
-    del encoder
-    del test_tensor
+    del encoder, test_tensor
 
 
 def test_SwinEncoder():
+
     test_tensor = torch.randn(3, 3136, 96)
+
     # when downsampled
-    encoder = SwinEncoder(
+    encoder = ENCODER_REGISTRY.get("SwinEncoder")(
         dim=96,
         input_resolution=(224 // 4, 224 // 4),
         depth=2,
@@ -37,8 +33,9 @@ def test_SwinEncoder():
 
     assert out.shape == (3, 784, 192)
     del encoder
+
     # when not downsampled
-    encoder = SwinEncoder(
+    encoder = ENCODER_REGISTRY.get("SwinEncoder")(
         dim=96,
         input_resolution=(224 // 4, 224 // 4),
         depth=2,
@@ -51,7 +48,7 @@ def test_SwinEncoder():
     assert out.shape == (3, 3136, 96)
     del encoder
 
-    encoder_block = SwinEncoderBlock(
+    encoder_block = ENCODER_REGISTRY.get("SwinEncoderBlock")(
         dim=96, input_resolution=(224 // 4, 224 // 4), num_heads=3, window_size=7
     )
     out = encoder_block(test_tensor)
@@ -59,8 +56,10 @@ def test_SwinEncoder():
 
 
 def test_PVTEncoder():
+
     test_tensor = torch.randn(4, 3136, 64)
-    encoder = PVTEncoder(
+
+    encoder = ENCODER_REGISTRY.get("PVTEncoder")(
         dim=64,
         depth=3,
         qkv_bias=True,
@@ -80,10 +79,12 @@ def test_PVTEncoder():
 
 
 def test_CrossEncoder():
+
     test_tensor1 = torch.randn(3, 5, 128)
     test_tensor2 = torch.randn(3, 5, 256)
-    encoder = CrossEncoder(128, 256)
+
+    encoder = ENCODER_REGISTRY.get("CrossEncoder")(128, 256)
     out = encoder(test_tensor1, test_tensor2)
     assert out[0].shape == test_tensor1.shape
-    assert out[1].shape == test_tensor2.shape  # shape remains same
+    assert out[1].shape == test_tensor2.shape
     del encoder

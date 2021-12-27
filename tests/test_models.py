@@ -1,19 +1,7 @@
 import torch
 import torch.nn as nn
 
-from vformer.models import (
-    CCT,
-    CVT,
-    CrossViT,
-    PVTClassification,
-    PVTClassificationV2,
-    PVTDetection,
-    PVTDetectionV2,
-    PVTSegmentation,
-    PVTSegmentationV2,
-    SwinTransformer,
-    VanillaViT,
-)
+from vformer.utils import MODEL_REGISTRY
 
 img_3channels_256 = torch.randn(2, 3, 256, 256)
 img_3channels_224 = torch.randn(4, 3, 224, 224)
@@ -22,12 +10,14 @@ img_1channels_224 = torch.randn(2, 1, 224, 224)
 
 def test_VanillaViT():
 
-    model = VanillaViT(img_size=256, patch_size=32, n_classes=10, in_channels=3)
+    model = MODEL_REGISTRY.get("VanillaViT")(
+        img_size=256, patch_size=32, n_classes=10, in_channels=3
+    )
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
     del model
 
-    model = VanillaViT(
+    model = MODEL_REGISTRY.get("VanillaViT")(
         img_size=256,
         patch_size=32,
         n_classes=10,
@@ -40,7 +30,8 @@ def test_VanillaViT():
 
 
 def test_SwinTransformer():
-    model = SwinTransformer(
+
+    model = MODEL_REGISTRY.get("SwinTransformer")(
         img_size=224,
         patch_size=4,
         in_channels=3,
@@ -64,7 +55,7 @@ def test_SwinTransformer():
     del model
 
     # tiny_patch4_window7_224
-    model = SwinTransformer(
+    model = MODEL_REGISTRY.get("SwinTransformer")(
         img_size=224,
         patch_size=4,
         in_channels=3,
@@ -80,7 +71,7 @@ def test_SwinTransformer():
     del model
 
     # tiny_c24_patch4_window8_256
-    model = SwinTransformer(
+    model = MODEL_REGISTRY.get("SwinTransformer")(
         img_size=256,
         patch_size=4,
         in_channels=3,
@@ -96,7 +87,7 @@ def test_SwinTransformer():
     del model
 
     # for greyscale image
-    model = SwinTransformer(
+    model = MODEL_REGISTRY.get("SwinTransformer")(
         img_size=224,
         patch_size=4,
         in_channels=1,
@@ -112,7 +103,7 @@ def test_SwinTransformer():
     del model
 
     # testing for decoder_config parameter
-    model = SwinTransformer(
+    model = MODEL_REGISTRY.get("SwinTransformer")(
         img_size=224,
         patch_size=4,
         in_channels=3,
@@ -129,7 +120,7 @@ def test_SwinTransformer():
     assert out.shape == (4, 10)
 
     # ape=false
-    model = SwinTransformer(
+    model = MODEL_REGISTRY.get("SwinTransformer")(
         img_size=224,
         patch_size=4,
         in_channels=3,
@@ -148,11 +139,13 @@ def test_SwinTransformer():
 
 
 def test_CrossVit():
-    model = CrossViT(256, 16, 64, 10)
+
+    model = MODEL_REGISTRY.get("CrossViT")(256, 16, 64, 10)
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
     del model
-    model = CrossViT(
+
+    model = MODEL_REGISTRY.get("CrossViT")(
         256,
         16,
         64,
@@ -166,9 +159,9 @@ def test_CrossVit():
 
 
 def test_pvt():
-    # classification
 
-    model = PVTClassification(
+    # classification
+    model = MODEL_REGISTRY.get("PVTClassification")(
         patch_size=[7, 3, 3, 3],
         embed_dims=[64, 128, 320, 512],
         num_heads=[1, 2, 5, 8],
@@ -184,7 +177,7 @@ def test_pvt():
     assert out.shape == (4, 10)
     del model
 
-    model = PVTClassification(
+    model = MODEL_REGISTRY.get("PVTClassification")(
         patch_size=[7, 3, 3, 3],
         embed_dims=[64, 128, 320, 512],
         num_heads=[1, 2, 5, 8],
@@ -196,32 +189,31 @@ def test_pvt():
         decoder_config=512,
         num_classes=10,
     )
-
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
 
-    model = PVTClassificationV2(linear=False)
+    model = MODEL_REGISTRY.get("PVTClassificationV2")(linear=False)
     out = model(img_3channels_224)
     assert out.shape == (4, 1000)
     del model
 
-    model = PVTClassificationV2(num_classes=10)
+    model = MODEL_REGISTRY.get("PVTClassificationV2")(num_classes=10)
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
 
-    model = PVTClassificationV2(num_classes=10)
+    model = MODEL_REGISTRY.get("PVTClassificationV2")(num_classes=10)
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
 
-    model = PVTClassification(num_classes=12)
+    model = MODEL_REGISTRY.get("PVTClassification")(num_classes=12)
     out = model(img_3channels_224)
     assert out.shape == (4, 12)
     del model
 
-    model = PVTClassificationV2(
+    model = MODEL_REGISTRY.get("PVTClassificationV2")(
         embedding_dims=[64, 128, 320, 512],
         num_heads=[1, 2, 5, 8],
         mlp_ratio=[8, 8, 4, 4],
@@ -235,7 +227,7 @@ def test_pvt():
     assert out.shape == (4, 1000)
 
     # segmentation
-    model = PVTSegmentation()
+    model = MODEL_REGISTRY.get("PVTSegmentation")()
     outs = model(img_3channels_224)
     assert outs.shape == (
         4,
@@ -245,7 +237,7 @@ def test_pvt():
     ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
     del model
 
-    model = PVTSegmentation()
+    model = MODEL_REGISTRY.get("PVTSegmentation")()
     outs = model(img_3channels_256)
     assert outs.shape == (
         2,
@@ -255,7 +247,7 @@ def test_pvt():
     ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
     del model
 
-    model = PVTSegmentation()
+    model = MODEL_REGISTRY.get("PVTSegmentation")()
     outs = model(img_3channels_256)
     assert outs.shape == (
         2,
@@ -265,7 +257,7 @@ def test_pvt():
     ), f"expected: {(4,1,256,256)}, got : {outs.shape}"
     del model
 
-    model = PVTSegmentationV2(return_pyramid=False)
+    model = MODEL_REGISTRY.get("PVTSegmentationV2")(return_pyramid=False)
     outs = model(img_3channels_224)
     assert outs.shape == (
         4,
@@ -275,10 +267,10 @@ def test_pvt():
     ), f"expected: {(4,1,224,224)}, got : {outs.shape}"
     del model
 
-    model = PVTSegmentationV2(return_pyramid=True)
+    model = MODEL_REGISTRY.get("PVTSegmentationV2")(return_pyramid=True)
     out = model(img_3channels_224)
 
-    model = PVTSegmentationV2(return_pyramid=False)
+    model = MODEL_REGISTRY.get("PVTSegmentationV2")(return_pyramid=False)
     outs = model(img_3channels_256)
     assert outs.shape == (
         2,
@@ -289,24 +281,23 @@ def test_pvt():
     del model
 
     # detection
-
-    model = PVTDetection()
+    model = MODEL_REGISTRY.get("PVTDetection")()
     outs = model(img_3channels_224)
-
     del model
 
-    model = PVTDetectionV2()
+    model = MODEL_REGISTRY.get("PVTDetectionV2")()
     outs = model(img_3channels_224)
     del model
 
 
 def test_cvt():
-    model = CVT(img_size=256, patch_size=4, in_channels=3)
+
+    model = MODEL_REGISTRY.get("CVT")(img_size=256, patch_size=4, in_channels=3)
     out = model(img_3channels_256)
     assert out.shape == (2, 1000)
     del model
 
-    model = CVT(
+    model = MODEL_REGISTRY.get("CVT")(
         img_size=224,
         patch_size=4,
         in_channels=3,
@@ -325,7 +316,7 @@ def test_cvt():
     assert out.shape == (4, 10)
     del model
 
-    model = CVT(
+    model = MODEL_REGISTRY.get("CVT")(
         img_size=224,
         in_channels=3,
         patch_size=4,
@@ -337,7 +328,7 @@ def test_cvt():
     assert f.shape == (4, 1000)
     del model
 
-    model = CVT(
+    model = MODEL_REGISTRY.get("CVT")(
         img_size=224,
         in_channels=3,
         patch_size=4,
@@ -351,12 +342,13 @@ def test_cvt():
 
 
 def test_cct():
-    model = CCT(img_size=256, patch_size=4, in_channels=3)
+
+    model = MODEL_REGISTRY.get("CCT")(img_size=256, patch_size=4, in_channels=3)
     out = model(img_3channels_256)
     assert out.shape == (2, 1000)
     del model
 
-    model = CCT(
+    model = MODEL_REGISTRY.get("CCT")(
         img_size=224,
         patch_size=4,
         in_channels=3,
@@ -375,7 +367,7 @@ def test_cct():
     assert out.shape == (4, 10)
     del model
 
-    model = CCT(
+    model = MODEL_REGISTRY.get("CCT")(
         img_size=224,
         in_channels=3,
         patch_size=4,
@@ -387,7 +379,7 @@ def test_cct():
     assert f.shape == (4, 1000)
     del model
 
-    model = CCT(
+    model = MODEL_REGISTRY.get("CCT")(
         img_size=224,
         in_channels=3,
         patch_size=4,
