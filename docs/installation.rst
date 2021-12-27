@@ -14,7 +14,7 @@ Clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/neu-vig/vformer
+    $ git clone https://github.com/SforAiDl/vformer.git
 
 and then run the following command to install VFormer:
 
@@ -23,7 +23,7 @@ and then run the following command to install VFormer:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/neu-vig/vformer
+.. _Github repo: https://github.com/SforAiDl/vformer
 
 
 Stable release
