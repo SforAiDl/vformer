@@ -14,6 +14,7 @@ from ..utils import (
 from .nn import FeedForward
 
 
+@ENCODER_REGISTRY.register()
 class SwinEncoderBlock(nn.Module):
     """
     Parameters

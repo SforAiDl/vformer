@@ -169,6 +169,7 @@ class PVTDetection(nn.Module):
         return out
 
 
+@MODEL_REGISTRY.register()
 class PVTDetectionV2(PVTDetection):
     """
     Implementation of Pyramid Vision Transformer:

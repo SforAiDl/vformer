@@ -4,9 +4,8 @@ from timm.models.layers import trunc_normal_
 
 from ..utils import ATTENTION_REGISTRY, get_relative_position_bias_index, pair
 
-ATTENTION_REGISTRY.register()
 
-
+@ATTENTION_REGISTRY.register()
 class WindowAttention(nn.Module):
     """
     Parameters
