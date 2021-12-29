@@ -111,6 +111,7 @@ class PVTEncoder(nn.Module):
     qkv_bias: bool
         Whether to add a bias vector to the q,k, and v matrices
     qk_scale:float, optional
+        Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
     p_dropout: float
         Dropout probability
     attn_dropout: float

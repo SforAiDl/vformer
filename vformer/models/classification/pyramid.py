@@ -35,6 +35,7 @@ class PVTClassification(nn.Module):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 Spatial Attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
     attn_dropout:  float,
@@ -228,6 +229,7 @@ class PVTClassificationV2(PVTClassification):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
     attn_dropout:  float,

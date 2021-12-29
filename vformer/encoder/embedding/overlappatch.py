@@ -66,7 +66,7 @@ class OverlapPatchEmbed(nn.Module):
             Height of Patch
         W: int
             Width of Patch
-          """
+        """
 
         x = self.proj(x)
         H, W = x.shape[2:]

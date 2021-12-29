@@ -53,7 +53,7 @@ class CVT(BaseClassificationModel):
         in_channels=3,
         seq_pool=True,
         embedding_dim=768,
-        dim_head=96,
+        head_dim=96,
         num_layers=1,
         num_heads=1,
         mlp_ratio=4.0,
@@ -135,11 +135,11 @@ class CVT(BaseClassificationModel):
         self.encoder_blocks = nn.ModuleList(
             [
                 VanillaEncoder(
-                    latent_dim=embedding_dim,
+                    embedding_dim=embedding_dim,
                     num_heads=num_heads,
                     depth=1,
                     mlp_dim=hidden_dim,
-                    dim_head=dim_head,
+                    head_dim=head_dim,
                     p_dropout=p_dropout,
                     attn_dropout=attn_dropout,
                     drop_path_rate=dpr[i],

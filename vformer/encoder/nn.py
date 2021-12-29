@@ -33,16 +33,16 @@ class FeedForward(nn.Module):
     def forward(self, x):
         """
 
-         Parameters
-         ----------
-         x: torch.Tensor
-             Input tensor
-         Returns
-         ----------
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
 
-         torch.Tensor
-             Returns output tensor by performing linear operations and activation on input tensor
+        torch.Tensor
+            Returns output tensor by performing linear operations and activation on input tensor
 
-         """
+        """
 
         return self.net(x)

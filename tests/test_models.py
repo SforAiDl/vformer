@@ -161,7 +161,6 @@ def test_CrossVit():
 
 
 def test_pvt():
-
     # classification
     model = MODEL_REGISTRY.get("PVTClassification")(
         patch_size=[7, 3, 3, 3],

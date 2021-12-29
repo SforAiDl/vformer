@@ -13,11 +13,11 @@ class VanillaEncoder(nn.Module):
 
     Parameters
     ----------
-    latent_dim: int
+    embedding_dim: int
         Dimension of the embedding
     depth: int
         Number of self-attention layers
-    heads: int
+    num_heads: int
         Number of the attention heads
     dim_head: int
         Dimension of each head
@@ -33,10 +33,10 @@ class VanillaEncoder(nn.Module):
 
     def __init__(
         self,
-        latent_dim,
+        embedding_dim,
         depth,
         num_heads,
-        dim_head,
+        head_dim,
         mlp_dim,
         p_dropout=0.0,
         attn_dropout=0.0,
@@ -50,18 +50,20 @@ class VanillaEncoder(nn.Module):
                 nn.ModuleList(
                     [
                         PreNorm(
-                            dim=latent_dim,
+                            dim=embedding_dim,
                             fn=VanillaSelfAttention(
-                                dim=latent_dim,
+                                dim=embedding_dim,
                                 num_heads=num_heads,
-                                head_dim=dim_head,
+                                head_dim=head_dim,
                                 p_dropout=attn_dropout,
                             ),
                         ),
                         PreNorm(
-                            dim=latent_dim,
+                            dim=embedding_dim,
                             fn=FeedForward(
-                                dim=latent_dim, hidden_dim=mlp_dim, p_dropout=p_dropout
+                                dim=embedding_dim,
+                                hidden_dim=mlp_dim,
+                                p_dropout=p_dropout,
                             ),
                         ),
                     ]

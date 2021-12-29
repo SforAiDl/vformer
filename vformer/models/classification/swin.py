@@ -68,7 +68,7 @@ class SwinTransformer(BaseClassificationModel):
         mlp_ratio=4.0,
         qkv_bias=True,
         qk_scale=None,
-        drop_rate=0.0,
+        p_dropout=0.0,
         attn_dropout=0.0,
         drop_path_rate=0.1,
         norm_layer=nn.LayerNorm,
@@ -114,7 +114,7 @@ class SwinTransformer(BaseClassificationModel):
                 mlp_ratio=mlp_ratio,
                 qkv_bias=qkv_bias,
                 qkv_scale=qk_scale,
-                p_dropout=drop_rate,
+                p_dropout=p_dropout,
                 attn_dropout=attn_dropout,
                 drop_path=dpr[sum(depths[:i_layer]) : sum(depths[: i_layer + 1])],
                 norm_layer=norm_layer,
@@ -138,7 +138,7 @@ class SwinTransformer(BaseClassificationModel):
 
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.norm = norm_layer(num_features) if norm_layer is not None else nn.Identity
-        self.pos_drop = nn.Dropout(p=drop_rate)
+        self.pos_drop = nn.Dropout(p=p_dropout)
 
     def forward(self, x):
         """

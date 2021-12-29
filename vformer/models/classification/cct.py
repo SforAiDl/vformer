@@ -60,7 +60,7 @@ class CCT(BaseClassificationModel):
         seq_pool=True,
         embedding_dim=768,
         num_layers=1,
-        dim_head=96,
+        head_dim=96,
         num_heads=1,
         mlp_ratio=4.0,
         num_classes=1000,
@@ -148,10 +148,10 @@ class CCT(BaseClassificationModel):
         self.encoder_blocks = nn.ModuleList(
             [
                 VanillaEncoder(
-                    latent_dim=embedding_dim,
+                    embedding_dim=embedding_dim,
                     num_heads=num_heads,
                     depth=1,
-                    dim_head=dim_head,
+                    head_dim=head_dim,
                     mlp_dim=hidden_dim,
                     p_dropout=p_dropout,
                     attn_dropout=attn_dropout,

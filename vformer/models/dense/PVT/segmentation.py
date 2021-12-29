@@ -132,7 +132,7 @@ class PVTSegmentation(nn.Module):
                             depth=depths[i],
                             attn_dropout=attn_dropout,
                             drop_path=dpr[sum(depths[:i]) : sum(depths[: i + 1])],
-                            sr_ratios=sr_ratios[i],
+                            sr_ratio=sr_ratios[i],
                             linear=linear,
                             act_layer=nn.GELU,
                             use_dwconv=use_dwconv,
@@ -151,15 +151,15 @@ class PVTSegmentation(nn.Module):
 
         """
 
-         Parameters
-         ----------
-         x: torch.Tensor
-             Input tensor
-         Returns
-         ----------
-         torch.Tensor
-             Returns output tensor
-         """
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor
+        """
         B = x.shape[0]
         out = []
 

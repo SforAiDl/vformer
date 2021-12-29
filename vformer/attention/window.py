@@ -61,21 +61,21 @@ class WindowAttention(nn.Module):
     def forward(self, x, mask=None):
         """
 
-         Parameters
-         ----------
-         x: torch.Tensor
-             input Tensor
-         mask: torch.Tensor
-             Attention mask used for shifted window attention, if None, window attention will be used,
-             else attention mask will be taken into consideration.
-             for better understanding you may refer `this <https://github.com/microsoft/Swin-Transformer/issues/38>`
+        Parameters
+        ----------
+        x: torch.Tensor
+            input Tensor
+        mask: torch.Tensor
+            Attention mask used for shifted window attention, if None, window attention will be used,
+            else attention mask will be taken into consideration.
+            for better understanding you may refer `this <https://github.com/microsoft/Swin-Transformer/issues/38>`
 
-         Returns
-         ----------
-         torch.Tensor
-             Returns output tensor by applying Window-Attention or Shifted-Window-Attention on input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor by applying Window-Attention or Shifted-Window-Attention on input tensor
 
-         """
+        """
 
         B_, N, C = x.shape
         qkv = (

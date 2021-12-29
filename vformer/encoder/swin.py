@@ -34,6 +34,7 @@ class SwinEncoderBlock(nn.Module):
     qkv_bias: bool, default= True
         Whether to add a bias vector to the q,k, and v matrices
     qk_scale: float, Optional
+
     p_dropout: float
         Dropout rate
     attn_dropout: float
@@ -108,16 +109,16 @@ class SwinEncoderBlock(nn.Module):
 
         """
 
-           Parameters
-           ----------
-               x: torch.Tensor
+        Parameters
+        ----------
+        x: torch.Tensor
 
-           Returns
-           ----------
-               torch.Tensor
-                   Returns output tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor
 
-           """
+        """
 
         H, W = self.input_resolution
         B, L, C = x.shape
@@ -172,6 +173,7 @@ class SwinEncoder(nn.Module):
     qkv_bias: bool, default is True
        Whether to add a bias vector to the q,k, and v matrices
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in Window Attention if set
     p_dropout: float,
         Dropout rate.
     attn_dropout: float, optional
