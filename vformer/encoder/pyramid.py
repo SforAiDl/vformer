@@ -70,6 +70,23 @@ class PVTFeedForward(nn.Module):
 
     def forward(self, x, **kwargs):
 
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        H: int
+            Height of image patch
+        W: int
+            Width of image patch
+
+        Returns
+        --------
+        torch.Tensor
+            Returns output tensor
+
+        """
         x = self.relu(self.fc1(x))
 
         if self.use_dwconv:

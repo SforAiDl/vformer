@@ -39,6 +39,23 @@ class DWConv(nn.Module):
         )
 
     def forward(self, x, H, W):
+
+        """
+
+        Parameters:
+        ----------
+        x: torch.Tensor
+            Input tensor
+        H: int
+            Height of image patch
+        W: int
+            Width of image patch
+
+        Returns:
+        ----------
+        torch.Tensor
+            Returns output tensor after performing depth-wise convolution operation
+        """
         B, N, C = x.shape
         x = x.transpose(1, 2).view(B, C, H, W)
         x = self.dwconv(x)

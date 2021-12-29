@@ -51,6 +51,22 @@ class OverlapPatchEmbed(nn.Module):
         self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+              Input tensor
+
+        Returns
+        ----------
+        x: torch.Tensor
+            Input tensor
+        H: int
+            Height of Patch
+        W: int
+            Width of Patch
+          """
 
         x = self.proj(x)
         H, W = x.shape[2:]

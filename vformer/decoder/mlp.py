@@ -34,5 +34,16 @@ class MLPDecoder(nn.Module):
         self.decoder = nn.Sequential(*self.decoder)
 
     def forward(self, x):
+        """
 
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor of size `n_classes`, Note that `torch.nn.Softmax` is not applied to the output tensor.
+
+        """
         return self.decoder(x)

@@ -36,4 +36,19 @@ class LinearEmbedding(nn.Module):
         )
 
     def forward(self, x):
+
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+
+        Returns
+        ----------
+        torch.Tensor
+            Returns patch embeddings of size `embedding_dim`
+
+        """
+
         return self.patch_embedding(x)

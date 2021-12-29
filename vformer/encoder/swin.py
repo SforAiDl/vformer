@@ -36,7 +36,7 @@ class SwinEncoderBlock(nn.Module):
     qk_scale: float, Optional
     p_dropout: float
         Dropout rate
-    attn_drop: float
+    attn_dropout: float
         Dropout rate
     drop_path: float
         Stochastic depth rate
@@ -105,6 +105,19 @@ class SwinEncoderBlock(nn.Module):
         self.register_buffer("attn_mask", attn_mask)
 
     def forward(self, x):
+
+        """
+
+           Parameters
+           ----------
+               x: torch.Tensor
+
+           Returns
+           ----------
+               torch.Tensor
+                   Returns output tensor
+
+           """
 
         H, W = self.input_resolution
         B, L, C = x.shape
@@ -225,6 +238,16 @@ class SwinEncoder(nn.Module):
             self.downsample = None
 
     def forward(self, x):
+        """
+        Parameters
+        ----------
+        x: torch.Tensor
+
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor
+        """
 
         for blk in self.blocks:
             if self.use_checkpoint:

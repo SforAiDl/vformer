@@ -74,7 +74,17 @@ class VanillaEncoder(nn.Module):
         )
 
     def forward(self, x):
+        """
 
+        Parameters
+        ----------
+        x: torch.Tensor
+
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor
+        """
         for attn, ff in self.encoder:
             x = attn(x) + x
             x = self.drop_path(ff(x)) + x

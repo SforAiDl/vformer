@@ -41,7 +41,17 @@ class VanillaSelfAttention(nn.Module):
         )
 
     def forward(self, x):
+        """
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor by applying self-attention on input tensor
 
+        """
         qkv = self.to_qkv(x).chunk(3, dim=-1)
         q, k, v = map(
             lambda t: rearrange(t, "b n (h d) -> b h n d", h=self.num_heads), qkv
