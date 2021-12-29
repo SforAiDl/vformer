@@ -161,6 +161,18 @@ class CVT(BaseClassificationModel):
             self.decoder = MLPDecoder(config=embedding_dim, n_classes=num_classes)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
 
         x = self.embedding(x)
 

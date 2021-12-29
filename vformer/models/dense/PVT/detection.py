@@ -34,13 +34,14 @@ class PVTDetection(nn.Module):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
     attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     linear: bool
         Whether to use linear spatial attention, default is False
@@ -144,6 +145,18 @@ class PVTDetection(nn.Module):
 
     def forward(self, x):
 
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns list containing output features from all pyramid stages
+
+        """
         B = x.shape[0]
         out = []
 
@@ -197,13 +210,14 @@ class PVTDetectionV2(PVTDetection):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
     attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     linear: bool
         Whether to use linear spatial attention
@@ -211,8 +225,6 @@ class PVTDetectionV2(PVTDetection):
         Whether to use Depth-wise convolutions in Overlap-patch embedding
     ape: bool
         Whether to use absolute position embedding
-    return_pyramid: bool
-        Whether to return all pyramid feature layers, if false returns only last feature layer, default is True
     """
 
     def __init__(
@@ -231,7 +243,7 @@ class PVTDetectionV2(PVTDetection):
         norm_layer=nn.LayerNorm,
         depths=[3, 4, 6, 3],
         sr_ratios=[8, 4, 2, 1],
-        use_abs_pos_embed=False,
+        ape=False,
         use_dwconv=True,
         linear=False,
     ):
@@ -251,6 +263,6 @@ class PVTDetectionV2(PVTDetection):
             depths=depths,
             sr_ratios=sr_ratios,
             linear=linear,
-            ape=use_abs_pos_embed,
+            ape=ape,
             use_dwconv=use_dwconv,
         )

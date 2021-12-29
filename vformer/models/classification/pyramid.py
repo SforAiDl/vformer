@@ -37,13 +37,13 @@ class PVTClassification(nn.Module):
     qk_scale: float, optional
     p_dropout: float,
         Dropout rate,default is 0.0
-    attn_drop_rate:  float,
+    attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
     norm_layer:
         Normalization layer, default is nn.LayerNorm
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     decoder_config:int or tuple[int], optional
         Configuration of the decoder. If None, the default configuration is used.
@@ -163,6 +163,18 @@ class PVTClassification(nn.Module):
             self.decoder = MLPDecoder(config=embed_dims[-1], n_classes=num_classes)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
         B = x.shape[0]
         for i in range(len(self.depths)):
             patch_embed = self.patch_embeds[i]
@@ -218,13 +230,13 @@ class PVTClassificationV2(PVTClassification):
     qk_scale: float, optional
     p_dropout: float,
         Dropout rate,default is 0.0
-    attn_drop_rate:  float,
+    attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
     norm_layer:nn.Module
         Normalization layer, default is nn.LayerNorm
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     decoder_config:int or tuple[int], optional
         Configuration of the decoder. If None, the default configuration is used.

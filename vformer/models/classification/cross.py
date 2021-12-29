@@ -195,7 +195,18 @@ class CrossViT(BaseClassificationModel):
             self.decoder_l = MLPDecoder(latent_dim_l, n_classes)
 
     def forward(self, img):
+        """
 
+        Parameters
+        ----------
+        img: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
         emb_s = self.s(img)
         emb_l = self.l(img)
         emb_s, emb_l = self.encoder(emb_s, emb_l)
