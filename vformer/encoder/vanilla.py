@@ -19,7 +19,7 @@ class VanillaEncoder(nn.Module):
         Number of self-attention layers
     num_heads: int
         Number of the attention heads
-    dim_head: int
+    head_dim: int
         Dimension of each head
     mlp_dim: int
         Dimension of the hidden layer in the feed-forward layer

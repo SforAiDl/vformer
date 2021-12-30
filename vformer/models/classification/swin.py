@@ -39,7 +39,7 @@ class SwinTransformer(BaseClassificationModel):
         Adds bias to the qkv if true
     qk_scale:  float, optional
         Override default qk scale of head_dim ** -0.5 in Window Attention if set
-    drop_rate: float
+    p_dropout: float
         Dropout rate, default is 0.0
     attn_dropout: float
         Attention dropout rate,default is 0.0

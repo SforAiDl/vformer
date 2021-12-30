@@ -16,7 +16,6 @@ from .nn import FeedForward
 
 @ENCODER_REGISTRY.register()
 class SwinEncoderBlock(nn.Module):
-
     """
 
     Parameters
@@ -111,7 +110,6 @@ class SwinEncoderBlock(nn.Module):
         self.register_buffer("attn_mask", attn_mask)
 
     def forward(self, x):
-
         """
 
         Parameters

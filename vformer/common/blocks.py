@@ -40,7 +40,6 @@ class DWConv(nn.Module):
         )
 
     def forward(self, x, H, W):
-
         """
 
         Parameters:

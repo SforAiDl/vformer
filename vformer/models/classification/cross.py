@@ -66,9 +66,9 @@ class CrossViT(BaseClassificationModel):
         Dimension of the hidden layer for the smaller patches
     latent_dim_l: int
         Dimension of the hidden layer for the larger patches
-    dim_head_s: int
+    head_dim_s: int
         Dimension of the head of the attention for the smaller patches
-    dim_head_l: int
+    head_dim_l: int
         Dimension of the head of the attention for the larger patches
     depth_s: int
         Number of attention layers in encoder for the smaller patches

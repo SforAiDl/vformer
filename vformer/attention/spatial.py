@@ -6,7 +6,6 @@ from ..utils import ATTENTION_REGISTRY
 
 @ATTENTION_REGISTRY.register()
 class SpatialAttention(nn.Module):
-
     """
 
     Spatial Reduction Attention- Linear complexity attention layer
@@ -77,7 +76,6 @@ class SpatialAttention(nn.Module):
             self.sr = nn.Conv2d(dim, dim, kernel_size=1, stride=1)
 
     def forward(self, x, H, W):
-
         """
 
         Parameters

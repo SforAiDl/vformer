@@ -47,7 +47,6 @@ class PatchEmbedding(nn.Module):
         self.norm = norm_layer(embedding_dim)
 
     def forward(self, x):
-
         """
 
         Parameters

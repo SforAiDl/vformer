@@ -7,7 +7,6 @@ from ..utils import ATTENTION_REGISTRY
 
 @ATTENTION_REGISTRY.register()
 class VanillaSelfAttention(nn.Module):
-
     """
     Vanilla O(n^2) Self attention
 
@@ -43,7 +42,6 @@ class VanillaSelfAttention(nn.Module):
         )
 
     def forward(self, x):
-
         """
 
         Parameters
