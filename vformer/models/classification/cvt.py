@@ -116,7 +116,7 @@ class CVT(BaseClassificationModel):
 
         if positional_embedding != "none":
             self.positional_emb = PosEmbedding(
-                self.sequence_length,
+                shape=self.sequence_length,
                 dim=embedding_dim,
                 drop=p_dropout,
                 sinusoidal=True if positional_embedding is "sine" else False,
