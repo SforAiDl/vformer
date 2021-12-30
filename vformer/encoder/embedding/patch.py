@@ -18,6 +18,7 @@ class PatchEmbedding(nn.Module):
         Number of linear projection output channels
     norm_layer: nn.Module,
         Normalization layer, Default is `nn.LayerNorm`
+
     """
 
     def __init__(

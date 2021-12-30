@@ -27,9 +27,7 @@ class PVTFeedForward(nn.Module):
     use_dwconv: bool
         Whether to use Depth-wise convolutions, default is False
 
-    Kwargs
-    ------
-    kernel_size_dwconv: int,optional
+    kernel_size_dwconv: int
         `kernel_size` parameter for 2D convolution used in Depth wise convolution
     stride_dwconv: int
         `stride` parameter for 2D convolution used in Depth wise convolution

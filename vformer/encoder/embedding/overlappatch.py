@@ -20,6 +20,7 @@ class OverlapPatchEmbed(nn.Module):
         Number of linear projection output channels,default is 768
     norm_layer: nn.Module, optional
         Normalization layer, default is nn.LayerNorm
+
     """
 
     def __init__(
@@ -66,6 +67,7 @@ class OverlapPatchEmbed(nn.Module):
             Height of Patch
         W: int
             Width of Patch
+
         """
 
         x = self.proj(x)

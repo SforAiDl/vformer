@@ -15,6 +15,7 @@ class LinearEmbedding(nn.Module):
         Width of the patch
     patch_dim: int
         Dimension of the patch
+
     """
 
     def __init__(

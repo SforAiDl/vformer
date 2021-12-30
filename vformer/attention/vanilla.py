@@ -7,6 +7,7 @@ from ..utils import ATTENTION_REGISTRY
 
 @ATTENTION_REGISTRY.register()
 class VanillaSelfAttention(nn.Module):
+
     """
     Vanilla O(n^2) Self attention
 
@@ -20,6 +21,7 @@ class VanillaSelfAttention(nn.Module):
         Dimension of each head
     p_dropout: float
         Dropout Probability
+
     """
 
     def __init__(self, dim, num_heads=8, head_dim=64, p_dropout=0.0):
@@ -41,7 +43,9 @@ class VanillaSelfAttention(nn.Module):
         )
 
     def forward(self, x):
+
         """
+
         Parameters
         ----------
         x: torch.Tensor

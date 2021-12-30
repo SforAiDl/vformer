@@ -6,7 +6,9 @@ from ..utils import ATTENTION_REGISTRY
 
 @ATTENTION_REGISTRY.register()
 class SpatialAttention(nn.Module):
+
     """
+
     Spatial Reduction Attention- Linear complexity attention layer
 
     Parameters
@@ -29,6 +31,7 @@ class SpatialAttention(nn.Module):
         Whether to use linear Spatial attention,default is False
     act_fn : nn.Module
         Activation function, default is False
+
     """
 
     def __init__(
@@ -74,7 +77,9 @@ class SpatialAttention(nn.Module):
             self.sr = nn.Conv2d(dim, dim, kernel_size=1, stride=1)
 
     def forward(self, x, H, W):
+
         """
+
         Parameters
         ----------
         x: torch.Tensor
@@ -86,7 +91,9 @@ class SpatialAttention(nn.Module):
         Returns
         ----------
         torch.Tensor
-            Returns output tensor by applying spatial attention on input tensor"""
+            Returns output tensor by applying spatial attention on input tensor
+
+        """
         B, N, C = x.shape
         q = (
             self.q(x)

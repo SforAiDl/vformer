@@ -14,6 +14,7 @@ class FeedForward(nn.Module):
         Dimension of the output tensor
     p_dropout: float
         Dropout probability, default=0.0
+
     """
 
     def __init__(self, dim, hidden_dim=None, out_dim=None, p_dropout=0.0):

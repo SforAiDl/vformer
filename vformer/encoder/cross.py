@@ -9,6 +9,7 @@ from .vanilla import VanillaEncoder
 @ENCODER_REGISTRY.register()
 class CrossEncoder(nn.Module):
     """
+
     Parameters
     ----------
     embedding_dim_s : int

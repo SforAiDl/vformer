@@ -16,7 +16,9 @@ from .nn import FeedForward
 
 @ENCODER_REGISTRY.register()
 class SwinEncoderBlock(nn.Module):
+
     """
+
     Parameters
     ----------
     dim: int
@@ -39,10 +41,11 @@ class SwinEncoderBlock(nn.Module):
         Dropout rate
     attn_dropout: float
         Dropout rate
-    drop_path: float
+    drop_path_rate: float
         Stochastic depth rate
     norm_layer:nn.Module
         Normalization layer, default is `nn.LayerNorm`
+
     """
 
     def __init__(
@@ -57,7 +60,7 @@ class SwinEncoderBlock(nn.Module):
         qk_scale=None,
         p_dropout=0.0,
         attn_dropout=0.0,
-        drop_path=0.0,
+        drop_path_rate=0.0,
         norm_layer=nn.LayerNorm,
     ):
         super(SwinEncoderBlock, self).__init__()
@@ -89,7 +92,9 @@ class SwinEncoderBlock(nn.Module):
             proj_dropout=p_dropout,
         )
 
-        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
+        self.drop_path = (
+            DropPath(drop_path_rate) if drop_path_rate > 0.0 else nn.Identity()
+        )
         self.norm2 = norm_layer(dim)
         self.mlp = FeedForward(dim=dim, hidden_dim=hidden_dim, p_dropout=p_dropout)
 
@@ -178,7 +183,7 @@ class SwinEncoder(nn.Module):
         Dropout rate.
     attn_dropout: float, optional
         Attention dropout rate
-    drop_path: float or tuple[float]
+    drop_path_rate: float or tuple[float]
         Stochastic depth rate.
     norm_layer: nn.Module
         Normalization layer. default is nn.LayerNorm
@@ -224,7 +229,7 @@ class SwinEncoder(nn.Module):
                     qk_scale=qkv_scale,
                     p_dropout=p_dropout,
                     attn_dropout=attn_dropout,
-                    drop_path=drop_path[i]
+                    drop_path_rate=drop_path[i]
                     if isinstance(drop_path, list)
                     else drop_path,
                     norm_layer=norm_layer,
@@ -241,6 +246,7 @@ class SwinEncoder(nn.Module):
 
     def forward(self, x):
         """
+
         Parameters
         ----------
         x: torch.Tensor
@@ -249,6 +255,7 @@ class SwinEncoder(nn.Module):
         ----------
         torch.Tensor
             Returns output tensor
+
         """
 
         for blk in self.blocks:
