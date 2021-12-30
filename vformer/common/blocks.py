@@ -17,6 +17,7 @@ class DWConv(nn.Module):
         Padding added to all sides of the input, default is 1
     bias_dwconv:bool
         Whether to add learnable bias to the output,default is True.
+
     """
 
     def __init__(
@@ -39,8 +40,27 @@ class DWConv(nn.Module):
         )
 
     def forward(self, x, H, W):
+        """
+
+        Parameters:
+        ----------
+        x: torch.Tensor
+            Input tensor
+        H: int
+            Height of image patch
+        W: int
+            Width of image patch
+
+        Returns:
+        ----------
+        torch.Tensor
+            Returns output tensor after performing depth-wise convolution operation
+
+        """
+
         B, N, C = x.shape
         x = x.transpose(1, 2).view(B, C, H, W)
         x = self.dwconv(x)
+
         x = x.flatten(2).transpose(1, 2)
         return x

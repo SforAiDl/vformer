@@ -13,13 +13,13 @@ class VanillaEncoder(nn.Module):
 
     Parameters
     ----------
-    latent_dim: int
+    embedding_dim: int
         Dimension of the embedding
     depth: int
         Number of self-attention layers
-    heads: int
+    num_heads: int
         Number of the attention heads
-    dim_head: int
+    head_dim: int
         Dimension of each head
     mlp_dim: int
         Dimension of the hidden layer in the feed-forward layer
@@ -33,10 +33,10 @@ class VanillaEncoder(nn.Module):
 
     def __init__(
         self,
-        latent_dim,
+        embedding_dim,
         depth,
         num_heads,
-        dim_head,
+        head_dim,
         mlp_dim,
         p_dropout=0.0,
         attn_dropout=0.0,
@@ -50,18 +50,20 @@ class VanillaEncoder(nn.Module):
                 nn.ModuleList(
                     [
                         PreNorm(
-                            dim=latent_dim,
+                            dim=embedding_dim,
                             fn=VanillaSelfAttention(
-                                dim=latent_dim,
+                                dim=embedding_dim,
                                 num_heads=num_heads,
-                                head_dim=dim_head,
+                                head_dim=head_dim,
                                 p_dropout=attn_dropout,
                             ),
                         ),
                         PreNorm(
-                            dim=latent_dim,
+                            dim=embedding_dim,
                             fn=FeedForward(
-                                dim=latent_dim, hidden_dim=mlp_dim, p_dropout=p_dropout
+                                dim=embedding_dim,
+                                hidden_dim=mlp_dim,
+                                p_dropout=p_dropout,
                             ),
                         ),
                     ]
@@ -74,7 +76,17 @@ class VanillaEncoder(nn.Module):
         )
 
     def forward(self, x):
+        """
 
+        Parameters
+        ----------
+        x: torch.Tensor
+
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor
+        """
         for attn, ff in self.encoder:
             x = attn(x) + x
             x = self.drop_path(ff(x)) + x

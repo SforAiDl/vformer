@@ -38,13 +38,14 @@ class SwinTransformer(BaseClassificationModel):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale:  float, optional
-    drop_rate: float
+        Override default qk scale of head_dim ** -0.5 in Window Attention if set
+    p_dropout: float
         Dropout rate, default is 0.0
-    attn_drop_rate: float
+    attn_dropout: float
         Attention dropout rate,default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    norm_layer:
+    norm_layer: nn.Module
         Normalization layer,default is nn.LayerNorm
     ape: bool, optional
         Whether to add relative/absolute position embedding to patch embedding, default is True
@@ -67,8 +68,8 @@ class SwinTransformer(BaseClassificationModel):
         mlp_ratio=4.0,
         qkv_bias=True,
         qk_scale=None,
-        drop_rate=0.0,
-        attn_drop_rate=0.0,
+        p_dropout=0.0,
+        attn_dropout=0.0,
         drop_path_rate=0.1,
         norm_layer=nn.LayerNorm,
         ape=True,
@@ -113,8 +114,8 @@ class SwinTransformer(BaseClassificationModel):
                 mlp_ratio=mlp_ratio,
                 qkv_bias=qkv_bias,
                 qkv_scale=qk_scale,
-                p_dropout=drop_rate,
-                attn_dropout=attn_drop_rate,
+                p_dropout=p_dropout,
+                attn_dropout=attn_dropout,
                 drop_path=dpr[sum(depths[:i_layer]) : sum(depths[: i_layer + 1])],
                 norm_layer=norm_layer,
                 downsample=PatchMerging if i_layer < len(depths) - 1 else None,
@@ -137,10 +138,21 @@ class SwinTransformer(BaseClassificationModel):
 
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.norm = norm_layer(num_features) if norm_layer is not None else nn.Identity
-        self.pos_drop = nn.Dropout(p=drop_rate)
+        self.pos_drop = nn.Dropout(p=p_dropout)
 
     def forward(self, x):
+        """
 
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
         x = self.patch_embed(x)
 
         if self.ape:
