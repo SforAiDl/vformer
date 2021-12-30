@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 from ....decoder import SegmentationHead
-from ....encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
+from ....encoder import OverlapPatchEmbed, PVTEncoder, PVTPosEmbedding
 from ....utils import MODEL_REGISTRY
 
 
@@ -111,7 +111,7 @@ class PVTSegmentation(nn.Module):
                 self.pos_embeds.append(
                     nn.ModuleList(
                         [
-                            AbsolutePositionEmbedding(
+                            PVTPosEmbedding(
                                 pos_shape=img_size // np.prod(patch_size[: i + 1]),
                                 pos_dim=embedding_dims[i],
                             )

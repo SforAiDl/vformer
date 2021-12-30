@@ -4,7 +4,7 @@ import torch.nn as nn
 from timm.models.layers import trunc_normal_
 
 from ...decoder import MLPDecoder
-from ...encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
+from ...encoder import OverlapPatchEmbed, PVTEncoder, PVTPosEmbedding
 from ...utils import MODEL_REGISTRY
 
 
@@ -108,7 +108,7 @@ class PVTClassification(nn.Module):
                     self.pos_embeds.append(
                         nn.ModuleList(
                             [
-                                AbsolutePositionEmbedding(
+                                PVTPosEmbedding(
                                     pos_shape=img_size // np.prod(patch_size[: i + 1]),
                                     pos_dim=embed_dims[i],
                                 )

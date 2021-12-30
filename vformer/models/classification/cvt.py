@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
-from ...encoder import CVTEmbedding, VanillaEncoder
+from ...encoder import CVTEmbedding, PosEmbedding, VanillaEncoder
 from ...utils import MODEL_REGISTRY, pair
 
 
@@ -115,22 +115,15 @@ class CVT(BaseClassificationModel):
             self.attention_pool = nn.Linear(self.embedding_dim, 1)
 
         if positional_embedding != "none":
-
-            if positional_embedding == "learnable":
-                self.positional_emb = nn.Parameter(
-                    torch.zeros(1, self.sequence_length, embedding_dim),
-                    requires_grad=True,
-                )
-            else:
-                self.positional_emb = nn.Parameter(
-                    self.sinusoidal_embedding(self.sequence_length, embedding_dim),
-                    requires_grad=False,
-                )
-
+            self.positional_emb = PosEmbedding(
+                self.sequence_length,
+                dim=embedding_dim,
+                drop=p_dropout,
+                sinusoidal=True if positional_embedding is "sine" else False,
+            )
         else:
             self.positional_emb = None
 
-        self.dropout = nn.Dropout(p=p_dropout)
         dpr = [x.item() for x in torch.linspace(0, drop_path, num_layers)]
         self.encoder_blocks = nn.ModuleList(
             [
@@ -186,9 +179,8 @@ class CVT(BaseClassificationModel):
             x = torch.cat((cls_token, x), dim=1)
 
         if self.positional_emb is not None:
-            x += self.positional_emb
+            x = self.positional_emb(x)
 
-        x = self.dropout(x)
         for blk in self.encoder_blocks:
             x = blk(x)
 
@@ -202,17 +194,3 @@ class CVT(BaseClassificationModel):
         x = self.decoder(x)
 
         return x
-
-    @staticmethod
-    def sinusoidal_embedding(n_channels, dim):
-
-        pe = torch.FloatTensor(
-            [
-                [p / (10000 ** (2 * (i // 2) / dim)) for i in range(dim)]
-                for p in range(n_channels)
-            ]
-        )
-        pe[:, 0::2] = torch.sin(pe[:, 0::2])
-        pe[:, 1::2] = torch.cos(pe[:, 1::2])
-
-        return pe.unsqueeze(0)
