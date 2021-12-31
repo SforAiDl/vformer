@@ -4,7 +4,7 @@ from einops import repeat
 
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
-from ...encoder import LinearEmbedding, VanillaEncoder
+from ...encoder import LinearEmbedding, PosEmbedding, VanillaEncoder
 from ...utils import MODEL_REGISTRY
 
 
@@ -66,11 +66,13 @@ class VanillaViT(BaseClassificationModel):
             embedding_dim, self.patch_height, self.patch_width, self.patch_dim
         )
 
-        self.pos_embedding = nn.Parameter(
-            torch.randn(1, self.n_patches + 1, embedding_dim)
+        self.pos_embedding = PosEmbedding(
+            shape=self.n_patches + 1,
+            dim=embedding_dim,
+            drop=p_dropout_embedding,
+            sinusoidal=False,
         )
         self.cls_token = nn.Parameter(torch.randn(1, 1, embedding_dim))
-        self.embedding_dropout = nn.Dropout(p_dropout_embedding)
 
         self.encoder = VanillaEncoder(
             embedding_dim=embedding_dim,
@@ -114,8 +116,7 @@ class VanillaViT(BaseClassificationModel):
 
         cls_tokens = repeat(self.cls_token, "() n d -> b n d", b=b)
         x = torch.cat((cls_tokens, x), dim=1)
-        x += self.pos_embedding[:, : (n + 1)]
-        x = self.embedding_dropout(x)
+        x = self.pos_embedding(x)
         x = self.encoder(x)
         x = self.pool(x)
         x = self.decoder(x)

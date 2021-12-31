@@ -4,7 +4,7 @@ from timm.models.layers import trunc_normal_
 
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
-from ...encoder import PatchEmbedding, SwinEncoder
+from ...encoder import PatchEmbedding, PosEmbedding, SwinEncoder
 from ...functional import PatchMerging
 from ...utils import MODEL_REGISTRY
 
@@ -92,12 +92,11 @@ class SwinTransformer(BaseClassificationModel):
         self.ape = ape
         num_features = int(embedding_dim * 2 ** (len(depths) - 1))
 
-        if self.ape:
-            self.absolute_pos_embed = nn.Parameter(
-                torch.zeros(1, num_patches, embedding_dim)
-            )
-            trunc_normal_(self.absolute_pos_embed, std=0.02)
-
+        self.absolute_pos_embed = (
+            PosEmbedding(shape=num_patches, dim=embedding_dim, drop=p_dropout, std=0.02)
+            if ape
+            else nn.Identity()
+        )
         dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
         self.encoder = nn.ModuleList()
 
@@ -155,10 +154,7 @@ class SwinTransformer(BaseClassificationModel):
         """
         x = self.patch_embed(x)
 
-        if self.ape:
-            x += self.absolute_pos_embed
-
-        x = self.pos_drop(x)
+        x = self.absolute_pos_embed(x)
 
         for layer in self.encoder:
             x = layer(x)
