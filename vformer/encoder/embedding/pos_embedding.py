@@ -21,7 +21,7 @@ class PVTPosEmbedding(nn.Module):
         Standard deviation for truncated normal distribution
     """
 
-    def __init__(self, pos_shape, pos_dim, p_dropout=0.0, std=0.02, use_sq=False):
+    def __init__(self, pos_shape, pos_dim, p_dropout=0.0, std=0.02):
         super().__init__()
 
         pos_shape = pair(pos_shape)
@@ -72,6 +72,7 @@ class PVTPosEmbedding(nn.Module):
             x = x + self.resize_pos_embed(self.pos_embed, (H, W), mode)
 
         return self.drop(x)
+
 
 
 class PosEmbedding(nn.Module):
