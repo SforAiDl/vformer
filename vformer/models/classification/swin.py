@@ -138,9 +138,7 @@ class SwinTransformer(BaseClassificationModel):
         self.pool = nn.AdaptiveAvgPool1d(1)
         self.norm = norm_layer(num_features) if norm_layer is not None else nn.Identity
 
-
-
-
+        self.pos_drop = nn.Dropout(p=p_dropout)
 
     def forward(self, x):
         """
