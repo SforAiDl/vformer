@@ -12,7 +12,6 @@ class PVTDetection(nn.Module):
     Implementation of Pyramid Vision Transformer:
     https://arxiv.org/abs/2102.12122v1
 
-
     Parameters
     ----------
     img_size: int

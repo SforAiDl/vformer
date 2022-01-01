@@ -17,7 +17,6 @@ from .nn import FeedForward
 @ENCODER_REGISTRY.register()
 class SwinEncoderBlock(nn.Module):
     """
-
     Parameters
     ----------
     dim: int

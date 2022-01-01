@@ -32,10 +32,16 @@ class PVTSegmentation(nn.Module):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+<<<<<<< HEAD
         Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
     p_dropout: float
         Dropout rate,default is 0.0
     attn_dropout:  float
+=======
+    p_dropout: float
+        Dropout rate,default is 0.0
+    attn_drop_rate:  float
+>>>>>>> b7146b2c4ec168ba2ae27ba31476fb38de7ee199
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
