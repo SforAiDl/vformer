@@ -66,7 +66,6 @@ class Attention_Block(nn.Module):
 class Visformer(nn.Module):
     def __init__(
         self,
-        patch_size,
         in_channels,
         initial_channels,
     ):
