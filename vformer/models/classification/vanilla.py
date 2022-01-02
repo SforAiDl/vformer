@@ -122,4 +122,3 @@ class VanillaViT(BaseClassificationModel):
         x = self.decoder(x)
 
         return x
-

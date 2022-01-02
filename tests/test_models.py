@@ -403,18 +403,15 @@ def test_dpt():
     print(out.shape)
 
     model = DPTDepthModel(backbone="vitb16_384")
-    out=model(img)
+    out = model(img)
     print(out.shape)
 
     model = DPTDepthModel(backbone="vitb_rn50_384")
-    out=model(img)
+    out = model(img)
     print(out.shape)
-
 
     model = MODEL_REGISTRY.get("DPTDepthModel")(
         backbone="vitb16_384_vf"
     )  # using vformer vit implementation
     out = model(img)
     print(out.shape)
-
-

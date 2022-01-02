@@ -111,13 +111,7 @@ class DPT(nn.Module):
 @MODEL_REGISTRY.register()
 class DPTDepthModel(DPT):
     def __init__(
-        self,
-        backbone,
-        non_negative=True,
-        scale=1.0,
-        shift=0.0,
-        invert=False,
-        **kwargs
+        self, backbone, non_negative=True, scale=1.0, shift=0.0, invert=False, **kwargs
     ):
         features = kwargs["features"] if "features" in kwargs else 256
 
