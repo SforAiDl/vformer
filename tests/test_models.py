@@ -1,7 +1,5 @@
 import torch
 import torch.nn as nn
-import torchvision.transforms
-from PIL import Image
 from vformer.utils import MODEL_REGISTRY
 
 models = MODEL_REGISTRY.get_list()
