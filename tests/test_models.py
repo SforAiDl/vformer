@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+
 from vformer.utils import MODEL_REGISTRY
 
 models = MODEL_REGISTRY.get_list()
@@ -395,9 +396,25 @@ def test_cct():
 
 
 def test_dpt():
-    model = DPTDepthModel()
-    img= torch.randn(3,3,384,384)
-    out= model(img)
+
+    model = MODEL_REGISTRY.get("DPTDepthModel")(backbone="vitl16_384")
+    img = torch.randn(3, 3, 384, 384)
+    out = model(img)
+    print(out.shape)
+
+    model = DPTDepthModel(backbone="vitb16_384")
+    out=model(img)
+    print(out.shape)
+
+    model = DPTDepthModel(backbone="vitb_rn50_384")
+    out=model(img)
+    print(out.shape)
+
+
+    model = MODEL_REGISTRY.get("DPTDepthModel")(
+        backbone="vitb16_384_vf"
+    )  # using vformer vit implementation
+    out = model(img)
     print(out.shape)
 
 

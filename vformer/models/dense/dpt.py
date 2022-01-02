@@ -33,6 +33,8 @@ class DPT(nn.Module):
             "vitb_rn50_384": [0, 1, 8, 11],
             "vitb16_384": [2, 5, 8, 11],
             "vitl16_384": [5, 11, 17, 23],
+            "vitb16_384_vf": [2, 5, 8, 11],
+            "vitl16_384_vf": [5, 11, 17, 23],
         }
 
         # Instantiate backbone and reassemble blocks
@@ -103,13 +105,19 @@ class DPT(nn.Module):
 
         out = self.scratch.output_conv(path_1)
 
-
         return out
 
 
+@MODEL_REGISTRY.register()
 class DPTDepthModel(DPT):
     def __init__(
-        self, non_negative=True, scale=1.0, shift=0.0, invert=False, **kwargs
+        self,
+        backbone,
+        non_negative=True,
+        scale=1.0,
+        shift=0.0,
+        invert=False,
+        **kwargs
     ):
         features = kwargs["features"] if "features" in kwargs else 256
 
@@ -127,7 +135,7 @@ class DPTDepthModel(DPT):
             nn.Identity(),
         )
 
-        super().__init__(head, **kwargs)
+        super().__init__(head=head, backbone=backbone, **kwargs)
 
     def forward(self, x):
         inv_depth = super().forward(x).squeeze(dim=1)

@@ -1,3 +1,5 @@
+# thanks to https://github.com/isl-org/DPT
+
 import math
 import types
 
@@ -6,7 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
+from .registry import MODEL_REGISTRY
 
 
 #########################
@@ -19,7 +21,7 @@ class Slice(nn.Module):
         self.start_index = start_index
 
     def forward(self, x):
-        return x[:, self.start_index :]
+        return x[:, self.start_index:]
 
 
 class AddReadout(nn.Module):
@@ -32,7 +34,7 @@ class AddReadout(nn.Module):
             readout = (x[:, 0] + x[:, 1]) / 2
         else:
             readout = x[:, 0]
-        return x[:, self.start_index :] + readout.unsqueeze(1)
+        return x[:, self.start_index:] + readout.unsqueeze(1)
 
 
 class Interpolate(nn.Module):
@@ -77,8 +79,8 @@ class ProjectReadout(nn.Module):
         self.project = nn.Sequential(nn.Linear(2 * in_features, in_features), nn.GELU())
 
     def forward(self, x):
-        readout = x[:, 0].unsqueeze(1).expand_as(x[:, self.start_index :])
-        features = torch.cat((x[:, self.start_index :], readout), -1)
+        readout = x[:, 0].unsqueeze(1).expand_as(x[:, self.start_index:])
+        features = torch.cat((x[:, self.start_index:], readout), -1)
 
         return self.project(features)
 
@@ -264,10 +266,10 @@ def forward_vit(pretrained, x):
     if layer_4.ndim == 3:
         layer_4 = unflatten(layer_4)
 
-    layer_1 = pretrained.act_postprocess1[3 : len(pretrained.act_postprocess1)](layer_1)
-    layer_2 = pretrained.act_postprocess2[3 : len(pretrained.act_postprocess2)](layer_2)
-    layer_3 = pretrained.act_postprocess3[3 : len(pretrained.act_postprocess3)](layer_3)
-    layer_4 = pretrained.act_postprocess4[3 : len(pretrained.act_postprocess4)](layer_4)
+    layer_1 = pretrained.act_postprocess1[3: len(pretrained.act_postprocess1)](layer_1)
+    layer_2 = pretrained.act_postprocess2[3: len(pretrained.act_postprocess2)](layer_2)
+    layer_3 = pretrained.act_postprocess3[3: len(pretrained.act_postprocess3)](layer_3)
+    layer_4 = pretrained.act_postprocess4[3: len(pretrained.act_postprocess4)](layer_4)
 
     return layer_1, layer_2, layer_3, layer_4
 
@@ -282,18 +284,17 @@ def get_activation(name):
     return hook
 
 
-
-
-
 attention = {}
+
+
 def get_attention(name):
     def hook(module, input, output):
         x = input[0]
         B, N, C = x.shape
         qkv = (
             module.qkv(x)
-            .reshape(B, N, 3, module.num_heads, C // module.num_heads)
-            .permute(2, 0, 3, 1, 4)
+                .reshape(B, N, 3, module.num_heads, C // module.num_heads)
+                .permute(2, 0, 3, 1, 4)
         )
         q, k, v = (
             qkv[0],
@@ -312,7 +313,7 @@ def get_attention(name):
 def _resize_pos_embed(self, posemb, gs_h, gs_w):
     posemb_tok, posemb_grid = (
         posemb[:, : self.start_index],
-        posemb[0, self.start_index :],
+        posemb[0, self.start_index:],
     )
 
     gs_old = int(math.sqrt(len(posemb_grid)))
@@ -329,10 +330,16 @@ def _resize_pos_embed(self, posemb, gs_h, gs_w):
 def forward_flex(self, x):
     b, c, h, w = x.shape
 
-    pos_embed = self._resize_pos_embed(
-        self.pos_embed, h // self.patch_size[1], w // self.patch_size[0]
-    )
+    try:
+        pos_embed = self._resize_pos_embed(
+            self.pos_embed, h // self.patch_size[1], w // self.patch_size[0]
+        )
+    except:
+        pos_embed = self._resize_pos_embed(
+            self.pos_embed.pos_embed, h // self.patch_size[1], w // self.patch_size[0]
+        )
 
+    print(self.pos_embed)
     B = x.shape[0]
 
     if hasattr(self.patch_embed, "backbone"):
@@ -340,8 +347,10 @@ def forward_flex(self, x):
         if isinstance(x, (list, tuple)):
             x = x[-1]  # last feature if backbone outputs list/tuple of features
 
-    x = self.patch_embed.proj(x).flatten(2).transpose(1, 2)
-
+    try:
+        x = self.patch_embed.proj(x).flatten(2).transpose(1, 2)
+    except:
+        x = self.patch_embed.patch_embedding(x)
     if getattr(self, "dist_token", None) is not None:
         cls_tokens = self.cls_token.expand(
             B, -1, -1
@@ -355,13 +364,22 @@ def forward_flex(self, x):
         x = torch.cat((cls_tokens, x), dim=1)
 
     x = x + pos_embed
-    x = self.pos_drop(x)
 
-    for blk in self.blocks:
-        x = blk(x)
+    try:
+        x = self.pos_drop(x)
+    except :
+        x = self.pos_embed.pos_drop
+    print("")
+    try:
+        for blk in self.blocks:
+            x = blk(x)
+    except:
+        x= self.encoder(x)
+    try:
 
-    x = self.norm(x)
-
+        x = self.norm(x)
+    except:
+        pass  # normalisation is already done in encoder block, so we wont require this afaik
     return x
 
 
@@ -382,6 +400,7 @@ def get_readout_oper(vit_features, features, use_readout, start_index=1):
     return readout_oper
 
 
+"""
 def get_mean_attention_map(attn, token, shape):
     attn = attn[:, :, token, 1:]
     attn = attn.unflatten(2, torch.Size([shape[2] // 16, shape[3] // 16])).float()
@@ -392,6 +411,8 @@ def get_mean_attention_map(attn, token, shape):
     all_attn = torch.mean(attn, 0)
 
     return all_attn
+
+"""
 
 
 #########################################
@@ -432,6 +453,142 @@ def _make_vit_b16_backbone(
             get_attention("attn_4")
         )
         pretrained.attention = attention
+
+    readout_oper = get_readout_oper(vit_features, features, use_readout, start_index)
+
+    # 32, 48, 136, 384
+    pretrained.act_postprocess1 = nn.Sequential(
+        readout_oper[0],
+        Transpose(1, 2),
+        nn.Unflatten(2, torch.Size([size[0] // 16, size[1] // 16])),
+        nn.Conv2d(
+            in_channels=vit_features,
+            out_channels=features[0],
+            kernel_size=1,
+            stride=1,
+            padding=0,
+        ),
+        nn.ConvTranspose2d(
+            in_channels=features[0],
+            out_channels=features[0],
+            kernel_size=4,
+            stride=4,
+            padding=0,
+            bias=True,
+            dilation=1,
+            groups=1,
+        ),
+    )
+
+    pretrained.act_postprocess2 = nn.Sequential(
+        readout_oper[1],
+        Transpose(1, 2),
+        nn.Unflatten(2, torch.Size([size[0] // 16, size[1] // 16])),
+        nn.Conv2d(
+            in_channels=vit_features,
+            out_channels=features[1],
+            kernel_size=1,
+            stride=1,
+            padding=0,
+        ),
+        nn.ConvTranspose2d(
+            in_channels=features[1],
+            out_channels=features[1],
+            kernel_size=2,
+            stride=2,
+            padding=0,
+            bias=True,
+            dilation=1,
+            groups=1,
+        ),
+    )
+
+    pretrained.act_postprocess3 = nn.Sequential(
+        readout_oper[2],
+        Transpose(1, 2),
+        nn.Unflatten(2, torch.Size([size[0] // 16, size[1] // 16])),
+        nn.Conv2d(
+            in_channels=vit_features,
+            out_channels=features[2],
+            kernel_size=1,
+            stride=1,
+            padding=0,
+        ),
+    )
+
+    pretrained.act_postprocess4 = nn.Sequential(
+        readout_oper[3],
+        Transpose(1, 2),
+        nn.Unflatten(2, torch.Size([size[0] // 16, size[1] // 16])),
+        nn.Conv2d(
+            in_channels=vit_features,
+            out_channels=features[3],
+            kernel_size=1,
+            stride=1,
+            padding=0,
+        ),
+        nn.Conv2d(
+            in_channels=features[3],
+            out_channels=features[3],
+            kernel_size=3,
+            stride=2,
+            padding=1,
+        ),
+    )
+
+    pretrained.model.start_index = start_index
+    pretrained.model.patch_size = [16, 16]
+
+    # We inject this function into the VisionTransformer instances so that
+    # we can use it with interpolated position embeddings without modifying the library source.
+    pretrained.model.forward_flex = types.MethodType(forward_flex, pretrained.model)
+    pretrained.model._resize_pos_embed = types.MethodType(
+        _resize_pos_embed, pretrained.model
+    )
+
+    return pretrained
+
+
+def _make_vf_vit_b16_backbone(  # we use vformer vit models here
+    model,
+    size=(384, 384),
+    features=(96, 192, 384, 768),
+    hooks=(2, 5, 8, 11),
+    use_readout="ignore",
+    enable_attention_hooks=False,
+    vit_features=768,
+    start_index=1,
+):
+    pretrained = nn.Module()
+    pretrained.model = model
+    pretrained.model.encoder.encoder[hooks[0]][0].fn.register_forward_hook(
+        get_activation("1")
+    )
+    pretrained.model.encoder.encoder[hooks[1]][0].fn.register_forward_hook(
+        get_activation("2")
+    )
+    pretrained.model.encoder.encoder[hooks[2]][0].fn.register_forward_hook(
+        get_activation("3")
+    )
+    pretrained.model.encoder.encoder[hooks[3]][0].fn.register_forward_hook(
+        get_activation("4")
+    )
+
+    pretrained.activations = activations
+
+    if enable_attention_hooks:
+        pretrained.model.encoder.encoder[hooks[0]][0].fn.register_forward_hook(
+            get_attention("attn_1")
+        )
+        pretrained.model.encoder.encoder[hooks[1]][0].fn.register_forward_hook(
+            get_attention("attn_2")
+        )
+        pretrained.model.encoder.encoder[hooks[2]][0].fn.register_forward_hook(
+            get_attention("attn_3")
+        )
+        pretrained.model.encoder.encoder[hooks[3]][0].fn.register_forward_hook(
+            get_attention("attn_4")
+        )
 
     readout_oper = get_readout_oper(vit_features, features, use_readout, start_index)
 
@@ -778,7 +935,17 @@ def _make_encoder(
     use_readout="ignore",
     enable_attention_hooks=False,
 ):
-    if backbone == "vitl16_384":
+    if backbone == "vitb16_384_vf":
+        pretrained = _make_vf_vitb16_384(
+            use_readout=use_readout,
+            hooks=hooks,
+            enable_attention_hooks=enable_attention_hooks,
+        )
+        scratch = _make_scratch(
+            [96, 192, 384, 768], features, groups=groups, expand=expand
+        )
+
+    elif backbone == "vitl16_384":
         pretrained = _make_pretrained_vitl16_384(
             use_pretrained,
             hooks=hooks,
@@ -890,3 +1057,24 @@ def _make_resnet_backbone(resnet):
 def _make_pretrained_resnext101_wsl():
     resnet = torch.hub.load("facebookresearch/WSL-Images", "resnext101_32x8d_wsl")
     return _make_resnet_backbone(resnet)
+
+
+def _make_vf_vitb16_384(use_readout="ignore", hooks=None, enable_attention_hooks=False):
+    model = MODEL_REGISTRY.get("VanillaViT")(
+        img_size=384,
+        patch_size=16,
+        embedding_dim=768,
+        head_dim=64,
+        depth=12,
+        attn_heads=12,
+        encoder_mlp_dim=768,
+        n_classes=10,
+        in_channels=3)
+    hooks = [2, 5, 8, 11] if hooks is None else hooks
+    return _make_vf_vit_b16_backbone(
+        model,
+        features=[96, 192, 384, 768],
+        hooks=hooks,
+        use_readout=use_readout,
+        enable_attention_hooks=enable_attention_hooks,
+    )

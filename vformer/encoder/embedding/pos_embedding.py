@@ -78,7 +78,7 @@ class PosEmbedding(nn.Module):
     def __init__(self, shape, dim, drop=None, sinusoidal=False, std=0.02):
         super(PosEmbedding, self).__init__()
         if not sinusoidal:
-            self.pos_embed = torch.zeros(1, shape, dim)
+            self.pos_embed = nn.Parameter(torch.zeros(1, shape, dim))
         else:
             pe = torch.FloatTensor(
                 [
@@ -91,8 +91,8 @@ class PosEmbedding(nn.Module):
             self.pos_embed = pe
             self.pos_embed.requires_grad = False
         trunc_normal_(self.pos_embed, std=std)
-        self.drop = nn.Dropout(drop) if drop is not None else nn.Identity()
+        self.pos_drop = nn.Dropout(drop) if drop is not None else nn.Identity()
 
     def forward(self, x):
         x = x + self.pos_embed
-        return self.drop(x)
+        return self.pos_drop(x)

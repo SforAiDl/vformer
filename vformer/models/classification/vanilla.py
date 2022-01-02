@@ -20,7 +20,7 @@ class VanillaViT(BaseClassificationModel):
         Size of the image
     patch_size: int
         Size of a patch
-    n_classes: int
+    num_classes: int
         Number of classes for classification
     embedding_dim: int
         Dimension of hidden layer
@@ -62,11 +62,11 @@ class VanillaViT(BaseClassificationModel):
     ):
         super().__init__(img_size, patch_size, in_channels, pool)
 
-        self.patch_embedding = LinearEmbedding(
+        self.patch_embed = LinearEmbedding(
             embedding_dim, self.patch_height, self.patch_width, self.patch_dim
         )
 
-        self.pos_embedding = PosEmbedding(
+        self.pos_embed = PosEmbedding(
             shape=self.n_patches + 1,
             dim=embedding_dim,
             drop=p_dropout_embedding,
@@ -111,17 +111,15 @@ class VanillaViT(BaseClassificationModel):
             Returns tensor of size `num_classes`
 
         """
-        x = self.patch_embedding(x)
+        x = self.patch_embed(x)
         b, n, _ = x.shape
 
         cls_tokens = repeat(self.cls_token, "() n d -> b n d", b=b)
         x = torch.cat((cls_tokens, x), dim=1)
-        x = self.pos_embedding(x)
+        x = self.pos_embed(x)
         x = self.encoder(x)
         x = self.pool(x)
         x = self.decoder(x)
 
         return x
-
-#register different models here
 
