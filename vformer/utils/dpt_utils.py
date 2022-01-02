@@ -379,7 +379,7 @@ def forward_flex(self, x):
         pass
         x = self.norm(x)
     except:
-        pass  # normalisation is already done in encoder block, so we wont require this afaik
+        pass  # normalisation is already done in encoder block for vformer implementation, so we wont require this afaik
     return x
 
 
