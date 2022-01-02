@@ -374,9 +374,10 @@ def forward_flex(self, x):
         for blk in self.blocks:
             x = blk(x)
     except:
+        pass
         x= self.encoder(x)
     try:
-
+        pass
         x = self.norm(x)
     except:
         pass  # normalisation is already done in encoder block, so we wont require this afaik
@@ -399,20 +400,6 @@ def get_readout_oper(vit_features, features, use_readout, start_index=1):
 
     return readout_oper
 
-
-"""
-def get_mean_attention_map(attn, token, shape):
-    attn = attn[:, :, token, 1:]
-    attn = attn.unflatten(2, torch.Size([shape[2] // 16, shape[3] // 16])).float()
-    attn = torch.nn.functional.interpolate(
-        attn, size=shape[2:], mode="bicubic", align_corners=False
-    ).squeeze(0)
-
-    all_attn = torch.mean(attn, 0)
-
-    return all_attn
-
-"""
 
 
 #########################################
