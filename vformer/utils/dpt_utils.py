@@ -32,6 +32,40 @@ class AddReadout(nn.Module):
         return x[:, self.start_index :] + readout.unsqueeze(1)
 
 
+class Interpolate(nn.Module):
+    """Interpolation module."""
+
+    def __init__(self, scale_factor, mode, align_corners=False):
+        """Init.
+        Args:
+            scale_factor (float): scaling
+            mode (str): interpolation mode
+        """
+        super(Interpolate, self).__init__()
+
+        self.interp = nn.functional.interpolate
+        self.scale_factor = scale_factor
+        self.mode = mode
+        self.align_corners = align_corners
+
+    def forward(self, x):
+        """Forward pass.
+        Args:
+            x (tensor): input
+        Returns:
+            tensor: interpolated data
+        """
+
+        x = self.interp(
+            x,
+            scale_factor=self.scale_factor,
+            mode=self.mode,
+            align_corners=self.align_corners,
+        )
+
+        return x
+
+
 class ProjectReadout(nn.Module):
     def __init__(self, in_features, start_index=1):
         super(ProjectReadout, self).__init__()
@@ -60,15 +94,13 @@ class Transpose(nn.Module):
 class ResidualConvUnit_custom(nn.Module):
     """Residual convolution module."""
 
-    def __init__(self, features, activation, bn):
+    def __init__(self, features, activation=nn.GELU, bn=True):
         """Init.
         Args:
             features (int): number of features
         """
         super().__init__()
-
         self.bn = bn
-
         self.groups = 1
 
         self.conv1 = nn.Conv2d(
@@ -106,7 +138,6 @@ class ResidualConvUnit_custom(nn.Module):
         Returns:
             tensor: output
         """
-
         out = self.activation(x)
         out = self.conv1(out)
         if self.bn == True:
@@ -123,50 +154,6 @@ class ResidualConvUnit_custom(nn.Module):
         return self.skip_add.add(out, x)
 
         # return out + x
-
-
-def forward_vit(pretrained, x):
-    b, c, h, w = x.shape
-
-    glob = pretrained.model.forward_flex(x)
-
-    layer_1 = pretrained.activations["1"]
-    layer_2 = pretrained.activations["2"]
-    layer_3 = pretrained.activations["3"]
-    layer_4 = pretrained.activations["4"]
-
-    layer_1 = pretrained.act_postprocess1[0:2](layer_1)
-    layer_2 = pretrained.act_postprocess2[0:2](layer_2)
-    layer_3 = pretrained.act_postprocess3[0:2](layer_3)
-    layer_4 = pretrained.act_postprocess4[0:2](layer_4)
-
-    unflatten = nn.Sequential(
-        nn.Unflatten(
-            2,
-            torch.Size(
-                [
-                    h // pretrained.model.patch_size[1],
-                    w // pretrained.model.patch_size[0],
-                ]
-            ),
-        )
-    )
-
-    if layer_1.ndim == 3:
-        layer_1 = unflatten(layer_1)
-    if layer_2.ndim == 3:
-        layer_2 = unflatten(layer_2)
-    if layer_3.ndim == 3:
-        layer_3 = unflatten(layer_3)
-    if layer_4.ndim == 3:
-        layer_4 = unflatten(layer_4)
-
-    layer_1 = pretrained.act_postprocess1[3 : len(pretrained.act_postprocess1)](layer_1)
-    layer_2 = pretrained.act_postprocess2[3 : len(pretrained.act_postprocess2)](layer_2)
-    layer_3 = pretrained.act_postprocess3[3 : len(pretrained.act_postprocess3)](layer_3)
-    layer_4 = pretrained.act_postprocess4[3 : len(pretrained.act_postprocess4)](layer_4)
-
-    return layer_1, layer_2, layer_3, layer_4
 
 
 class FeatureFusionBlock_custom(nn.Module):
@@ -236,6 +223,52 @@ class FeatureFusionBlock_custom(nn.Module):
 
 
 ####################
+
+
+def forward_vit(pretrained, x):
+    b, c, h, w = x.shape
+
+    glob = pretrained.model.forward_flex(x)
+
+    layer_1 = pretrained.activations["1"]
+    layer_2 = pretrained.activations["2"]
+    layer_3 = pretrained.activations["3"]
+    layer_4 = pretrained.activations["4"]
+
+    layer_1 = pretrained.act_postprocess1[0:2](layer_1)
+    layer_2 = pretrained.act_postprocess2[0:2](layer_2)
+    layer_3 = pretrained.act_postprocess3[0:2](layer_3)
+    layer_4 = pretrained.act_postprocess4[0:2](layer_4)
+
+    unflatten = nn.Sequential(
+        nn.Unflatten(
+            2,
+            torch.Size(
+                [
+                    h // pretrained.model.patch_size[1],
+                    w // pretrained.model.patch_size[0],
+                ]
+            ),
+        )
+    )
+
+    if layer_1.ndim == 3:
+        layer_1 = unflatten(layer_1)
+    if layer_2.ndim == 3:
+        layer_2 = unflatten(layer_2)
+    if layer_3.ndim == 3:
+        layer_3 = unflatten(layer_3)
+    if layer_4.ndim == 3:
+        layer_4 = unflatten(layer_4)
+
+    layer_1 = pretrained.act_postprocess1[3 : len(pretrained.act_postprocess1)](layer_1)
+    layer_2 = pretrained.act_postprocess2[3 : len(pretrained.act_postprocess2)](layer_2)
+    layer_3 = pretrained.act_postprocess3[3 : len(pretrained.act_postprocess3)](layer_3)
+    layer_4 = pretrained.act_postprocess4[3 : len(pretrained.act_postprocess4)](layer_4)
+
+    return layer_1, layer_2, layer_3, layer_4
+
+
 activations = {}
 
 
@@ -365,6 +398,10 @@ def get_mean_attention_map(attn, token, shape):
     all_attn = torch.mean(attn, 0)
 
     return all_attn
+
+
+#########################################
+# functions related to backbone
 
 
 def _make_vit_b16_backbone(

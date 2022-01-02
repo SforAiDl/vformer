@@ -122,8 +122,3 @@ class VanillaViT(BaseClassificationModel):
         x = self.decoder(x)
 
         return x
-
-
-@MODEL_REGISTRY.register()
-def vit_tiny_patch16_224(**kwargs):
-    model = VanillaViT()

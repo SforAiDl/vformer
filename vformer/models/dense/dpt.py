@@ -1,9 +1,16 @@
 import torch
 import torch.nn as nn
 
-from ...utils.dpt_utils import FeatureFusionBlock_custom, _make_encoder, forward_vit
+from ...utils.dpt_utils import (
+    FeatureFusionBlock_custom,
+    Interpolate,
+    _make_encoder,
+    forward_vit,
+)
+from ...utils.registry import MODEL_REGISTRY
 
 
+@MODEL_REGISTRY.register()
 class DPT(nn.Module):
     def __init__(self):
         super(DPT, self).__init__()
@@ -41,10 +48,41 @@ class DPT(nn.Module):
             enable_attention_hooks=enable_attention_hooks,
         )
 
-        self.scratch.refinenet1 = FeatureFusionBlock_custom(features, use_bn)
-        self.scratch.refinenet2 = FeatureFusionBlock_custom(features, use_bn)
-        self.scratch.refinenet3 = FeatureFusionBlock_custom(features, use_bn)
-        self.scratch.refinenet4 = FeatureFusionBlock_custom(features, use_bn)
+        self.scratch.refinenet1 = FeatureFusionBlock_custom(
+            features,
+            nn.ReLU(False),
+            deconv=False,
+            bn=use_bn,
+            expand=False,
+            align_corners=True,
+        )
+
+        self.scratch.refinenet2 = FeatureFusionBlock_custom(
+            features,
+            nn.ReLU(False),
+            deconv=False,
+            bn=use_bn,
+            expand=False,
+            align_corners=True,
+        )
+
+        self.scratch.refinenet3 = FeatureFusionBlock_custom(
+            features,
+            nn.ReLU(False),
+            deconv=False,
+            bn=use_bn,
+            expand=False,
+            align_corners=True,
+        )
+
+        self.scratch.refinenet4 = FeatureFusionBlock_custom(
+            features,
+            nn.ReLU(False),
+            deconv=False,
+            bn=use_bn,
+            expand=False,
+            align_corners=True,
+        )
 
         self.scratch.output_conv = head
 
@@ -67,3 +105,36 @@ class DPT(nn.Module):
         out = self.scratch.output_conv(path_1)
 
         return out
+
+
+class DPTDepthModel(DPT):
+    def __init__(
+        self, path=None, non_negative=True, scale=1.0, shift=0.0, invert=False, **kwargs
+    ):
+        features = kwargs["features"] if "features" in kwargs else 256
+
+        self.scale = scale
+        self.shift = shift
+        self.invert = invert
+
+        head = nn.Sequential(
+            nn.Conv2d(features, features // 2, kernel_size=3, stride=1, padding=1),
+            Interpolate(scale_factor=2, mode="bilinear", align_corners=True),
+            nn.Conv2d(features // 2, 32, kernel_size=3, stride=1, padding=1),
+            nn.ReLU(True),
+            nn.Conv2d(32, 1, kernel_size=1, stride=1, padding=0),
+            nn.ReLU(True) if non_negative else nn.Identity(),
+            nn.Identity(),
+        )
+
+        super().__init__(head, **kwargs)
+
+    def forward(self, x):
+        inv_depth = super().forward(x).squeeze(dim=1)
+        if self.invert:
+            depth = self.scale * inv_depth + self.shift
+            depth[depth < 1e-8] = 1e-8
+            depth = 1.0 / depth
+            return depth
+        else:
+            return inv_depth

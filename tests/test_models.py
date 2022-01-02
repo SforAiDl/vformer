@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
-
+import torchvision.transforms
+from PIL import Image
 from vformer.utils import MODEL_REGISTRY
 
 models = MODEL_REGISTRY.get_list()
@@ -8,6 +9,8 @@ models = MODEL_REGISTRY.get_list()
 img_3channels_256 = torch.randn(2, 3, 256, 256)
 img_3channels_224 = torch.randn(4, 3, 224, 224)
 img_1channels_224 = torch.randn(2, 1, 224, 224)
+
+from vformer.models.dense.dpt import DPT, DPTDepthModel
 
 
 def test_VanillaViT():
@@ -391,3 +394,12 @@ def test_cct():
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
     del model
+
+
+def test_dpt():
+    model = DPTDepthModel()
+    img= torch.randn(3,3,384,384)
+    out= model(img)
+    print(out.shape)
+
+
