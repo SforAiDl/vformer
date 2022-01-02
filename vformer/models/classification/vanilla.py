@@ -20,7 +20,7 @@ class VanillaViT(BaseClassificationModel):
         Size of the image
     patch_size: int
         Size of a patch
-    num_classes: int
+    n_classes: int
         Number of classes for classification
     embedding_dim: int
         Dimension of hidden layer
