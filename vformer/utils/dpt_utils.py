@@ -6,6 +6,9 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
+
+
 #########################
 # classes
 
@@ -279,19 +282,10 @@ def get_activation(name):
     return hook
 
 
-attention = {}
 
-
-def get_activation(name):
-    def hook(model, input, output):
-        activations[name] = output
-
-    return hook
 
 
 attention = {}
-
-
 def get_attention(name):
     def hook(module, input, output):
         x = input[0]
@@ -540,10 +534,10 @@ def _make_vit_b_rn50_backbone(
     size=[384, 384],
     hooks=[0, 1, 8, 11],
     vit_features=768,
-    use_vit_only=False,
+    use_vit_only=True,
     use_readout="ignore",
     start_index=1,
-    enable_attention_hooks=False,
+    enable_attention_hooks=True,
 ):
     pretrained = nn.Module()
 
@@ -571,7 +565,6 @@ def _make_vit_b_rn50_backbone(
         pretrained.attention = attention
 
     pretrained.activations = activations
-
     readout_oper = get_readout_oper(vit_features, features, use_readout, start_index)
 
     if use_vit_only == True:
@@ -894,6 +887,6 @@ def _make_resnet_backbone(resnet):
     return pretrained
 
 
-def _make_pretrained_resnext101_wsl(use_pretrained):
+def _make_pretrained_resnext101_wsl():
     resnet = torch.hub.load("facebookresearch/WSL-Images", "resnext101_32x8d_wsl")
     return _make_resnet_backbone(resnet)

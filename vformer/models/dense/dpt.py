@@ -91,7 +91,6 @@ class DPT(nn.Module):
             x.contiguous(memory_format=torch.channels_last)
 
         layer_1, layer_2, layer_3, layer_4 = forward_vit(self.pretrained, x)
-
         layer_1_rn = self.scratch.layer1_rn(layer_1)
         layer_2_rn = self.scratch.layer2_rn(layer_2)
         layer_3_rn = self.scratch.layer3_rn(layer_3)
@@ -104,12 +103,13 @@ class DPT(nn.Module):
 
         out = self.scratch.output_conv(path_1)
 
+
         return out
 
 
 class DPTDepthModel(DPT):
     def __init__(
-        self, path=None, non_negative=True, scale=1.0, shift=0.0, invert=False, **kwargs
+        self, non_negative=True, scale=1.0, shift=0.0, invert=False, **kwargs
     ):
         features = kwargs["features"] if "features" in kwargs else 256
 
@@ -131,6 +131,7 @@ class DPTDepthModel(DPT):
 
     def forward(self, x):
         inv_depth = super().forward(x).squeeze(dim=1)
+
         if self.invert:
             depth = self.scale * inv_depth + self.shift
             depth[depth < 1e-8] = 1e-8

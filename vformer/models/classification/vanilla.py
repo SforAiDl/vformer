@@ -122,3 +122,6 @@ class VanillaViT(BaseClassificationModel):
         x = self.decoder(x)
 
         return x
+
+#register different models here
+
