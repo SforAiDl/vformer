@@ -63,7 +63,7 @@ class Attention_Block(nn.Module):
 
 
 class Visformer(nn.Module):
-    def __init__(self, image_size, depth, config, channel_config):
+    def __init__(self, image_size, depth: list, config: str, channel_config: list):
         super().__init__()
         q = 0
         if isinstance(image_size, int):
@@ -81,8 +81,8 @@ class Visformer(nn.Module):
             ]
         )
         q += 1
-        image_size = image_size // 2
-        for i in range(depth):
+        image_size = [i // 2 for i in image_size]
+        for i in range(len(depth)):
             if config[i] == 0:
                 self.stem.extend(
                     [Conv_Block(channel_config[q]) for j in range(depth[i])]
