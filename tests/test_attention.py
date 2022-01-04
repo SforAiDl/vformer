@@ -4,6 +4,7 @@ from vformer.attention.cross import CrossAttention
 from vformer.attention.spatial import SpatialAttention
 from vformer.attention.vanilla import VanillaSelfAttention
 from vformer.attention.window import WindowAttention
+from vformer.attention.multiscale import MultiScaleAttention
 
 
 def test_VanillaSelfAttention():
@@ -43,6 +44,7 @@ def test_CrossAttention():
     del attention
 
 
+    
 def test_SpatialAttention():
     test_tensor1 = torch.randn(4, 3136, 64)
     test_tensor2 = torch.randn(4, 50, 512)
@@ -63,3 +65,8 @@ def test_SpatialAttention():
     attention = SpatialAttention(dim=64, num_heads=1, sr_ratio=8, linear=True)
     out = attention(test_tensor1, 56, 56)
     assert out.shape == test_tensor1.shape
+
+    
+    def test_MultiScaleAttention():
+        test_tensor1 = torch.randn(256, 49, 96)
+        test_tensor2 = torch.randn(32, 64, 96)
