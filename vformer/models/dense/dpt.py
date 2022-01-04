@@ -111,7 +111,18 @@ class DPT(nn.Module):
 @MODEL_REGISTRY.register()
 class DPTDepthModel(DPT):
     def __init__(
-        self, backbone, non_negative=True, scale=1.0, shift=0.0, invert=False, **kwargs
+        self,
+        backbone,
+        features=256,
+        readout="project",
+        channels_last=False,
+        use_bn=False,
+        enable_attention_hooks=False,
+        non_negative=True,
+        scale=1.0,
+        shift=0.0,
+        invert=False,
+        **kwargs
     ):
         features = kwargs["features"] if "features" in kwargs else 256
 
@@ -129,7 +140,15 @@ class DPTDepthModel(DPT):
             nn.Identity(),
         )
 
-        super().__init__(head=head, backbone=backbone, **kwargs)
+        super().__init__(
+            head=head,
+            backbone=backbone,
+            features=features,
+            readout=readout,
+            channels_last=channels_last,
+            use_bn=use_bn,
+            enable_attention_hooks=enable_attention_hooks,
+        )
 
     def forward(self, x):
         inv_depth = super().forward(x).squeeze(dim=1)

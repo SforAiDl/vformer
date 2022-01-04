@@ -230,6 +230,16 @@ class FeatureFusionBlock_custom(nn.Module):
 
 
 def forward_vit(pretrained, x):
+    """
+
+    Parameters
+    -----------
+    pretrained: nn.Module
+    x: torch.Tensor
+
+    Returns:
+
+    """
     b, c, h, w = x.shape
 
     glob = pretrained.model.forward_flex(x)
@@ -338,7 +348,6 @@ def forward_flex(self, x):
             self.pos_embed.pos_embed, h // self.patch_size[1], w // self.patch_size[0]
         )
 
-    print(self.pos_embed)
     B = x.shape[0]
 
     if hasattr(self.patch_embed, "backbone"):
@@ -367,13 +376,11 @@ def forward_flex(self, x):
     try:
         x = self.pos_drop(x)
     except:
-        x = self.pos_embed.pos_drop
-    print("")
+        x = self.pos_embed.pos_drop(x)
     try:
         for blk in self.blocks:
             x = blk(x)
     except:
-        pass
         x = self.encoder(x)
     try:
         pass
@@ -864,50 +871,6 @@ def _make_pretrained_vitb16_384(
     )
 
 
-def _make_pretrained_deitb16_384(
-    pretrained, use_readout="ignore", hooks=None, enable_attention_hooks=False
-):
-    model = timm.create_model("vit_deit_base_patch16_384", pretrained=pretrained)
-
-    hooks = [2, 5, 8, 11] if hooks == None else hooks
-    return _make_vit_b16_backbone(
-        model,
-        features=[96, 192, 384, 768],
-        hooks=hooks,
-        use_readout=use_readout,
-        enable_attention_hooks=enable_attention_hooks,
-    )
-
-
-def _make_pretrained_deitb16_distil_384(
-    pretrained, use_readout="ignore", hooks=None, enable_attention_hooks=False
-):
-    """
-
-    Args:
-        pretrained:  bool
-        use_readout:
-        hooks:
-        enable_attention_hooks:
-
-    Returns:
-
-    """
-    model = timm.create_model(
-        "vit_deit_base_distilled_patch16_384", pretrained=pretrained
-    )
-
-    hooks = [2, 5, 8, 11] if hooks == None else hooks
-    return _make_vit_b16_backbone(
-        model,
-        features=[96, 192, 384, 768],
-        hooks=hooks,
-        use_readout=use_readout,
-        start_index=2,
-        enable_attention_hooks=enable_attention_hooks,
-    )
-
-
 def _make_encoder(
     backbone,
     features,
@@ -930,6 +893,15 @@ def _make_encoder(
             [96, 192, 384, 768], features, groups=groups, expand=expand
         )
 
+    elif backbone == "vitl16_384_vf":
+        pretrained = _make_vf_vitl16_384(
+            use_readout=use_readout,
+            hooks=hooks,
+            enable_attention_hooks=enable_attention_hooks,
+        )
+        scratch = _make_scratch(
+            [256, 512, 1024, 1024], features, groups=groups, expand=expand
+        )
     elif backbone == "vitl16_384":
         pretrained = _make_pretrained_vitl16_384(
             use_pretrained,
@@ -1061,6 +1033,29 @@ def _make_vf_vitb16_384(use_readout="ignore", hooks=None, enable_attention_hooks
         model,
         features=[96, 192, 384, 768],
         hooks=hooks,
+        use_readout=use_readout,
+        enable_attention_hooks=enable_attention_hooks,
+    )
+
+
+def _make_vf_vitl16_384(use_readout="ignore", hooks=None, enable_attention_hooks=False):
+    model = MODEL_REGISTRY.get("VanillaViT")(
+        img_size=384,
+        patch_size=16,
+        embedding_dim=1024,
+        head_dim=64,
+        depth=24,
+        attn_heads=16,
+        encoder_mlp_dim=1024,
+        n_classes=10,
+        in_channels=3,
+    )
+    hooks = [5, 11, 17, 23] if hooks == None else hooks
+    return _make_vf_vit_b16_backbone(
+        model,
+        features=[256, 512, 1024, 1024],
+        hooks=hooks,
+        vit_features=1024,
         use_readout=use_readout,
         enable_attention_hooks=enable_attention_hooks,
     )
