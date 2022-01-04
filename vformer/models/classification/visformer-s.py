@@ -156,9 +156,3 @@ def VisformerV2_Ti(img_size, n_class):
         "20202121",
         [3, 24, 48, 96, 192, 384],
     )
-
-
-summary(Visformer_S(224, 1000), (3, 224, 224))
-summary(VisformerV2_S(224, 1000), (3, 224, 224))
-summary(Visformer_Ti(224, 1000), (3, 224, 224))
-summary(VisformerV2_Ti(224, 1000), (3, 224, 224))
