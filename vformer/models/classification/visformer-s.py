@@ -6,7 +6,7 @@ from torchsummary import summary
 from vformer.attention import VanillaSelfAttention
 
 
-# need to add dropout,scale,head
+# need to add dropout,scale,head,visformerV2_ti
 # editted number of heads, head dim_s   need to change
 class Conv_Block(nn.Module):
     def __init__(self, in_channels, group=8, activation=nn.GELU, drop=0.0):
@@ -126,7 +126,39 @@ class Visformer(nn.Module):
         return x
 
 
-Visformer_s = Visformer(244, 1000, [4, 7, 2, 4, 2, 4], "202121", [3, 32, 192, 384, 768])
-Visformer_s_s2 = Visformer(
-    244, 1000, [2, 1, 2, 10, 2, 14, 2, 3], "20202121", [3, 32, 64, 128, 256, 512]
-)
+def Visformer_S(img_size, n_class):
+    return Visformer(
+        img_size, n_class, [4, 7, 2, 4, 2, 4], "202121", [3, 32, 192, 384, 768]
+    )
+
+
+def VisformerV2_S(img_size, n_class):
+    return Visformer(
+        img_size,
+        n_class,
+        [2, 1, 2, 10, 2, 14, 2, 3],
+        "20202121",
+        [3, 32, 64, 128, 256, 512],
+    )
+
+
+def Visformer_Ti(img_size, n_class):
+    return Visformer(
+        img_size, n_class, [4, 7, 2, 4, 2, 4], "202121", [3, 16, 96, 192, 384]
+    )
+
+
+def VisformerV2_Ti(img_size, n_class):
+    return Visformer(
+        img_size,
+        n_class,
+        [2, 1, 2, 4, 2, 6, 2, 2],
+        "20202121",
+        [3, 24, 48, 96, 192, 384],
+    )
+
+
+summary(Visformer_S(224, 1000), (3, 224, 224))
+summary(VisformerV2_S(224, 1000), (3, 224, 224))
+summary(Visformer_Ti(224, 1000), (3, 224, 224))
+summary(VisformerV2_Ti(224, 1000), (3, 224, 224))
