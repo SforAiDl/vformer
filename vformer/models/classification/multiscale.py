@@ -39,6 +39,7 @@ def __init__(self, cfg):
         mode = "conv"
         self.cls_embed_on = True
         self.sep_pos_embed = False
+        norm_stem = False
         norm_layer = partial(nn.LayerNorm, eps=1e-6)
         self.num_classes = num_classes
         self.patch_embed = stem_helper.PatchEmbed(
@@ -94,10 +95,10 @@ def __init__(self, cfg):
         for i in range(len(cfg.MVIT.HEAD_MUL)):
             head_mul[cfg.MVIT.HEAD_MUL[i][0]] = cfg.MVIT.HEAD_MUL[i][1]
 
-        pool_q = [[] for i in range(cfg.MVIT.DEPTH)]
-        pool_kv = [[] for i in range(cfg.MVIT.DEPTH)]
-        stride_q = [[] for i in range(cfg.MVIT.DEPTH)]
-        stride_kv = [[] for i in range(cfg.MVIT.DEPTH)]
+        pool_q = [[] for i in range(depth)]
+        pool_kv = [[] for i in range(depth)]
+        stride_q = [[] for i in range(depth)]
+        stride_kv = [[] for i in range(depth)]
 
         for i in range(len(cfg.MVIT.POOL_Q_STRIDE)):
             stride_q[cfg.MVIT.POOL_Q_STRIDE[i][0]] = cfg.MVIT.POOL_Q_STRIDE[i][
@@ -136,7 +137,7 @@ def __init__(self, cfg):
                     for s in cfg.MVIT.POOL_KV_STRIDE[i][1:]
                 ]
 
-        self.norm_stem = norm_layer(embed_dim) if cfg.MVIT.NORM_STEM else None
+        self.norm_stem = norm_layer(embed_dim) if norm_stem else None
 
         self.blocks = nn.ModuleList()
 
