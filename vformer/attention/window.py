@@ -2,13 +2,14 @@ import torch
 import torch.nn as nn
 from timm.models.layers import trunc_normal_
 
-from ..utils import get_relative_position_bias_index, pair
+from ..utils import ATTENTION_REGISTRY, get_relative_position_bias_index, pair
 
 
+@ATTENTION_REGISTRY.register()
 class WindowAttention(nn.Module):
     """
-    Parameters:
-    -----------
+    Parameters
+    ----------
     dim: int
         Number of input channels.
     window_size : int or tuple[int]
@@ -19,9 +20,9 @@ class WindowAttention(nn.Module):
         If True, add a learnable bias to query, key, value.
     qk_scale: float, optional
         Override default qk scale of head_dim ** -0.5 if set
-    attn_drop: float, optional
+    attn_dropout: float, optional
         Dropout rate
-    proj_drop: float, optional
+    proj_dropout: float, optional
         Dropout rate
 
     """
@@ -33,10 +34,11 @@ class WindowAttention(nn.Module):
         num_heads,
         qkv_bias=True,
         qk_scale=None,
-        attn_drop=0.0,
-        proj_drop=0.0,
+        attn_dropout=0.0,
+        proj_dropout=0.0,
     ):
         super(WindowAttention, self).__init__()
+
         self.dim = dim
         self.window_size = pair(window_size)
         self.num_heads = num_heads
@@ -52,11 +54,29 @@ class WindowAttention(nn.Module):
         self.register_buffer("relative_position_index", relative_position_index)
 
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
-        self.to_out_1 = nn.Sequential(nn.Softmax(dim=-1), nn.Dropout(attn_drop))
-        self.to_out_2 = nn.Sequential(nn.Linear(dim, dim), nn.Dropout(proj_drop))
+        self.to_out_1 = nn.Sequential(nn.Softmax(dim=-1), nn.Dropout(attn_dropout))
+        self.to_out_2 = nn.Sequential(nn.Linear(dim, dim), nn.Dropout(proj_dropout))
         trunc_normal_(self.relative_position_bias_table, std=0.2)
 
     def forward(self, x, mask=None):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            input Tensor
+        mask: torch.Tensor
+            Attention mask used for shifted window attention, if None, window attention will be used,
+            else attention mask will be taken into consideration.
+            for better understanding you may refer `this <https://github.com/microsoft/Swin-Transformer/issues/38>`
+
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor by applying Window-Attention or Shifted-Window-Attention on input tensor
+
+        """
+
         B_, N, C = x.shape
         qkv = (
             self.qkv(x)
@@ -95,4 +115,5 @@ class WindowAttention(nn.Module):
         attn = self.to_out_1(attn)
         x = (attn @ v).transpose(1, 2).reshape(B_, N, C)
         x = self.to_out_2(x)
+
         return x

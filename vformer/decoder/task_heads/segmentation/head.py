@@ -2,11 +2,12 @@ import torch
 import torch.nn as nn
 from torchvision.transforms.functional import resize
 
+from ....utils import DECODER_REGISTRY
 
-# U-net like structre is used here
+
 class DoubleConv(nn.Module):
     """
-    This is a module consisting two convolution layers and activations, we will use this in up-sampling block
+    Module consisting of two convolution layers and activations
     """
 
     def __init__(
@@ -15,6 +16,7 @@ class DoubleConv(nn.Module):
         out_channels,
     ):
         super(DoubleConv, self).__init__()
+
         self.conv = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, 3, 1, 1, bias=False),
             nn.BatchNorm2d(out_channels),
@@ -28,6 +30,7 @@ class DoubleConv(nn.Module):
         return self.conv(x)
 
 
+@DECODER_REGISTRY.register()
 class SegmentationHead(nn.Module):
     """
     U-net like up-sampling block
@@ -39,6 +42,7 @@ class SegmentationHead(nn.Module):
         embed_dims=[64, 128, 256, 512],
     ):
         super(SegmentationHead, self).__init__()
+
         self.ups = nn.ModuleList()
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
@@ -63,7 +67,9 @@ class SegmentationHead(nn.Module):
 
         x = self.bottleneck(skip_connections[-1])
         skip_connections = skip_connections[::-1]
+
         for idx in range(0, len(self.ups), 2):
+
             x = self.ups[idx](x)
             skip_connection = skip_connections[idx // 2]
 
@@ -74,4 +80,5 @@ class SegmentationHead(nn.Module):
             x = self.ups[idx + 1](concat_skip)
 
         x = self.conv1(x)
+
         return self.conv2(x)

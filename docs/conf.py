@@ -54,8 +54,8 @@ master_doc = "index"
 
 # General information about the project.
 project = "vformer"
-copyright = "2021, Neelay Shah"
-author = "Neelay Shah"
+copyright = "2021, Neelay Shah, Abhijit Deo, Aditya Agrawal"
+author = "Neelay Shah, Abhijit Deo, Aditya Agrawal"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -159,6 +159,6 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
-
+autodoc_mock_imports = ["einops", "timm"]
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True

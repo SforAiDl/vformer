@@ -6,8 +6,9 @@ from ..utils import pair
 
 class PatchMerging(nn.Module):
     """
-    Parameters :
-    ------------
+
+    Parameters
+    ----------
     input_resolution: int or tuple[int]
         Resolution of input features
     dim : int

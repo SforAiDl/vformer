@@ -4,15 +4,18 @@ import torch.nn as nn
 from timm.models.layers import trunc_normal_
 
 from ...decoder import MLPDecoder
-from ...encoder import AbsolutePositionEmbedding, OverlapPatchEmbed, PVTEncoder
+from ...encoder import OverlapPatchEmbed, PVTEncoder, PVTPosEmbedding
+from ...utils import MODEL_REGISTRY
 
 
+@MODEL_REGISTRY.register()
 class PVTClassification(nn.Module):
     """
-    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
+    Implementation of Pyramid Vision Transformer:
+    https://arxiv.org/abs/2102.12122v1
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Image size
     patch_size: list(int)
@@ -32,24 +35,25 @@ class PVTClassification(nn.Module):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 Spatial Attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
-    attn_drop_rate:  float,
+    attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
     norm_layer:
         Normalization layer, default is nn.LayerNorm
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     decoder_config:int or tuple[int], optional
         Configuration of the decoder. If None, the default configuration is used.
     linear: bool
-        Whether to use
+        Whether to use linear Spatial attention, default is False
     use_dwconv: bool
-        Whether to use Depth-wise convolutions in the overlap-patch embedding layer
+        Whether to use Depth-wise convolutions, default is False
     ape: bool
-        Whether to use absolute position embedding
+        Whether to use absolute position embedding, default is True
     """
 
     def __init__(
@@ -64,7 +68,7 @@ class PVTClassification(nn.Module):
         qkv_bias=False,
         qk_scale=None,
         p_dropout=0.0,
-        attn_drop_rate=0.0,
+        attn_dropout=0.0,
         drop_path_rate=0.0,
         norm_layer=nn.LayerNorm,
         depths=[3, 4, 6, 3],
@@ -94,7 +98,7 @@ class PVTClassification(nn.Module):
                             patch_size=patch_size[i],
                             stride=4 if i == 0 else 2,
                             in_channels=in_channels if i == 0 else embed_dims[i - 1],
-                            embed_dim=embed_dims[i],
+                            embedding_dim=embed_dims[i],
                         )
                     ]
                 )
@@ -104,7 +108,7 @@ class PVTClassification(nn.Module):
                     self.pos_embeds.append(
                         nn.ModuleList(
                             [
-                                AbsolutePositionEmbedding(
+                                PVTPosEmbedding(
                                     pos_shape=img_size // np.prod(patch_size[: i + 1]),
                                     pos_dim=embed_dims[i],
                                 )
@@ -131,7 +135,7 @@ class PVTClassification(nn.Module):
                             qk_scale=qk_scale,
                             p_dropout=p_dropout,
                             depth=depths[i],
-                            attn_drop=attn_drop_rate,
+                            attn_dropout=attn_dropout,
                             drop_path=dpr[sum(depths[:i]) : sum(depths[: i + 1])],
                             sr_ratio=sr_ratios[i],
                             linear=linear,
@@ -160,6 +164,18 @@ class PVTClassification(nn.Module):
             self.decoder = MLPDecoder(config=embed_dims[-1], n_classes=num_classes)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of size `num_classes`
+
+        """
         B = x.shape[0]
         for i in range(len(self.depths)):
             patch_embed = self.patch_embeds[i]
@@ -186,21 +202,23 @@ class PVTClassification(nn.Module):
         return x
 
 
+@MODEL_REGISTRY.register()
 class PVTClassificationV2(PVTClassification):
     """
-    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v2
+    Implementation of Pyramid Vision Transformer:
+    https://arxiv.org/abs/2102.12122v2
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     img_size: int
         Image size
     patch_size: list(int)
         List of patch size
     in_channels: int
-        Input channels in image, default=3
+        Input channels in image, default is 3
     num_classes: int
         Number of classes for classification
-    embed_dims:  int
+    embedding_dims:  int
         Patch Embedding dimension
     num_heads:tuple[int]
         Number of heads in each transformer layer
@@ -211,24 +229,25 @@ class PVTClassificationV2(PVTClassification):
     qkv_bias: bool, default= True
         Adds bias to the qkv if true
     qk_scale: float, optional
+        Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
     p_dropout: float,
         Dropout rate,default is 0.0
-    attn_drop_rate:  float,
+    attn_dropout:  float,
         Attention dropout rate, default is 0.0
     drop_path_rate: float
         Stochastic depth rate, default is 0.1
-    norm_layer:
+    norm_layer:nn.Module
         Normalization layer, default is nn.LayerNorm
-    sr_ratio: float
+    sr_ratios: float
         Spatial reduction ratio
     decoder_config:int or tuple[int], optional
         Configuration of the decoder. If None, the default configuration is used.
     linear: bool
-        Whether to use
+        Whether to use linear Spatial attention, default is False
     use_dwconv: bool
-        Whether to use Depth-wise convolutions in the overlap-patch embedding layer
+        Whether to use Depth-wise convolutions, default is True
     ape: bool
-        Whether to use absolute position embedding
+        Whether to use absolute position embedding, default is false
     """
 
     def __init__(
@@ -237,13 +256,13 @@ class PVTClassificationV2(PVTClassification):
         patch_size=[7, 3, 3, 3],
         in_channels=3,
         num_classes=1000,
-        embed_dims=[64, 128, 256, 512],
+        embedding_dims=[64, 128, 256, 512],
         num_heads=[1, 2, 4, 8],
         mlp_ratio=[4, 4, 4, 4],
         qkv_bias=False,
         qk_scale=0.0,
         p_dropout=0.0,
-        attn_drop_rate=0.0,
+        attn_dropout=0.0,
         drop_path_rate=0.0,
         norm_layer=nn.LayerNorm,
         depths=[3, 4, 6, 3],
@@ -258,13 +277,13 @@ class PVTClassificationV2(PVTClassification):
             patch_size=patch_size,
             in_channels=in_channels,
             num_classes=num_classes,
-            embed_dims=embed_dims,
+            embed_dims=embedding_dims,
             num_heads=num_heads,
             mlp_ratio=mlp_ratio,
             qkv_bias=qkv_bias,
             qk_scale=qk_scale,
             p_dropout=p_dropout,
-            attn_drop_rate=attn_drop_rate,
+            attn_dropout=attn_dropout,
             drop_path_rate=drop_path_rate,
             norm_layer=norm_layer,
             depths=depths,

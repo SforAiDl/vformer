@@ -4,29 +4,30 @@ from timm.models.layers import DropPath
 from ..attention import SpatialAttention
 from ..common.blocks import DWConv
 from ..functional import PreNorm
+from ..utils import ENCODER_REGISTRY
 
 
 class PVTFeedForward(nn.Module):
     """
+
+    Parameters
+    ----------
     dim: int
         Dimension of the input tensor
     hidden_dim: int, optional
         Dimension of hidden layer
     out_dim:int, optional
         Dimension of output tensor
-    act_layer: Activation class
+    act_layer: nn.Module
         Activation Layer, default is nn.GELU
     p_dropout: float
         Dropout probability/rate, default is 0.0
     linear: bool
-        default=False
+        Whether to use linear Spatial attention,default is False
     use_dwconv: bool
-        default=False
+        Whether to use Depth-wise convolutions, default is False
 
-
-    Kwargs:
-    ----------
-    kernel_size_dwconv: int,optional
+    kernel_size_dwconv: int
         `kernel_size` parameter for 2D convolution used in Depth wise convolution
     stride_dwconv: int
         `stride` parameter for 2D convolution used in Depth wise convolution
@@ -48,13 +49,16 @@ class PVTFeedForward(nn.Module):
         **kwargs
     ):
         super(PVTFeedForward, self).__init__()
+
         out_dim = out_dim if out_dim is not None else dim
         hidden_dim = hidden_dim if hidden_dim is not None else dim
         self.use_dwconv = use_dwconv
         self.fc1 = nn.Linear(dim, hidden_dim)
         self.relu = nn.ReLU(inplace=True) if linear else nn.Identity()
+
         if use_dwconv:
             self.dw_conv = DWConv(dim=hidden_dim, **kwargs)
+
         self.to_out = nn.Sequential(
             act_layer(),
             nn.Dropout(p=p_dropout),
@@ -63,16 +67,37 @@ class PVTFeedForward(nn.Module):
         )
 
     def forward(self, x, **kwargs):
+
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        H: int
+            Height of image patch
+        W: int
+            Width of image patch
+
+        Returns
+        --------
+        torch.Tensor
+            Returns output tensor
+
+        """
         x = self.relu(self.fc1(x))
+
         if self.use_dwconv:
             x = self.dw_conv(x, **kwargs)
+
         return self.to_out(x)
 
 
+@ENCODER_REGISTRY.register()
 class PVTEncoder(nn.Module):
     """
-    Parameters:
-    ------------
+    Parameters
+    ----------
     dim: int
         Dimension of the input tensor
     num_heads: int
@@ -84,9 +109,10 @@ class PVTEncoder(nn.Module):
     qkv_bias: bool
         Whether to add a bias vector to the q,k, and v matrices
     qk_scale:float, optional
+        Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
     p_dropout: float
         Dropout probability
-    attn_drop: float
+    attn_dropout: float
         Dropout probability
     drop_path: tuple(float)
         List of stochastic drop rate
@@ -97,7 +123,7 @@ class PVTEncoder(nn.Module):
     sr_ratio: float
         Spatial Reduction ratio
     linear: bool
-
+        Whether to use linear Spatial attention, default is False
     """
 
     def __init__(
@@ -109,7 +135,7 @@ class PVTEncoder(nn.Module):
         qkv_bias,
         qk_scale,
         p_dropout,
-        attn_drop,
+        attn_dropout,
         drop_path,
         act_layer,
         use_dwconv,
@@ -117,7 +143,9 @@ class PVTEncoder(nn.Module):
         linear=False,
     ):
         super(PVTEncoder, self).__init__()
+
         self.encoder = nn.ModuleList([])
+
         for i in range(depth):
             self.encoder.append(
                 nn.ModuleList(
@@ -129,7 +157,7 @@ class PVTEncoder(nn.Module):
                                 num_heads=num_heads,
                                 qkv_bias=qkv_bias,
                                 qk_scale=qk_scale,
-                                attn_drop=attn_drop,
+                                attn_drop=attn_dropout,
                                 proj_drop=p_dropout,
                                 sr_ratio=sr_ratio,
                                 linear=linear,
@@ -156,7 +184,9 @@ class PVTEncoder(nn.Module):
             )
 
     def forward(self, x, **kwargs):
+
         for prenorm_attn, prenorm_ff in self.encoder:
             x = x + self.drop_path(prenorm_attn(x, **kwargs))
             x = x + self.drop_path(prenorm_ff(x, **kwargs))
+
         return x

@@ -2,30 +2,35 @@ import torch
 import torch.nn as nn
 from einops import rearrange
 
+from ..utils import ATTENTION_REGISTRY
 
+
+@ATTENTION_REGISTRY.register()
 class VanillaSelfAttention(nn.Module):
     """
     Vanilla O(n^2) Self attention
-    Parameters:
-    -----------
+
+    Parameters
+    ----------
     dim: int
         Dimension of the embedding
-    heads: int
+    num_heads: int
         Number of the attention heads
-    dim_head: int
+    head_dim: int
         Dimension of each head
     p_dropout: float
         Dropout Probability
+
     """
 
-    def __init__(self, dim, heads=8, dim_head=64, p_dropout=0.0):
+    def __init__(self, dim, num_heads=8, head_dim=64, p_dropout=0.0):
         super().__init__()
 
-        inner_dim = dim_head * heads
-        project_out = not (heads == 1 and dim_head == dim)
+        inner_dim = head_dim * num_heads
+        project_out = not (num_heads == 1 and head_dim == dim)
 
-        self.heads = heads
-        self.scale = dim_head ** -0.5
+        self.num_heads = num_heads
+        self.scale = head_dim ** -0.5
 
         self.attend = nn.Softmax(dim=-1)
         self.to_qkv = nn.Linear(dim, inner_dim * 3, bias=False)
@@ -37,8 +42,22 @@ class VanillaSelfAttention(nn.Module):
         )
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor by applying self-attention on input tensor
+
+        """
         qkv = self.to_qkv(x).chunk(3, dim=-1)
-        q, k, v = map(lambda t: rearrange(t, "b n (h d) -> b h n d", h=self.heads), qkv)
+        q, k, v = map(
+            lambda t: rearrange(t, "b n (h d) -> b h n d", h=self.num_heads), qkv
+        )
 
         dots = torch.matmul(q, k.transpose(-1, -2)) * self.scale
 

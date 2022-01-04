@@ -5,42 +5,18 @@ Installation
 ============
 
 
-Stable release
---------------
-
-To install vformer, run this command in your terminal:
-
-.. code-block:: console
-
-    $ pip install vformer
-
-This is the preferred method to install vformer, as it will always install the most recent stable release.
-
-If you don't have `pip`_ installed, this `Python installation guide`_ can guide
-you through the process.
-
-.. _pip: https://pip.pypa.io
-.. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
-
-
-From sources
+From source (recommended)
 ------------
 
-The sources for vformer can be downloaded from the `Github repo`_.
+VFormer can be installed from the `GitHub repo`_.
 
-You can either clone the public repository:
-
-.. code-block:: console
-
-    $ git clone git://github.com/SforAiDl/vformer
-
-Or download the `tarball`_:
+Clone the public repository:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/SforAiDl/vformer/tarball/master
+    $ git clone https://github.com/SforAiDl/vformer.git
 
-Once you have a copy of the source, you can install it with:
+and then run the following command to install VFormer:
 
 .. code-block:: console
 
@@ -48,4 +24,19 @@ Once you have a copy of the source, you can install it with:
 
 
 .. _Github repo: https://github.com/SforAiDl/vformer
-.. _tarball: https://github.com/SforAiDl/vformer/tarball/master
+
+
+Stable release
+--------------
+
+To install VFormer, run this command in your terminal:
+
+.. code-block:: console
+
+    $ pip install vformer
+
+Note that VFormer is an active project and routinely publishes new releases. In order to upgrade VFormer to the latest version, use pip as follows:
+
+.. code-block:: console
+
+    $ pip install -U vformer
