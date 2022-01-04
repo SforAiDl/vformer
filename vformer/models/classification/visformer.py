@@ -5,6 +5,8 @@ from torchsummary import summary
 
 from vformer.attention import VanillaSelfAttention
 
+from ...utils import MODEL_REGISTRY
+
 
 # need to add dropout,scale,head,visformerV2_ti
 # editted number of heads, head dim_s   need to change
@@ -66,6 +68,7 @@ class Attention_Block(nn.Module):
         return x
 
 
+@MODEL_REGISTRY.register()
 class Visformer(nn.Module):
     def __init__(
         self, image_size, n_classes, depth: list, config: str, channel_config: list
@@ -126,12 +129,14 @@ class Visformer(nn.Module):
         return x
 
 
+@MODEL_REGISTRY.register()
 def Visformer_S(img_size, n_class):
     return Visformer(
         img_size, n_class, [4, 7, 2, 4, 2, 4], "202121", [3, 32, 192, 384, 768]
     )
 
 
+@MODEL_REGISTRY.register()
 def VisformerV2_S(img_size, n_class):
     return Visformer(
         img_size,
@@ -142,12 +147,14 @@ def VisformerV2_S(img_size, n_class):
     )
 
 
+@MODEL_REGISTRY.register()
 def Visformer_Ti(img_size, n_class):
     return Visformer(
         img_size, n_class, [4, 7, 2, 4, 2, 4], "202121", [3, 16, 96, 192, 384]
     )
 
 
+@MODEL_REGISTRY.register()
 def VisformerV2_Ti(img_size, n_class):
     return Visformer(
         img_size,
