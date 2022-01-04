@@ -403,27 +403,33 @@ def test_dpt():
     img = torch.randn(4, 3, 384, 384)
     out = model(img)
     assert out.shape == (4, 384, 384)
+    del model
 
     model = DPTDepthModel(backbone="vitb16_384")
     out = model(img)
     assert out.shape == (4, 384, 384)
+    del model
 
     model = DPTDepthModel(backbone="vitb_rn50_384")
     out = model(img)
     assert out.shape == (4, 384, 384)
+    del model
 
     model = MODEL_REGISTRY.get("DPTDepthModel")(
         backbone="vitb16_384_vf", use_bn=True, enable_attention_hooks=False
     )  # using vformer vit implementation
     out = model(img)
     assert out.shape == (4, 384, 384)
+    del model
 
     model = MODEL_REGISTRY.get("DPTDepthModel")(backbone="vitl16_384_vf")
     out = model(img)
     assert out.shape == (4, 384, 384)
+    del model
 
     model = MODEL_REGISTRY.get("DPTDepthModel")(
         backbone="vitl16_384_vf", channels_last=True
     )
     out = model(img)
     assert out.shape == (4, 384, 384)
+    del model
