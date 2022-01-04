@@ -1,3 +1,4 @@
+import math
 import torch
 import torch.nn as nn
 
@@ -202,38 +203,13 @@ def __init__(self, cfg):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    @torch.jit.ignore
-    def no_weight_decay(self):
-        if self.cfg.MVIT.ZERO_DECAY_POS_CLS:
-            if self.sep_pos_embed:
-                if self.cls_embed_on:
-                    return {
-                        "pos_embed_spatial",
-                        "pos_embed_temporal",
-                        "pos_embed_class",
-                        "cls_token",
-                    }
-                else:
-                    return {
-                        "pos_embed_spatial",
-                        "pos_embed_temporal",
-                        "pos_embed_class",
-                    }
-            else:
-                if self.cls_embed_on:
-                    return {"pos_embed", "cls_token"}
-                else:
-                    return {"pos_embed"}
-        else:
-            return {}
-
-    def forward(self, x):
+    def forward(self,spatial_size,temporal_size, x):
         x = x[0]
         x = self.patch_embed(x)
-
-        T = self.cfg.DATA.NUM_FRAMES // self.patch_stride[0]
-        H = self.cfg.DATA.TRAIN_CROP_SIZE // self.patch_stride[1]
-        W = self.cfg.DATA.TRAIN_CROP_SIZE // self.patch_stride[2]
+        
+        T = temporal_size // self.patch_stride[0]
+        H = spatial_size // self.patch_stride[1]
+        W = spatial_size // self.patch_stride[2]
         B, N, C = x.shape
 
         if self.cls_embed_on:
