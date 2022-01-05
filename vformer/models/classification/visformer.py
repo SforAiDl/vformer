@@ -9,6 +9,7 @@ from ...utils import MODEL_REGISTRY
 
 # need to add dropout,scale,head,visformerV2_ti
 # editted number of heads, head dim_s   need to change
+# run one epoch to check if the model is working
 class Conv_Block(nn.Module):
     def __init__(self, in_channels, group=8, activation=nn.GELU, drop=0.0):
         super(Conv_Block, self).__init__()
@@ -74,6 +75,9 @@ class Visformer(nn.Module):
     ):
         super().__init__()
         q = 0
+        assert (
+            len(channel_config) == len(depth) - depth.count(0) + 2
+        ), "channel config is not correct"
         self.linear = nn.Linear(channel_config[-1], n_classes)
         if isinstance(image_size, int):
             image_size = (image_size, image_size)
@@ -93,8 +97,27 @@ class Visformer(nn.Module):
             ]
         )
         q += 1
+        emb = 2
         image_size = [i // 2 for i in image_size]
         for i in range(len(depth)):
+            if depth[i] == 0:
+                emb *= 2
+                config = "0" + config
+                continue
+            self.stem.extend(
+                [
+                    nn.Conv2d(
+                        channel_config[q],
+                        channel_config[q + 1],
+                        kernel_size=emb,
+                        stride=emb,
+                    ),
+                    nn.BatchNorm2d(channel_config[q + 1]),
+                ]
+            )
+            emb = 2
+            q += 1
+            image_size = [k // depth[i] for k in image_size]
             if config[i] == "0":
                 self.stem.extend(
                     [Conv_Block(channel_config[q]) for j in range(depth[i])]
@@ -103,21 +126,6 @@ class Visformer(nn.Module):
                 self.stem.extend(
                     [Attention_Block(channel_config[q]) for j in range(depth[i])]
                 )
-            elif config[i] == "2":
-                self.stem.extend(
-                    [
-                        nn.Conv2d(
-                            channel_config[q],
-                            channel_config[q + 1],
-                            kernel_size=depth[i],
-                            stride=depth[i],
-                        ),
-                        nn.BatchNorm2d(channel_config[q + 1]),
-                    ]
-                )
-                q += 1
-                image_size = [k // depth[i] for k in image_size]
-            assert q < len(channel_config), "channel configuration not complete"
         self.stem.extend([nn.BatchNorm2d(channel_config[-1]), nn.AdaptiveAvgPool2d(1)])
 
     def forward(self, x):
@@ -130,9 +138,7 @@ class Visformer(nn.Module):
 
 @MODEL_REGISTRY.register()
 def Visformer_S(img_size, n_class):
-    return Visformer(
-        img_size, n_class, [4, 7, 2, 4, 2, 4], "202121", [3, 32, 192, 384, 768]
-    )
+    return Visformer(img_size, n_class, [0, 7, 4, 4], "011", [3, 32, 192, 384, 768])
 
 
 @MODEL_REGISTRY.register()
@@ -140,17 +146,15 @@ def VisformerV2_S(img_size, n_class):
     return Visformer(
         img_size,
         n_class,
-        [2, 1, 2, 10, 2, 14, 2, 3],
-        "20202121",
+        [1, 10, 14, 3],
+        "0011",
         [3, 32, 64, 128, 256, 512],
     )
 
 
 @MODEL_REGISTRY.register()
 def Visformer_Ti(img_size, n_class):
-    return Visformer(
-        img_size, n_class, [4, 7, 2, 4, 2, 4], "202121", [3, 16, 96, 192, 384]
-    )
+    return Visformer(img_size, n_class, [0, 7, 4, 4], "011", [3, 16, 96, 192, 384])
 
 
 @MODEL_REGISTRY.register()
@@ -158,7 +162,10 @@ def VisformerV2_Ti(img_size, n_class):
     return Visformer(
         img_size,
         n_class,
-        [2, 1, 2, 4, 2, 6, 2, 2],
-        "20202121",
+        [1, 4, 6, 2],
+        "0011",
         [3, 24, 48, 96, 192, 384],
     )
+
+
+print(Visformer_S(224, 1000))
