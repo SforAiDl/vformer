@@ -10,45 +10,51 @@ from ....utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class PVTSegmentation(nn.Module):
     """
-    Implementation of Pyramid Vision Transformer:
-    https://arxiv.org/abs/2102.12122v1
+        Implementation of Pyramid Vision Transformer:
+        https://arxiv.org/abs/2102.12122v1
 
-    Parameters
-    ----------
-    img_size: int
-        Image size
-    patch_size: list(int)
-        List of patch size
-    in_channels: int
-        Input channels in image, default=3
-    embedding_dims:  int
-        Patch Embedding dimension
-    num_heads:tuple[int]
-        Number of heads in each transformer layer
-    depths: tuple[int]
-        Depth in each Transformer layer
-    mlp_ratio: float
-        Ratio of mlp heads to embedding dimension
-    qkv_bias: bool, default= True
-        Adds bias to the qkv if true
-    qk_scale: float, optional
-        Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
-    p_dropout: float
-        Dropout rate,default is 0.0
-    attn_dropout:  float
-        Attention dropout rate, default is 0.0
-    drop_path_rate: float
-        Stochastic depth rate, default is 0.1
-    sr_ratios: float
-        Spatial reduction ratio
-    linear: bool
-        Whether to use linear spatial attention
-    use_dwconv: bool
-        Whether to use Depth-wise convolutions in Overlap-patch embedding
-    ape: bool
-        Whether to use absolute position embedding
-    return_pyramid:bool
-        Whether to use all pyramid feature layers for up-sampling, default is False
+        Parameters
+        ----------
+        img_size: int
+            Image size
+        patch_size: list(int)
+            List of patch size
+        in_channels: int
+            Input channels in image, default=3
+        embedding_dims:  int
+            Patch Embedding dimension
+        num_heads:tuple[int]
+            Number of heads in each transformer layer
+        depths: tuple[int]
+            Depth in each Transformer layer
+        mlp_ratio: float
+            Ratio of mlp heads to embedding dimension
+        qkv_bias: bool, default= True
+            Adds bias to the qkv if true
+        qk_scale: float, optional
+    <<<<<<< HEAD
+            Override default qk scale of head_dim ** -0.5 in Spatial Attention if set
+        p_dropout: float
+            Dropout rate,default is 0.0
+        attn_dropout:  float
+    =======
+        p_dropout: float
+            Dropout rate,default is 0.0
+        attn_drop_rate:  float
+    >>>>>>> b7146b2c4ec168ba2ae27ba31476fb38de7ee199
+            Attention dropout rate, default is 0.0
+        drop_path_rate: float
+            Stochastic depth rate, default is 0.1
+        sr_ratios: float
+            Spatial reduction ratio
+        linear: bool
+            Whether to use linear spatial attention
+        use_dwconv: bool
+            Whether to use Depth-wise convolutions in Overlap-patch embedding
+        ape: bool
+            Whether to use absolute position embedding
+        return_pyramid:bool
+            Whether to use all pyramid feature layers for up-sampling, default is False
     """
 
     def __init__(

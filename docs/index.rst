@@ -21,6 +21,19 @@ Welcome to VFormer's documentation!
    api/utils/index
    api/viz/index
 
+.. toctree::
+   :maxdepth: 2
+   :caption: API References:
+   
+   api/attention/index
+   api/common/index
+   api/decoder/index
+   api/encoder/index
+   api/functional/index
+   api/models/index
+   api/utils/index
+   api/viz/index
+
 Indices and tables
 ==================
 * :ref:`genindex`

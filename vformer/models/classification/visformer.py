@@ -3,7 +3,8 @@ import torch
 import torch.nn as nn
 
 from vformer.attention import VanillaSelfAttention
-from vformer.utils import MODEL_REGISTRY
+
+from ...utils import MODEL_REGISTRY
 
 
 # need to add dropout,scale,head,visformerV2_ti
