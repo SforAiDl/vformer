@@ -391,3 +391,24 @@ def test_cct():
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
     del model
+
+
+def test_dpt():
+    model = MODEL_REGISTRY.get("DPTDepth")(
+        "vitb16_384",
+        enable_attention_hooks=True,
+    )
+    img = torch.randn(4, 3, 384, 384)
+    out = model(img)
+    assert out.shape == (4, 384, 384)
+    del model
+
+    model = MODEL_REGISTRY.get("DPTDepth")("vitl16_384", invert=True, readout="ignore")
+    out = model(img)
+    assert out.shape == (4, 384, 384)
+    del model
+
+    model = MODEL_REGISTRY.get("DPTDepth")("vitb16_384", invert=True, readout="add")
+    out = model(img)
+    assert out.shape == (4, 384, 384)
+    del model

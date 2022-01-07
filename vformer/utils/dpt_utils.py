@@ -172,10 +172,7 @@ class FeatureFusionBlock_custom(nn.Module):
         expand=False,
         align_corners=True,
     ):
-        """Init.
-        Args:
-            features (int): number of features
-        """
+
         super(FeatureFusionBlock_custom, self).__init__()
 
         self.deconv = deconv
@@ -226,7 +223,23 @@ class FeatureFusionBlock_custom(nn.Module):
         return output
 
 
-####################
+def forward_flex(self, x):
+    b, c, h, w = x.shape
+
+    pos_embed = self.model._resize_pos_embed(
+        self.model.pos_embed.pos_embed,
+        h // self.model.patch_size[1],
+        w // self.model.patch_size[0],
+    )
+
+    B = x.shape[0]
+    x = self.model.patch_embed.patch_embedding(x)
+    cls_tokens = self.model.cls_token.expand(B, -1, -1)
+    x = torch.cat((cls_tokens, x), dim=1)
+    x = x + pos_embed
+    x = self.model.pos_embed.pos_drop(x)
+    x = self.model.encoder(x)
+    return x
 
 
 def _resize_pos_embed(self, posemb, gs_h, gs_w):
