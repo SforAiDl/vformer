@@ -153,6 +153,7 @@ class Visformer(nn.Module):
     ):
         super().__init__()
 
+
         q = 0
         assert (
             len(channel_config) == len(depth) - depth.count(0) + 2
