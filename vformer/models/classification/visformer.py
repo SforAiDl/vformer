@@ -45,6 +45,7 @@ class Visformer_Conv_Block(nn.Module):
 
     def forward(self, x):
 
+
         xt = x
         xt = self.norm1(xt)
         x = self.conv1(x)
