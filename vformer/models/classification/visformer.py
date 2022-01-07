@@ -7,11 +7,10 @@ from ...utils import MODEL_REGISTRY
 
 
 # need to add visformerV2_ti
-# editted number of need to change
-# run one epoch to check if the model is working
 class Conv_Block(nn.Module):
-    def __init__(self, in_channels, group=8, activation=nn.GELU, drop=0.0):
+    def __init__(self, in_channels, group=8, activation=nn.GELU, p_dropout=0.0):
         super(Conv_Block, self).__init__()
+
         self.norm1 = nn.BatchNorm2d(in_channels)
         self.conv1 = nn.Conv2d(in_channels, in_channels * 2, kernel_size=1, bias=False)
         self.act1 = activation()
@@ -25,9 +24,10 @@ class Conv_Block(nn.Module):
         )
         self.act2 = activation()
         self.conv3 = nn.Conv2d(in_channels * 2, in_channels, kernel_size=1, bias=False)
-        self.drop = nn.Dropout(drop)
+        self.drop = nn.Dropout(p_dropout)
 
     def forward(self, x):
+
         xt = x
         xt = self.norm1(xt)
         x = self.conv1(x)
@@ -42,8 +42,9 @@ class Conv_Block(nn.Module):
 
 
 class Attention_Block(nn.Module):
-    def __init__(self, channels, num_heads=8, drop=0.0):
+    def __init__(self, channels, num_heads=8, p_dropout=0.0):
         super().__init__()
+
         self.conv1 = nn.Conv2d(channels, channels * 4, kernel_size=1, bias=False)
         self.conv2 = nn.Conv2d(channels * 4, channels, kernel_size=1, bias=False)
         self.attn = VanillaSelfAttention(
@@ -51,7 +52,7 @@ class Attention_Block(nn.Module):
         )
         self.norm1 = nn.BatchNorm2d(channels)
         self.norm2 = nn.BatchNorm2d(channels)
-        self.drop = nn.Dropout(drop)
+        self.drop = nn.Dropout(p_dropout)
 
     def forward(self, x):
         B, C, H, W = x.shape
@@ -75,22 +76,25 @@ class Attention_Block(nn.Module):
 class Visformer(nn.Module):
     def __init__(
         self,
-        image_size,
+        img_size,
         n_classes,
         depth: list,
         config: str,
         channel_config: list,
         num_heads=8,
-        drop=0.0,
+        conv_group=8,
+        p_dropout_conv=0.0,
+        p_dropout_attn=0.0,
     ):
         super().__init__()
+
         q = 0
         assert (
             len(channel_config) == len(depth) - depth.count(0) + 2
         ), "channel config is not correct"
         self.linear = nn.Linear(channel_config[-1], n_classes)
-        if isinstance(image_size, int):
-            image_size = (image_size, image_size)
+        if isinstance(img_size, int):
+            image_size = (img_size, img_size)
         image_size = list(image_size)
         self.stem = nn.ModuleList(
             [
@@ -130,29 +134,43 @@ class Visformer(nn.Module):
             image_size = [k // depth[i] for k in image_size]
             if config[i] == "0":
                 self.stem.extend(
-                    [Conv_Block(channel_config[q]) for j in range(depth[i])]
+                    [
+                        Conv_Block(
+                            channel_config[q],
+                            group=conv_group,
+                            p_dropout=p_dropout_conv,
+                        )
+                        for j in range(depth[i])
+                    ]
                 )
             elif config[i] == "1":
                 self.stem.extend(
                     [
-                        Attention_Block(channel_config[q], num_heads, drop)
+                        Attention_Block(channel_config[q], num_heads, p_dropout_attn)
                         for j in range(depth[i])
                     ]
                 )
         self.stem.extend([nn.BatchNorm2d(channel_config[-1]), nn.AdaptiveAvgPool2d(1)])
+        self.softmax = nn.Softmax()
 
     def forward(self, x):
         for i in self.stem:
             x = i(x)
         x.squeeze_(2).squeeze_(2)
         x = self.linear(x)
+        x = self.softmax(x)
         return x
 
 
-@MODEL_REGISTRY.register(name="Visformer_S")
-def Visformer_S(img_size, n_class):
+@MODEL_REGISTRY.register()
+def Visformer_S(img_size, n_class, in_channels=3):
     return Visformer(
-        img_size, n_class, [0, 7, 4, 4], "011", [3, 32, 192, 384, 768], num_heads=6
+        img_size,
+        n_class,
+        [0, 7, 4, 4],
+        "011",
+        [in_channels, 32, 192, 384, 768],
+        num_heads=6,
     )
 
 
