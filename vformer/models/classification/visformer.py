@@ -1,14 +1,13 @@
 import einops
 import torch.nn as nn
-from torchsummary import summary
 
 from vformer.attention import VanillaSelfAttention
 
 from ...utils import MODEL_REGISTRY
 
 
-# need to add visformerV2_ti
-class Conv_Block(nn.Module):
+@MODEL_REGISTRY.register()
+class Visformer_Conv_Block(nn.Module):
     """
     Convolution Block for Vision-Friendly transformers
     https://arxiv.org/abs/2104.12533
@@ -26,7 +25,7 @@ class Conv_Block(nn.Module):
     """
 
     def __init__(self, in_channels, group=8, activation=nn.GELU, p_dropout=0.0):
-        super(Conv_Block, self).__init__()
+        super().__init__()
 
         self.norm1 = nn.BatchNorm2d(in_channels)
         self.conv1 = nn.Conv2d(in_channels, in_channels * 2, kernel_size=1, bias=False)
@@ -58,7 +57,8 @@ class Conv_Block(nn.Module):
         return x
 
 
-class Attention_Block(nn.Module):
+@MODEL_REGISTRY.register()
+class Visformer_Attention_Block(nn.Module):
     """
     Attention Block for Vision-Friendly transformers
     https://arxiv.org/abs/2104.12533
@@ -204,7 +204,7 @@ class Visformer(nn.Module):
             if config[i] == 0:
                 self.stem.extend(
                     [
-                        Conv_Block(
+                        Visformer_Conv_Block(
                             channel_config[q],
                             group=conv_group,
                             p_dropout=p_dropout_conv,
@@ -216,7 +216,7 @@ class Visformer(nn.Module):
             elif config[i] == 1:
                 self.stem.extend(
                     [
-                        Attention_Block(
+                        Visformer_Attention_Block(
                             channel_config[q],
                             num_heads,
                             activation,
