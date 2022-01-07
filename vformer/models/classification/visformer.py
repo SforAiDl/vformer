@@ -104,6 +104,7 @@ class Visformer_Attention_Block(nn.Module):
         x = self.drop(x)
         x = xt + x
         del xt
+
         return x
 
 
