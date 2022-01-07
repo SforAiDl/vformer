@@ -246,7 +246,6 @@ def _resize_pos_embed(self, posemb, gs_h, gs_w):
     return posemb
 
 
-
 def get_readout_oper(vit_features, features, use_readout, start_index=1):
     if use_readout == "ignore":
         readout_oper = [Slice(start_index)] * len(features)
@@ -262,4 +261,3 @@ def get_readout_oper(vit_features, features, use_readout, start_index=1):
         ), "wrong operation for readout token, use_readout can be 'ignore', 'add', or 'project'"
 
     return readout_oper
-

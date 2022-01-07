@@ -393,4 +393,3 @@ def test_cct():
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
     del model
-
