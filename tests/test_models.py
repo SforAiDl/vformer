@@ -394,24 +394,20 @@ def test_cct():
 
 def test_visformer():
 
-
     model = MODEL_REGISTRY.get("Visformer_S")(224, 1000)
     out = model(img_3channels_224)
     assert out.shape == (4, 1000)
     del model
-
 
     model = MODEL_REGISTRY.get("Visformer_Ti")(224, 1000)
     out = model(img_3channels_224)
     assert out.shape == (4, 1000)
     del model
 
-
     model = MODEL_REGISTRY.get("VisformerV2_S")(224, 1000)
     out = model(img_3channels_224)
     assert out.shape == (4, 1000)
     del model
-
 
     model = MODEL_REGISTRY.get("VisformerV2_Ti")(224, 1000)
     out = model(img_3channels_224)

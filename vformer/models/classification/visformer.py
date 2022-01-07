@@ -27,7 +27,6 @@ class Visformer_Conv_Block(nn.Module):
     def __init__(self, in_channels, group=8, activation=nn.GELU, p_dropout=0.0):
         super().__init__()
 
-
         self.norm1 = nn.BatchNorm2d(in_channels)
         self.conv1 = nn.Conv2d(in_channels, in_channels * 2, kernel_size=1, bias=False)
         self.act1 = activation()
@@ -44,7 +43,6 @@ class Visformer_Conv_Block(nn.Module):
         self.drop = nn.Dropout(p_dropout)
 
     def forward(self, x):
-
 
         xt = x
         xt = self.norm1(xt)
@@ -158,7 +156,6 @@ class Visformer(nn.Module):
         activation=nn.GELU,
     ):
         super().__init__()
-
 
         q = 0
         assert (
