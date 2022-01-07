@@ -89,6 +89,7 @@ class Visformer_Attention_Block(nn.Module):
         self.drop = nn.Dropout(p_dropout)
 
     def forward(self, x):
+
         B, C, H, W = x.shape
         xt = einops.rearrange(x, "b c h w -> b (h w) c")
         x = self.norm1(x)
