@@ -114,7 +114,7 @@ class Visformer_Attention_Block(nn.Module):
 @MODEL_REGISTRY.register()
 class Visformer(nn.Module):
     """
-    A builder to construct a Vision-Friendly transformer model
+    A builder to construct a Vision-Friendly transformer model as in the paper: "Visformer: A vision-friendly transformer"
     https://arxiv.org/abs/2104.12533
 
     Parameters
