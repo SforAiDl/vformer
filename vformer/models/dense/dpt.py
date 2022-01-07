@@ -48,13 +48,13 @@ class DPTdept(nn.Module):
         backbone,
         features=256,
         readout="project",
+        hooks = (2,5,8,11),
         channels_last=False,
         use_bn=False,
         enable_attention_hooks=False,
         non_negative=True,
         scale=1.0,
         shift=0.0,
-        scratch_in_features=[96, 192, 384, 768],
         invert=False,
     ):
         super(DPTdept, self).__init__()
@@ -64,19 +64,20 @@ class DPTdept(nn.Module):
         self.non_negative = non_negative
         self.scale = scale
         self.shift = shift
-        self.scratch_in_features = scratch_in_features
+        self.features =features
         self.invert = invert
 
+        scratch_in_features = (96,192,384,768) # only two values possible, based on pretrain string we will have one if -else block to handle this
         features_dict = {}  # these will contain the parameters for vitl16 and vitb16
         self.model = MODEL_REGISTRY.get(backbone)(**features_dict)
-        self._register_hooks_and_add_postprocess()
-        self._make_scratch()
-        self._add_refinenet_to_scratch()
+        self._register_hooks_and_add_postprocess(features=scratch_in_features,hooks=hooks,use_readout=readout,enable_attention_hooks=enable_attention_hooks,)
+        self._make_scratch(in_shape=(96,192,384,768), out_shape=self.features,groups=1,expand=False)
+        self._add_refinenet_to_scratch(features= self.features,use_bn= self.use_bn)
 
     def _register_hooks_and_add_postprocess(
         self,
         size=(384, 384),
-        features=(96, 192, 384, 768),
+        features = (96,192,384,768),
         hooks=(2, 5, 8, 11),
         use_readout="ignore",
         enable_attention_hooks=False,
@@ -193,6 +194,8 @@ class DPTdept(nn.Module):
         )
 
     def _make_scratch(self, in_shape, out_shape, groups=1, expand=False):
+        if isinstance(in_shape,int):
+            in_shape = [in_shape]*4
         self.scratch = nn.Module()
 
         for i in range(4):
@@ -296,7 +299,7 @@ class DPTdept(nn.Module):
         x = self.encoder(x)
         return x
 
-    def forward(self, x: torch.T):
+    def forward(self, x):
         if self.channels_last:
             x.contiguous(memory_format=torch.channels_last)
 
@@ -312,6 +315,13 @@ class DPTdept(nn.Module):
         path1 = self.scratch.refinenet2(path1, layer_2)
         path1 = self.scratch.refinenet1(path1, layer_1)
 
-        path1 = self.scratch.output_conv(path1)
+        inv_depth = self.scratch.output_conv(path1).squeeze(dim=1)
 
-        return path1
+        if self.invert:
+            depth = self.scale * inv_depth + self.shift
+            depth[depth<1e-8] = 1e-8
+            depth = 1.0/depth
+            return depth
+        else:
+            return  inv_depth
+
