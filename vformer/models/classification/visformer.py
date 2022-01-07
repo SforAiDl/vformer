@@ -1,5 +1,4 @@
 import einops
-import torch
 import torch.nn as nn
 
 from vformer.attention import VanillaSelfAttention
@@ -7,8 +6,8 @@ from vformer.attention import VanillaSelfAttention
 from ...utils import MODEL_REGISTRY
 
 
-# need to add dropout,scale,head,visformerV2_ti
-# editted number of heads, head dim_s   need to change
+# need to add visformerV2_ti
+# editted number of need to change
 # run one epoch to check if the model is working
 class Conv_Block(nn.Module):
     def __init__(self, in_channels, group=8, activation=nn.GELU, drop=0.0):
@@ -43,13 +42,16 @@ class Conv_Block(nn.Module):
 
 
 class Attention_Block(nn.Module):
-    def __init__(self, channels):
+    def __init__(self, channels, num_heads=8, drop=0.0):
         super().__init__()
         self.conv1 = nn.Conv2d(channels, channels * 4, kernel_size=1, bias=False)
         self.conv2 = nn.Conv2d(channels * 4, channels, kernel_size=1, bias=False)
-        self.attn = VanillaSelfAttention(channels, num_heads=6, head_dim=channels // 6)
+        self.attn = VanillaSelfAttention(
+            channels, num_heads=num_heads, head_dim=channels // num_heads
+        )
         self.norm1 = nn.BatchNorm2d(channels)
         self.norm2 = nn.BatchNorm2d(channels)
+        self.drop = nn.Dropout(drop)
 
     def forward(self, x):
         B, C, H, W = x.shape
@@ -63,6 +65,7 @@ class Attention_Block(nn.Module):
         x = self.norm2(x)
         x = self.conv1(x)
         x = self.conv2(x)
+        x = self.drop(x)
         x = xt + x
         del xt
         return x
@@ -71,7 +74,14 @@ class Attention_Block(nn.Module):
 @MODEL_REGISTRY.register()
 class Visformer(nn.Module):
     def __init__(
-        self, image_size, n_classes, depth: list, config: str, channel_config: list
+        self,
+        image_size,
+        n_classes,
+        depth: list,
+        config: str,
+        channel_config: list,
+        num_heads=8,
+        drop=0.0,
     ):
         super().__init__()
         q = 0
@@ -124,7 +134,10 @@ class Visformer(nn.Module):
                 )
             elif config[i] == "1":
                 self.stem.extend(
-                    [Attention_Block(channel_config[q]) for j in range(depth[i])]
+                    [
+                        Attention_Block(channel_config[q], num_heads, drop)
+                        for j in range(depth[i])
+                    ]
                 )
         self.stem.extend([nn.BatchNorm2d(channel_config[-1]), nn.AdaptiveAvgPool2d(1)])
 
@@ -136,9 +149,11 @@ class Visformer(nn.Module):
         return x
 
 
-@MODEL_REGISTRY.register()
+@MODEL_REGISTRY.register(name="Visformer_S")
 def Visformer_S(img_size, n_class):
-    return Visformer(img_size, n_class, [0, 7, 4, 4], "011", [3, 32, 192, 384, 768])
+    return Visformer(
+        img_size, n_class, [0, 7, 4, 4], "011", [3, 32, 192, 384, 768], num_heads=6
+    )
 
 
 @MODEL_REGISTRY.register()
@@ -149,20 +164,19 @@ def VisformerV2_S(img_size, n_class):
         [1, 10, 14, 3],
         "0011",
         [3, 32, 64, 128, 256, 512],
+        num_heads=6,
     )
 
 
 @MODEL_REGISTRY.register()
 def Visformer_Ti(img_size, n_class):
-    return Visformer(img_size, n_class, [0, 7, 4, 4], "011", [3, 16, 96, 192, 384])
+    return Visformer(
+        img_size, n_class, [0, 7, 4, 4], "011", [3, 16, 96, 192, 384], num_heads=6
+    )
 
 
 @MODEL_REGISTRY.register()
 def VisformerV2_Ti(img_size, n_class):
     return Visformer(
-        img_size,
-        n_class,
-        [1, 4, 6, 2],
-        "0011",
-        [3, 24, 48, 96, 192, 384],
+        img_size, n_class, [1, 4, 6, 2], "0011", [3, 24, 48, 96, 192, 384], num_heads=6
     )
