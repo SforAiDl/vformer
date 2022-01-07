@@ -10,7 +10,6 @@ img_3channels_224 = torch.randn(4, 3, 224, 224)
 img_1channels_224 = torch.randn(2, 1, 224, 224)
 
 
-
 def test_VanillaViT():
 
     model = MODEL_REGISTRY.get("VanillaViT")(
