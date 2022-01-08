@@ -140,7 +140,7 @@ class Visformer(nn.Module):
     activation: torch.nn.Module
         Activation function between layers, default is nn.GELU
     pos_embedding: bool
-        Whether to use positional embedding, default is False
+        Whether to use positional embedding, default is True
 
     """
 
