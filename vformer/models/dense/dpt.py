@@ -67,10 +67,11 @@ class DPTDepth(nn.Module):
     invert:bool
     start_index:int
     """
+
     def __init__(
         self,
         backbone,
-        in_channels =3,
+        in_channels=3,
         features=256,
         readout="project",
         hooks=(2, 5, 8, 11),
@@ -81,7 +82,7 @@ class DPTDepth(nn.Module):
         scale=1.0,
         shift=0.0,
         invert=False,
-        start_index=1
+        start_index=1,
     ):
         super(DPTDepth, self).__init__()
         self.channels_last = channels_last
@@ -128,20 +129,20 @@ class DPTDepth(nn.Module):
             )
             hooks = [5, 11, 17, 23] if hooks is None else hooks
             self.vit_features = 1024
-        elif backbone=="vit_tiny":
-            scratch_in_features = (48,96,144,192)
+        elif backbone == "vit_tiny":
+            scratch_in_features = (48, 96, 144, 192)
             self.model = MODEL_REGISTRY.get("VanillaViT")(
-                img_size =384,
+                img_size=384,
                 patch_size=16,
                 embedding_dim=192,
                 head_dim=64,
                 depth=12,
-                attn_heads =3,
-                encoder_mlp_dim = 192,
-                n_classes=3, #doenst matter because decoder part is not used in DPTs forward_vit
-                in_channels=in_channels
+                attn_heads=3,
+                encoder_mlp_dim=192,
+                n_classes=3,  # doenst matter because decoder part is not used in DPTs forward_vit
+                in_channels=in_channels,
             )
-            hooks = [2,5,8,11] if hooks is None else hooks
+            hooks = [2, 5, 8, 11] if hooks is None else hooks
             self.vit_features = 192
         else:
             raise NotImplementedError
@@ -151,7 +152,7 @@ class DPTDepth(nn.Module):
             hooks=hooks,
             use_readout=readout,
             enable_attention_hooks=enable_attention_hooks,
-            start_index=start_index
+            start_index=start_index,
         )
         self._make_scratch(
             in_shape=scratch_in_features,
@@ -282,7 +283,6 @@ class DPTDepth(nn.Module):
 
         self.model.start_index = start_index
         self.model.patch_size = [16, 16]
-
 
         self.model.forward_flex = types.MethodType(forward_flex, self.model)
         self.model._resize_pos_embed = types.MethodType(_resize_pos_embed, self.model)

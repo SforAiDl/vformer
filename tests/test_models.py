@@ -394,7 +394,7 @@ def test_cct():
 
 
 def test_dpt():
-    img = torch.randn(4,3,384,384)
+    img = torch.randn(4, 3, 384, 384)
     model = MODEL_REGISTRY.get("DPTDepth")(
         "vitb16_384",
         enable_attention_hooks=True,
@@ -415,18 +415,18 @@ def test_dpt():
     """
 
     model = MODEL_REGISTRY.get("DPTDepth")(
-        "vit_tiny",enable_attention_hooks=True,channels_last= True
+        "vit_tiny", enable_attention_hooks=True, channels_last=True
     )
     out = model(img)
-    assert out.shape == (4,384,384)
-    del  model
+    assert out.shape == (4, 384, 384)
+    del model
 
     model = MODEL_REGISTRY.get("DPTDepth")("vit_tiny", invert=True, readout="ignore")
     out = model(img)
-    assert out.shape == (4,384,384)
+    assert out.shape == (4, 384, 384)
     del model
 
-    model = MODEL_REGISTRY.get("DPTDepth")("vit_tiny", readout="add",use_bn=True)
-    out= model(img)
-    assert out.shape == (4,384,384)
+    model = MODEL_REGISTRY.get("DPTDepth")("vit_tiny", readout="add", use_bn=True)
+    out = model(img)
+    assert out.shape == (4, 384, 384)
     del model
