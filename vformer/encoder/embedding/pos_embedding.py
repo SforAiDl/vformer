@@ -81,7 +81,7 @@ class PosEmbedding(nn.Module):
             if isinstance(shape, int):
                 shape = [1] + [shape] + [dim]
             else:
-                shape = [1] + shape + [dim]
+                shape = [1] + list(shape) + [dim]
             shape = tuple(shape)
             self.pos_embed = nn.Parameter(torch.zeros(shape))
         else:
