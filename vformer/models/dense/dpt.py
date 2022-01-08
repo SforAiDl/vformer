@@ -51,9 +51,26 @@ def get_attention(name):
 
 @MODEL_REGISTRY.register()
 class DPTDepth(nn.Module):
+    """
+    Parameters
+    ----------
+    backbone:str
+    features:int
+    readout:str
+    hooks: list[int]
+    channels_last: bool
+    use_bn:bool
+    enable_attention_hooks:bool
+    non_negative:bool
+    scale:float
+    shift:float
+    invert:bool
+    start_index:int
+    """
     def __init__(
         self,
         backbone,
+        in_channels =3,
         features=256,
         readout="project",
         hooks=(2, 5, 8, 11),
@@ -64,6 +81,7 @@ class DPTDepth(nn.Module):
         scale=1.0,
         shift=0.0,
         invert=False,
+        start_index=1
     ):
         super(DPTDepth, self).__init__()
         self.channels_last = channels_last
@@ -91,7 +109,7 @@ class DPTDepth(nn.Module):
                 attn_heads=12,
                 encoder_mlp_dim=768,
                 n_classes=10,
-                in_channels=3,
+                in_channels=in_channels,
             )
             hooks = [2, 5, 8, 11] if hooks is None else hooks
             self.vit_features = 768
@@ -106,10 +124,25 @@ class DPTDepth(nn.Module):
                 attn_heads=16,
                 encoder_mlp_dim=1024,
                 n_classes=10,
-                in_channels=3,
+                in_channels=in_channels,
             )
             hooks = [5, 11, 17, 23] if hooks is None else hooks
             self.vit_features = 1024
+        elif backbone=="vit_tiny":
+            scratch_in_features = (48,96,144,192)
+            self.model = MODEL_REGISTRY.get("VanillaViT")(
+                img_size =384,
+                patch_size=16,
+                embedding_dim=192,
+                head_dim=64,
+                depth=12,
+                attn_heads =3,
+                encoder_mlp_dim = 192,
+                n_classes=3, #doenst matter because decoder part is not used in DPTs forward_vit
+                in_channels=in_channels
+            )
+            hooks = [2,5,8,11] if hooks is None else hooks
+            self.vit_features = 192
         else:
             raise NotImplementedError
 
@@ -118,6 +151,7 @@ class DPTDepth(nn.Module):
             hooks=hooks,
             use_readout=readout,
             enable_attention_hooks=enable_attention_hooks,
+            start_index=start_index
         )
         self._make_scratch(
             in_shape=scratch_in_features,
@@ -249,8 +283,7 @@ class DPTDepth(nn.Module):
         self.model.start_index = start_index
         self.model.patch_size = [16, 16]
 
-        # We inject this function into the VisionTransformer instances so that
-        # we can use it with interpolated position embeddings without modifying the library source.
+
         self.model.forward_flex = types.MethodType(forward_flex, self.model)
         self.model._resize_pos_embed = types.MethodType(_resize_pos_embed, self.model)
 
