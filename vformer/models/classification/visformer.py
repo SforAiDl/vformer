@@ -1,8 +1,9 @@
 import einops
 import torch.nn as nn
+from torchsummary import summary
 
-from vformer.attention import VanillaSelfAttention
-
+from ...attention import VanillaSelfAttention
+from ...encoder.embedding.pos_embedding import PosEmbedding
 from ...utils import MODEL_REGISTRY
 
 
@@ -139,6 +140,8 @@ class Visformer(nn.Module):
         Dropout rate for attention block, default is 0.0
     activation: torch.nn.Module
         Activation function between layers, default is nn.GELU
+    pos_embedding: bool
+        Whether to use positional embedding, default is False
 
     """
 
@@ -154,20 +157,23 @@ class Visformer(nn.Module):
         p_dropout_conv=0.0,
         p_dropout_attn=0.0,
         activation=nn.GELU,
+        pos_embedding=True,
     ):
         super().__init__()
 
         q = 0
         assert (
             len(channel_config) == len(depth) - depth.count(0) + 2
-        ), "channel config is not correct"
+        ), "Channel config is not correct"
         assert set(config).issubset(
             set([0, 1])
-        ), "config is not correct, should contain only 0 and 1"
+        ), "Config is not correct, should contain only 0 and 1"
         self.linear = nn.Linear(channel_config[-1], n_classes)
         if isinstance(img_size, int):
-            image_size = (img_size, img_size)
-        image_size = list(image_size)
+            img_size = (img_size, img_size)
+        image_size = list(img_size)
+        assert image_size[0] // (2 ** (len(depth) + 1)) > 0, "Image size is too small"
+        assert image_size[1] // (2 ** (len(depth) + 1)) > 0, "Image size is too small"
         self.stem = nn.ModuleList(
             [
                 nn.Conv2d(
@@ -202,9 +208,13 @@ class Visformer(nn.Module):
                     nn.ReLU(inplace=True),
                 ]
             )
+            image_size = [k // emb for k in image_size]
             emb = 2
             q += 1
-            image_size = [k // depth[i] for k in image_size]
+            if pos_embedding:
+                self.stem.extend(
+                    [PosEmbedding([channel_config[q], image_size[0]], image_size[1])]
+                )
             if config[i] == 0:
                 self.stem.extend(
                     [
