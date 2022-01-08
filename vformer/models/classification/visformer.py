@@ -1,6 +1,5 @@
 import einops
 import torch.nn as nn
-from torchsummary import summary
 
 from ...attention import VanillaSelfAttention
 from ...encoder.embedding.pos_embedding import PosEmbedding
