@@ -71,7 +71,7 @@ class DPTDepth(nn.Module):
         Must be one of {`add`, `ignore`,`project`}
     hooks: list[int]
         List representing index of encoder blocks on which hooks will be registered.
-        These hooks extract input of different ViT blocks like attention.
+        These hooks extract features from different ViT blocks, eg attention.
     channels_last: bool
         Alters the memory format of storing tensors. For more information visit, `this tutorial<https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html>`
     use_bn:bool
