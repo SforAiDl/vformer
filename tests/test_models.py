@@ -430,3 +430,5 @@ def test_dpt():
     out = model(img)
     assert out.shape == (4, 384, 384)
     del model
+
+

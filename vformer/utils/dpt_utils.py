@@ -1,17 +1,10 @@
 # thanks to https://github.com/isl-org/DPT
 
 import math
-import types
-
-import timm
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from .registry import MODEL_REGISTRY
-
-#########################
-# classes
 
 
 class Slice(nn.Module):
@@ -227,17 +220,17 @@ def forward_flex(self, x):
     b, c, h, w = x.shape
 
     pos_embed = self.model._resize_pos_embed(
-        self.model.pos_embed.pos_embed,
+        self.model.pos_embedding.pos_embed,
         h // self.model.patch_size[1],
         w // self.model.patch_size[0],
     )
 
     B = x.shape[0]
-    x = self.model.patch_embed.patch_embedding(x)
+    x = self.model.patch_embedding.patch_embedding(x)
     cls_tokens = self.model.cls_token.expand(B, -1, -1)
     x = torch.cat((cls_tokens, x), dim=1)
     x = x + pos_embed
-    x = self.model.pos_embed.pos_drop(x)
+    x = self.model.pos_embedding.pos_drop(x)
     x = self.model.encoder(x)
     return x
 
@@ -270,7 +263,7 @@ def get_readout_oper(vit_features, features, use_readout, start_index=1):
         ]
     else:
         assert (
-            False
+            True
         ), "wrong operation for readout token, use_readout can be 'ignore', 'add', or 'project'"
 
     return readout_oper
