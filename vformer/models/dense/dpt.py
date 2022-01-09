@@ -63,31 +63,33 @@ class DPTDepth(nn.Module):
         Authors of this paper have done experiment with `vit_large` and vit_base` models with input image of size (384,384).
         Here we have extended a similar architecture for `vit_tiny` and flexible input size. Do consider this before using the model.
     in_channels: int
-        Number of channels in input image
+        Number of channels in input image, default is 3
     img_size: tuple[int]
-        Image size
+        Input image size, default is (384,384)
     readout:str
         Method to handle the `readout_token` or `cls_token`
-        Must be one of {`add`, `ignore`,`project`}
+        Must be one of {`add`, `ignore`,`project`}, default is `project`
     hooks: list[int]
         List representing index of encoder blocks on which hooks will be registered.
-        These hooks extract features from different ViT blocks, eg attention.
+        These hooks extract features from different ViT blocks, eg attention, default is (2,5,8,11).
     channels_last: bool
-        Alters the memory format of storing tensors. For more information visit, `this tutorial<https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html>`
+        Alters the memory format of storing tensors, default is False,
+        For more information visit, this `blogpost<https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html>`
     use_bn:bool
-        If True, BatchNormalisation is used in `FeatureFusionBlock_custom`
+        If True, BatchNormalisation is used in `FeatureFusionBlock_custom`, default is False
     enable_attention_hooks:bool
-        If True, Input to the attention blocks is fetched and can be used in tasks of visualisation
+        If True, `get_attention` hook is registered, default is false
     non_negative:bool
-        If False, Relu operation wont be applied in DPTDepth.model.head block.
+        If True, Relu operation will be applied in `DPTDepth.model.head` block, default is True
     invert:bool
-        If True, forward pass output of DPTDepth.model.head will be transformed (inverted) according to `scale` and `shift` parameters
+        If True, forward pass output of `DPTDepth.model.head` will be transformed (inverted)
+        according to `scale` and `shift` parameters, default is False
     scale:float
-        Float value that will be multiplied with forward pass output from DPTDepth.model.head
+        Float value that will be multiplied with forward pass output from `DPTDepth.model.head`, default is 1.0
     shift:float
-        Float value that will be added with forward pass output from DPTDepth.model.head after scaling
+        Float value that will be added with forward pass output from `DPTDepth.model.head` after scaling, default is 0.0
     start_index:int
-        Parameter that handles readout operation, default value is 1.
+        Parameter that handles readout operation, default value is 1
     """
 
     def __init__(
