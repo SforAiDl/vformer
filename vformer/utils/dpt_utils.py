@@ -1,10 +1,10 @@
 # thanks to https://github.com/isl-org/DPT
 
 import math
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 
 
 class Slice(nn.Module):
