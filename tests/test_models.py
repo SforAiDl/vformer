@@ -396,17 +396,17 @@ def test_cct():
 def test_dpt():
     img = torch.randn(4, 3, 384, 384)
     model = MODEL_REGISTRY.get("DPTDepth")(
-        "vitb16_384",
+        "vitb16",
         enable_attention_hooks=True,
     )
     del model
-    model = MODEL_REGISTRY.get("DPTDepth")("vitl16_384")
+    model = MODEL_REGISTRY.get("DPTDepth")("vitl16")
     del model
 
-    model = MODEL_REGISTRY.get("DPTDepth")("vitl16_384", invert=True, readout="ignore")
+    model = MODEL_REGISTRY.get("DPTDepth")("vitl16", invert=True, readout="ignore")
     del model
 
-    model = MODEL_REGISTRY.get("DPTDepth")("vitb16_384", invert=True, readout="add")
+    model = MODEL_REGISTRY.get("DPTDepth")("vitb16", invert=True, readout="add")
     del model
     """
     only initialisation of large models; no forward pass here because these models are
@@ -427,6 +427,15 @@ def test_dpt():
     del model
 
     model = MODEL_REGISTRY.get("DPTDepth")("vit_tiny", readout="add", use_bn=True)
+    out = model(img)
+    assert out.shape == (4, 384, 384)
+    del model
+
+    model = MODEL_REGISTRY.get("DPTDepth")(
+        "vit_tiny",
+        readout="add",
+        use_bn=True,
+    )
     out = model(img)
     assert out.shape == (4, 384, 384)
     del model

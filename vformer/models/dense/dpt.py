@@ -52,27 +52,49 @@ def get_attention(name):
 @MODEL_REGISTRY.register()
 class DPTDepth(nn.Module):
     """
+    Implementation of " Vision Transformers for Dense Prediction "
+    https://arxiv.org/abs/2103.13413
+
     Parameters
     ----------
     backbone:str
-    features:int
+        Name of ViT model to be used as backbone, must be one of {`vitb16`,`vitl16`,`vit_tiny`}
+    .. note::
+        Authors of this paper have done experiment with `vit_large` and vit_base` models with input image of size (384,384).
+        Here we have extended a similar architecture for `vit_tiny` and flexible input size. Do consider this before using the model.
+    in_channels: int
+        Number of channels in input image
+    img_size: tuple[int]
+        Image size
     readout:str
+        Method to handle the `readout_token` or `cls_token`
+        Must be one of {`add`, `ignore`,`project`}
     hooks: list[int]
+        List representing index of encoder blocks on which hooks will be registered.
+        These hooks extract input of different ViT blocks like attention.
     channels_last: bool
+        Alters the memory format of storing tensors. For more information visit, `this tutorial<https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html>`
     use_bn:bool
+        If True, BatchNormalisation is used in `FeatureFusionBlock_custom`
     enable_attention_hooks:bool
+        If True, Input to the attention blocks is fetched and can be used in tasks of visualisation
     non_negative:bool
-    scale:float
-    shift:float
+        If False, Relu operation wont be applied in DPTDepth.model.head block.
     invert:bool
+        If True, forward pass output of DPTDepth.model.head will be transformed (inverted) according to `scale` and `shift` parameters
+    scale:float
+        Float value that will be multiplied with forward pass output from DPTDepth.model.head
+    shift:float
+        Float value that will be added with forward pass output from DPTDepth.model.head after scaling
     start_index:int
+        Parameter that handles readout operation, default value is 1.
     """
 
     def __init__(
         self,
         backbone,
         in_channels=3,
-        features=256,
+        img_size=(384, 384),
         readout="project",
         hooks=(2, 5, 8, 11),
         channels_last=False,
@@ -91,10 +113,9 @@ class DPTDepth(nn.Module):
         self.non_negative = non_negative
         self.scale = scale
         self.shift = shift
-        self.features = features
         self.invert = invert
 
-        if backbone == "vitb16_384":
+        if backbone == "vitb16":
             scratch_in_features = (
                 96,
                 192,
@@ -102,7 +123,7 @@ class DPTDepth(nn.Module):
                 768,
             )
             self.model = MODEL_REGISTRY.get("VanillaViT")(
-                img_size=384,
+                img_size=img_size,
                 patch_size=16,
                 embedding_dim=768,
                 head_dim=64,
@@ -114,10 +135,10 @@ class DPTDepth(nn.Module):
             )
             hooks = [2, 5, 8, 11] if hooks is None else hooks
             self.vit_features = 768
-        elif backbone == "vitl16_384":
+        elif backbone == "vitl16":
             scratch_in_features = (256, 512, 1024, 1024)
             self.model = MODEL_REGISTRY.get("VanillaViT")(
-                img_size=384,
+                img_size=img_size,
                 patch_size=16,
                 embedding_dim=1024,
                 head_dim=64,
@@ -132,7 +153,7 @@ class DPTDepth(nn.Module):
         elif backbone == "vit_tiny":
             scratch_in_features = (48, 96, 144, 192)
             self.model = MODEL_REGISTRY.get("VanillaViT")(
-                img_size=384,
+                img_size=img_size,
                 patch_size=16,
                 embedding_dim=192,
                 head_dim=64,
@@ -146,8 +167,10 @@ class DPTDepth(nn.Module):
             self.vit_features = 192
         else:
             raise NotImplementedError
+        features = scratch_in_features[0]
 
         self._register_hooks_and_add_postprocess(
+            size=img_size,
             features=scratch_in_features,
             hooks=hooks,
             use_readout=readout,
@@ -181,6 +204,23 @@ class DPTDepth(nn.Module):
         enable_attention_hooks=False,
         start_index=1,
     ):
+        """
+        Registers forward hooks to the backbone and initializes activation-postprocessing-blocks (act_postprocess(int))
+        Parameters
+        ----------
+        size: tuple[int]
+            Input image size
+        features:tuple[int]
+            Number of features
+        hooks:tuple[int]
+            List containing index of encoder blocks to which forward hooks will be registered
+        use_readout:str
+            Appropriate readout operation,must be one of  {`add`,`ignore`,`project`}
+        enable_attention_hooks:bool
+            If True, forward hooks will be registered to attention blocks.
+        start_index:int
+            Parameter that handles readout operation, default value is 1.
+        """
 
         for i in range(4):
             self.model.encoder.encoder[hooks[i]][0].fn.register_forward_hook(
@@ -288,6 +328,16 @@ class DPTDepth(nn.Module):
         self.model._resize_pos_embed = types.MethodType(_resize_pos_embed, self.model)
 
     def _make_scratch(self, in_shape, out_shape, groups=1, expand=False):
+        """
+        Makes a scratch module which is subclass of nn.Module
+
+        Parameters
+        ----------
+        in_shape: list[int]
+        out_shape:int
+        groups: int
+        expand:bool
+        """
         self.scratch = nn.Module()
 
         for i in range(4):
@@ -303,7 +353,15 @@ class DPTDepth(nn.Module):
             setattr(self.scratch, f"layer{i+1}_rn", layer)
 
     def _add_refinenet_to_scratch(self, features, use_bn):
+        """
 
+        Parameters
+        ----------
+        features: int
+            Number of features
+        use_bn: bool
+            Whether to use batch normalisation
+        """
         for i in range(4):
             refinenet = FeatureFusionBlock_custom(
                 features,
@@ -317,9 +375,12 @@ class DPTDepth(nn.Module):
 
     def forward_vit(self, x):
         """
+        Performs forward pass on backbone ViT model and fetches output from different encoder blocks with the help of hooks
 
         Parameters
         -----------
+        x: torch.Tensor
+            Input image tensor
         """
 
         b, c, h, w = x.shape
@@ -365,6 +426,13 @@ class DPTDepth(nn.Module):
         return layer_1, layer_2, layer_3, layer_4
 
     def forward(self, x):
+        """
+        Forward pass of DPTDepth
+        Parameters
+        ----------
+        x:torch.Tensor
+            Input image tensor
+        """
         if self.channels_last:
             x.contiguous(memory_format=torch.channels_last)
 
