@@ -121,7 +121,7 @@ class Visformer(nn.Module):
     ----------
     img_size: int,tuple
         Size of the input image
-    num_classes: int
+    n_classes: int
         Number of classes in the dataset
     depth: tuple[int]
         Number of layers before each embedding reduction
@@ -251,7 +251,7 @@ class Visformer(nn.Module):
 
 
 @MODEL_REGISTRY.register()
-def Visformer_S(img_size, n_class, in_channels=3):
+def Visformer_S(img_size, n_classes, in_channels=3):
     """
     Visformer-S model from the paper:"Visformer: The Vision-friendly Transformer"
     https://arxiv.org/abs/1906.11488
@@ -260,14 +260,14 @@ def Visformer_S(img_size, n_class, in_channels=3):
     ----------
     img_size: int,tuple
         Size of the input image
-    n_class: int
+    n_classes: int
         Number of classes in the dataset
     in_channels: int
         Number of channels in the input
     """
     return Visformer(
         img_size,
-        n_class,
+        n_classes,
         (0, 7, 4, 4),
         (0, 1, 1),
         (in_channels, 32, 192, 384, 768),
@@ -276,7 +276,7 @@ def Visformer_S(img_size, n_class, in_channels=3):
 
 
 @MODEL_REGISTRY.register()
-def VisformerV2_S(img_size, n_class, in_channels=3):
+def VisformerV2_S(img_size, n_classes, in_channels=3):
     """
     VisformerV2-S model from the paper:"Visformer: The Vision-friendly Transformer"
     https://arxiv.org/abs/1906.11488
@@ -285,14 +285,14 @@ def VisformerV2_S(img_size, n_class, in_channels=3):
     ----------
     img_size: int,tuple
         Size of the input image
-    n_class: int
+    n_classes: int
         Number of classes in the dataset
     in_channels: int
         Number of channels in the input
     """
     return Visformer(
         img_size,
-        n_class,
+        n_classes,
         (1, 10, 14, 3),
         (0, 0, 1, 1),
         (in_channels, 32, 64, 128, 256, 512),
@@ -301,7 +301,7 @@ def VisformerV2_S(img_size, n_class, in_channels=3):
 
 
 @MODEL_REGISTRY.register()
-def Visformer_Ti(img_size, n_class, in_channels=3):
+def Visformer_Ti(img_size, n_classes, in_channels=3):
     """
     Visformer-Ti model from the paper:"Visformer: The Vision-friendly Transformer"
     https://arxiv.org/abs/1906.11488
@@ -310,14 +310,14 @@ def Visformer_Ti(img_size, n_class, in_channels=3):
     ----------
     img_size: int,tuple
         Size of the input image
-    n_class: int
+    n_classes: int
         Number of classes in the dataset
     in_channels: int
         Number of channels in the input
     """
     return Visformer(
         img_size,
-        n_class,
+        n_classes,
         (0, 7, 4, 4),
         (0, 1, 1),
         (in_channels, 16, 96, 192, 384),
@@ -326,7 +326,7 @@ def Visformer_Ti(img_size, n_class, in_channels=3):
 
 
 @MODEL_REGISTRY.register()
-def VisformerV2_Ti(img_size, n_class, in_channels=3):
+def VisformerV2_Ti(img_size, n_classes, in_channels=3):
     """
     VisformerV2-Ti model from the paper:"Visformer: The Vision-friendly Transformer"
     https://arxiv.org/abs/1906.11488
@@ -335,7 +335,7 @@ def VisformerV2_Ti(img_size, n_class, in_channels=3):
     ----------
     img_size: int,tuple
         Size of the input image
-    n_class: int
+    n_classes: int
         Number of classes in the dataset
     in_channels: int
         Number of channels in the input
@@ -343,7 +343,7 @@ def VisformerV2_Ti(img_size, n_class, in_channels=3):
 
     return Visformer(
         img_size,
-        n_class,
+        n_classes,
         (1, 4, 6, 2),
         (0, 0, 1, 1),
         (in_channels, 24, 48, 96, 192, 384),
