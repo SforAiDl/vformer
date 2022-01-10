@@ -54,7 +54,6 @@ class VisformerConvBlock(nn.Module):
         x = self.conv3(x)
         x = self.drop(x)
         x = x + xt
-        del xt
 
         return x
 
