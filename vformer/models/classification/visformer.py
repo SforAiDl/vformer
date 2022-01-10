@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from ...attention import VanillaSelfAttention
 from ...encoder.embedding.pos_embedding import PosEmbedding
-from ...utils import MODEL_REGISTRY, ATTENTION_REGISTRY
+from ...utils import ATTENTION_REGISTRY, MODEL_REGISTRY
 
 
 class VisformerConvBlock(nn.Module):
