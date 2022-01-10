@@ -79,7 +79,7 @@ class PosEmbedding(nn.Module):
         super(PosEmbedding, self).__init__()
         if not sinusoidal:
             if isinstance(shape, int):
-                shape = [1] + [shape] + [dim]
+                shape = [1, shape, dim]
             else:
                 shape = [1] + list(shape) + [dim]
             shape = tuple(shape)
