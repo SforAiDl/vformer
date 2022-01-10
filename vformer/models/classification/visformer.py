@@ -244,6 +244,7 @@ class Visformer(nn.Module):
     def forward(self, x):
         for i in self.stem:
             x = i(x)
+
         x.squeeze_(2).squeeze_(2)
         x = self.linear(x)
         x = self.softmax(x)
