@@ -83,7 +83,6 @@ class PosEmbedding(nn.Module):
                 shape = [1, shape, dim]
             else:
                 shape = [1] + list(shape) + [dim]
-            shape = tuple(shape)
             self.pos_embed = nn.Parameter(torch.zeros(shape))
         else:
             pe = torch.FloatTensor(
