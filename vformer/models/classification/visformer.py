@@ -242,6 +242,7 @@ class Visformer(nn.Module):
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
+
         for i in self.stem:
             x = i(x)
 
