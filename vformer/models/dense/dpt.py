@@ -159,6 +159,11 @@ class DPTDepth(nn.Module):
             self.vit_features = 192
         else:
             raise NotImplementedError
+        assert readout in (
+            "add",
+            "ignore",
+            "project",
+        ), f"Not valid `readout` param, Must be one of ('add','ignore','project'), but got {readout}"  # check if valid string
         features = scratch_in_features[0]
 
         self._register_hooks_and_add_postprocess(
@@ -664,15 +669,8 @@ def get_readout_oper(vit_features, features, use_readout, start_index=1):
         readout_oper = [Slice(start_index)] * len(features)
     elif use_readout == "add":
         readout_oper = [AddReadout(start_index)] * len(features)
-    elif use_readout == "project":
+    else:
         readout_oper = [
             ProjectReadout(vit_features, start_index) for out_feat in features
         ]
-    else:
-        readout_oper = None
-
-        assert (
-            False
-        ), "wrong operation for readout token, use_readout can be 'ignore', 'add', or 'project'"
-
     return readout_oper

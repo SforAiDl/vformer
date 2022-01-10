@@ -461,10 +461,3 @@ def test_dpt():
     out = model(img)
     assert out.shape == (4, 384, 384)
     del model
-
-    import pytest
-
-    from vformer.models.dense.dpt import get_readout_oper
-
-    with pytest.raises(AssertionError):
-        get_readout_oper(768, 96, "garbage")
