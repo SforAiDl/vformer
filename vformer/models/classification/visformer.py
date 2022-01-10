@@ -217,7 +217,7 @@ class Visformer(nn.Module):
             if config[i] == 0:
                 self.stem.extend(
                     [
-                        Visformer_Conv_Block(
+                        VisformerConvBlock(
                             channel_config[q],
                             group=conv_group,
                             p_dropout=p_dropout_conv,
