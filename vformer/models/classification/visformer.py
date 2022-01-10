@@ -6,7 +6,6 @@ from ...encoder.embedding.pos_embedding import PosEmbedding
 from ...utils import MODEL_REGISTRY
 
 
-@MODEL_REGISTRY.register()
 class VisformerConvBlock(nn.Module):
     """
     Convolution Block for Vision-Friendly transformers
