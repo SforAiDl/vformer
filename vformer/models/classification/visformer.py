@@ -247,6 +247,7 @@ class Visformer(nn.Module):
         x.squeeze_(2).squeeze_(2)
         x = self.linear(x)
         x = self.softmax(x)
+
         return x
 
 
