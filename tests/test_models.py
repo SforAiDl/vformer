@@ -414,7 +414,6 @@ def test_visformer():
     assert out.shape == (4, 1000)
     del model
 
-
 def test_dpt():
     img = torch.randn(4, 3, 384, 384)
     model = MODEL_REGISTRY.get("DPTDepth")(
