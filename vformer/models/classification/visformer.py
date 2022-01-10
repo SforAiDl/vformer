@@ -229,7 +229,7 @@ class Visformer(nn.Module):
             elif config[i] == 1:
                 self.stem.extend(
                     [
-                        Visformer_Attention_Block(
+                        VisformerAttentionBlock(
                             channel_config[q],
                             num_heads,
                             activation,
