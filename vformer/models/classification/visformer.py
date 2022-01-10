@@ -59,7 +59,7 @@ class Visformer_Conv_Block(nn.Module):
         return x
 
 
-@MODEL_REGISTRY.register()
+@ATTENTION_REGISTRY.register()
 class Visformer_Attention_Block(nn.Module):
     """
     Attention Block for Vision-Friendly transformers
