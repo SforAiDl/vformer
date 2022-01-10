@@ -7,7 +7,7 @@ from ...utils import MODEL_REGISTRY
 
 
 @MODEL_REGISTRY.register()
-class Visformer_Conv_Block(nn.Module):
+class VisformerConvBlock(nn.Module):
     """
     Convolution Block for Vision-Friendly transformers
     https://arxiv.org/abs/2104.12533
