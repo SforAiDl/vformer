@@ -1,4 +1,4 @@
-Vision Friendly Transformer
+Vision-friendly Transformer
 ==============================
 
 .. automodule:: vformer.models.classification.visformer
