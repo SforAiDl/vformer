@@ -78,7 +78,12 @@ class PosEmbedding(nn.Module):
     def __init__(self, shape, dim, drop=None, sinusoidal=False, std=0.02):
         super(PosEmbedding, self).__init__()
         if not sinusoidal:
-            self.pos_embed = nn.Parameter(torch.zeros(1, shape, dim))
+            if isinstance(shape, int):
+                shape = [1, shape, dim]
+            else:
+                shape = [1] + list(shape) + [dim]
+            self.pos_embed = nn.Parameter(torch.zeros(shape))
+
         else:
             pe = torch.FloatTensor(
                 [

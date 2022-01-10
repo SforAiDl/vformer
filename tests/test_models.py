@@ -1,3 +1,4 @@
+import pytest
 import torch
 import torch.nn as nn
 
@@ -393,6 +394,28 @@ def test_cct():
     del model
 
 
+def test_visformer():
+    model = MODEL_REGISTRY.get("Visformer_S")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = MODEL_REGISTRY.get("Visformer_Ti")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = MODEL_REGISTRY.get("VisformerV2_S")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = MODEL_REGISTRY.get("VisformerV2_Ti")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+
 def test_dpt():
     img = torch.randn(4, 3, 384, 384)
     model = MODEL_REGISTRY.get("DPTDepth")(
@@ -439,3 +462,8 @@ def test_dpt():
     out = model(img)
     assert out.shape == (4, 384, 384)
     del model
+
+    from vformer.models.dense.dpt import get_readout_oper
+
+    with pytest.raises(AssertionError):
+        get_readout_oper(768, 96, "garbage")

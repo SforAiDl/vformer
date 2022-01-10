@@ -33,6 +33,7 @@ python setup.py install
 - [x] [CrossViT](https://arxiv.org/abs/2103.14899)
 - [x] [Compact Vision Transformer](https://arxiv.org/abs/2104.05704)
 - [x] [Compact Convolutional Transformer](https://arxiv.org/abs/2104.05704)
+- [x] [Vision-friendly Transformer](https://arxiv.org/abs/2104.12533)
 
 ## Example usage
 
