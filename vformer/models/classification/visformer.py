@@ -3,11 +3,10 @@ import torch.nn as nn
 
 from ...attention import VanillaSelfAttention
 from ...encoder.embedding.pos_embedding import PosEmbedding
-from ...utils import MODEL_REGISTRY
+from ...utils import ATTENTION_REGISTRY, MODEL_REGISTRY
 
 
-@MODEL_REGISTRY.register()
-class Visformer_Conv_Block(nn.Module):
+class VisformerConvBlock(nn.Module):
     """
     Convolution Block for Vision-Friendly transformers
     https://arxiv.org/abs/2104.12533
@@ -65,13 +64,12 @@ class Visformer_Conv_Block(nn.Module):
         x = self.conv3(x)
         x = self.drop(x)
         x = x + xt
-        del xt
 
         return x
 
 
-@MODEL_REGISTRY.register()
-class Visformer_Attention_Block(nn.Module):
+@ATTENTION_REGISTRY.register()
+class VisformerAttentionBlock(nn.Module):
     """
     Attention Block for Vision-Friendly transformers
     https://arxiv.org/abs/2104.12533
@@ -128,7 +126,6 @@ class Visformer_Attention_Block(nn.Module):
         x = self.conv2(x)
         x = self.drop(x)
         x = xt + x
-        del xt
 
         return x
 
@@ -186,15 +183,20 @@ class Visformer(nn.Module):
         assert (
             len(channel_config) == len(depth) - depth.count(0) + 2
         ), "Channel config is not correct"
+
         assert set(config).issubset(
             set([0, 1])
         ), "Config is not correct, should contain only 0 and 1"
+
         self.linear = nn.Linear(channel_config[-1], n_classes)
+
         if isinstance(img_size, int):
             img_size = (img_size, img_size)
         image_size = list(img_size)
+
         assert image_size[0] // (2 ** (len(depth) + 1)) > 0, "Image size is too small"
         assert image_size[1] // (2 ** (len(depth) + 1)) > 0, "Image size is too small"
+
         self.stem = nn.ModuleList(
             [
                 nn.Conv2d(
@@ -209,14 +211,18 @@ class Visformer(nn.Module):
                 nn.ReLU(inplace=True),
             ]
         )
+
         q += 1
         emb = 2
         image_size = [i // 2 for i in image_size]
+
         for i in range(len(depth)):
+
             if depth[i] == 0:
                 emb *= 2
                 config = tuple([0] + list(config))
                 continue
+
             self.stem.extend(
                 [
                     nn.Conv2d(
@@ -229,17 +235,20 @@ class Visformer(nn.Module):
                     nn.ReLU(inplace=True),
                 ]
             )
+
             image_size = [k // emb for k in image_size]
             emb = 2
             q += 1
+
             if pos_embedding:
                 self.stem.extend(
                     [PosEmbedding([channel_config[q], image_size[0]], image_size[1])]
                 )
+
             if config[i] == 0:
                 self.stem.extend(
                     [
-                        Visformer_Conv_Block(
+                        VisformerConvBlock(
                             channel_config[q],
                             group=conv_group,
                             p_dropout=p_dropout_conv,
@@ -248,10 +257,11 @@ class Visformer(nn.Module):
                         for j in range(depth[i])
                     ]
                 )
+
             elif config[i] == 1:
                 self.stem.extend(
                     [
-                        Visformer_Attention_Block(
+                        VisformerAttentionBlock(
                             channel_config[q],
                             num_heads,
                             activation,
@@ -260,6 +270,7 @@ class Visformer(nn.Module):
                         for j in range(depth[i])
                     ]
                 )
+
         self.stem.extend([nn.BatchNorm2d(channel_config[-1]), nn.AdaptiveAvgPool2d(1)])
         self.softmax = nn.Softmax(dim=1)
 
@@ -278,9 +289,11 @@ class Visformer(nn.Module):
         """
         for i in self.stem:
             x = i(x)
+
         x.squeeze_(2).squeeze_(2)
         x = self.linear(x)
         x = self.softmax(x)
+
         return x
 
 
