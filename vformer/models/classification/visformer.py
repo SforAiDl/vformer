@@ -43,6 +43,17 @@ class Visformer_Conv_Block(nn.Module):
         self.drop = nn.Dropout(p_dropout)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of same size as input
+        """
 
         xt = x
         xt = self.norm1(xt)
@@ -91,6 +102,17 @@ class Visformer_Attention_Block(nn.Module):
         self.drop = nn.Dropout(p_dropout)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of same size as input
+        """
 
         B, C, H, W = x.shape
         xt = einops.rearrange(x, "b c h w -> b (h w) c")
@@ -242,6 +264,18 @@ class Visformer(nn.Module):
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns tensor of size `n_classes`
+
+        """
         for i in self.stem:
             x = i(x)
         x.squeeze_(2).squeeze_(2)
@@ -264,6 +298,7 @@ def Visformer_S(img_size, n_classes, in_channels=3):
         Number of classes in the dataset
     in_channels: int
         Number of channels in the input
+
     """
     return Visformer(
         img_size,
