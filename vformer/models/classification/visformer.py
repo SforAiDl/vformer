@@ -311,7 +311,6 @@ def Visformer_S(img_size, n_classes, in_channels=3):
         Number of classes in the dataset
     in_channels: int
         Number of channels in the input
-
     """
     return Visformer(
         img_size,
