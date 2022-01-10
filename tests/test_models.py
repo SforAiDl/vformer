@@ -4,7 +4,6 @@ import torch.nn as nn
 from vformer.utils import MODEL_REGISTRY
 
 models = MODEL_REGISTRY.get_list()
-
 img_3channels_256 = torch.randn(2, 3, 256, 256)
 img_3channels_224 = torch.randn(4, 3, 224, 224)
 img_1channels_224 = torch.randn(2, 1, 224, 224)
@@ -390,4 +389,27 @@ def test_cct():
     )
     f = model(img_3channels_224)
     assert f.shape == (4, 1000)
+    del model
+
+
+def test_visformer():
+
+    model = MODEL_REGISTRY.get("Visformer_S")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = MODEL_REGISTRY.get("Visformer_Ti")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = MODEL_REGISTRY.get("VisformerV2_S")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
+    del model
+
+    model = MODEL_REGISTRY.get("VisformerV2_Ti")(224, 1000)
+    out = model(img_3channels_224)
+    assert out.shape == (4, 1000)
     del model
