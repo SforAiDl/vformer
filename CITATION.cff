@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "If you find this software useful, please cite it as below."
+authors:
+- family-names: "Deo"
+  given-names: "Abhijit"
+- family-names: "Agrawal"
+  given-names: "Aditya"
+- family-names: "Shah"
+  given-names: "Neelay"
+title: "VFormer: A modular PyTorch library for vision transformers"
+date-released: 2022-01-11
+url: "https://github.com/SforAiDl/vformer"
+license: MIT
