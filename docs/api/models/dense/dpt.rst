@@ -5,4 +5,4 @@ Vision Transformers for Dense Prediction
     :members:
     .. note::
         Authors of this paper experimented with `vit_large` and vit_base` models with input image of size (384,384).
-        Here we have extended a similar architecture for `vit_tiny` and flexible input size. Do consider this before using the model.
+        Here we have extended a similar architecture for `vit_tiny` which supports a variety of input sizes. 
