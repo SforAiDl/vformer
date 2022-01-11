@@ -99,6 +99,7 @@ class DPTDepth(nn.Module):
         invert=False,
     ):
         super(DPTDepth, self).__init__()
+
         self.channels_last = channels_last
         self.use_bn = use_bn
         self.enable_attention_hooks = enable_attention_hooks
@@ -107,7 +108,9 @@ class DPTDepth(nn.Module):
         self.shift = shift
         self.invert = invert
         start_index = 1
+
         if backbone == "vitb16":
+
             scratch_in_features = (
                 96,
                 192,
@@ -127,7 +130,9 @@ class DPTDepth(nn.Module):
             )
             hooks = (2, 5, 8, 11) if hooks is None else hooks
             self.vit_features = 768
+
         elif backbone == "vitl16":
+
             scratch_in_features = (256, 512, 1024, 1024)
             self.model = MODEL_REGISTRY.get("VanillaViT")(
                 img_size=img_size,
@@ -142,7 +147,9 @@ class DPTDepth(nn.Module):
             )
             hooks = (5, 11, 17, 23) if hooks is None else hooks
             self.vit_features = 1024
+
         elif backbone == "vit_tiny":
+
             scratch_in_features = (48, 96, 144, 192)
             self.model = MODEL_REGISTRY.get("VanillaViT")(
                 img_size=img_size,
@@ -157,8 +164,10 @@ class DPTDepth(nn.Module):
             )
             hooks = (2, 5, 8, 11) if hooks is None else hooks
             self.vit_features = 192
+
         else:
             raise NotImplementedError
+
         assert readout in (
             "add",
             "ignore",
