@@ -100,7 +100,7 @@ swin_encoder = SwinEncoder(
 - [vit-explain](https://github.com/jacobgil/vit-explain)
 - [CrossViT](https://github.com/IBM/CrossViT)
 - [Compact-Transformers](https://github.com/SHI-Labs/Compact-Transformers)
-- [Vis-former](https://github.com/danczs/Visformer)
+- [Visformer](https://github.com/danczs/Visformer)
 
 <br>
 
