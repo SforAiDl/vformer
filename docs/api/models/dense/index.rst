@@ -5,4 +5,6 @@ Dense Prediction
    :maxdepth: 2
    :caption: Contents
 
+   dpt
    PVT/index
+

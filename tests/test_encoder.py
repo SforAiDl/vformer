@@ -55,6 +55,7 @@ def test_SwinEncoder():
     )
     out = encoder_block(test_tensor)
     assert out.shape == test_tensor.shape
+    del encoder_block
 
 
 def test_PVTEncoder():
@@ -78,6 +79,7 @@ def test_PVTEncoder():
     )
     out = encoder(test_tensor, H=56, W=56)
     assert out.shape == test_tensor.shape
+    del encoder
 
 
 def test_CrossEncoder():

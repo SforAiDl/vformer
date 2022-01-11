@@ -34,6 +34,7 @@ python setup.py install
 - [x] [Compact Vision Transformer](https://arxiv.org/abs/2104.05704)
 - [x] [Compact Convolutional Transformer](https://arxiv.org/abs/2104.05704)
 - [x] [Vision-friendly Transformer](https://arxiv.org/abs/2104.12533)
+- [x] [Vision Transformers for Dense Prediction](https://arxiv.org/abs/2103.13413)
 
 ## Example usage
 

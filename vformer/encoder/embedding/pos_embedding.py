@@ -97,8 +97,8 @@ class PosEmbedding(nn.Module):
             self.pos_embed = pe
             self.pos_embed.requires_grad = False
         trunc_normal_(self.pos_embed, std=std)
-        self.drop = nn.Dropout(drop) if drop is not None else nn.Identity()
+        self.pos_drop = nn.Dropout(drop) if drop is not None else nn.Identity()
 
     def forward(self, x):
         x = x + self.pos_embed
-        return self.drop(x)
+        return self.pos_drop(x)
