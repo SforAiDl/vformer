@@ -52,9 +52,6 @@ class DPTDepth(nn.Module):
     ----------
     backbone:str
         Name of ViT model to be used as backbone, must be one of {`vitb16`,`vitl16`,`vit_tiny`}
-    .. note::
-        Authors of this paper have done experiment with `vit_large` and vit_base` models with input image of size (384,384).
-        Here we have extended a similar architecture for `vit_tiny` and flexible input size. Do consider this before using the model.
     in_channels: int
         Number of channels in input image, default is 3
     img_size: tuple[int]
@@ -434,6 +431,7 @@ class DPTDepth(nn.Module):
     def forward(self, x):
         """
         Forward pass of DPTDepth
+
         Parameters
         ----------
         x:torch.Tensor
@@ -506,14 +504,20 @@ class ProjectReadout(nn.Module):
 
 
 class Interpolate(nn.Module):
-    """Interpolation module."""
+    """Interpolation module
+
+    Parameters
+    ----------
+    scale_factor : float
+        Scaling factor used in interpolation
+    mode :str
+        Interpolation mode
+    align_corners: bool
+        Whether to align corners in Interpolation operation
+    """
 
     def __init__(self, scale_factor, mode, align_corners=False):
-        """Init.
-        Args:
-            scale_factor (float): scaling
-            mode (str): interpolation mode
-        """
+
         super(Interpolate, self).__init__()
 
         self.interp = nn.functional.interpolate
@@ -522,12 +526,7 @@ class Interpolate(nn.Module):
         self.align_corners = align_corners
 
     def forward(self, x):
-        """Forward pass.
-        Args:
-            x (tensor): input
-        Returns:
-            tensor: interpolated data
-        """
+        """ Forward pass """
 
         x = self.interp(
             x,
@@ -551,13 +550,19 @@ class Transpose(nn.Module):
 
 
 class ResidualConvUnit_custom(nn.Module):
-    """Residual convolution module."""
+    """Residual convolution module
+
+    Parameters
+    ----------
+    features :int
+        Number of features
+    activation: nn.Module
+        Activation module, default is nn.GELU
+    bn: bool
+        Whether to use batch normalisation
+    """
 
     def __init__(self, features, activation=nn.GELU, bn=True):
-        """Init.
-        Args:
-            features (int): number of features
-        """
         super().__init__()
         self.bn = bn
         self.groups = 1
@@ -591,12 +596,7 @@ class ResidualConvUnit_custom(nn.Module):
         self.skip_add = nn.quantized.FloatFunctional()
 
     def forward(self, x):
-        """Forward pass.
-        Args:
-            x (tensor): input
-        Returns:
-            tensor: output
-        """
+        """ forward pass"""
         out = self.activation(x)
         out = self.conv1(out)
         if self.bn == True:
@@ -651,10 +651,7 @@ class FeatureFusionBlock_custom(nn.Module):
         self.skip_add = nn.quantized.FloatFunctional()
 
     def forward(self, *xs):
-        """Forward pass.
-        Returns:
-            tensor: output
-        """
+        """Forward pass """
         output = xs[0]
 
         if len(xs) == 2:

@@ -101,6 +101,7 @@ swin_encoder = SwinEncoder(
 - [CrossViT](https://github.com/IBM/CrossViT)
 - [Compact-Transformers](https://github.com/SHI-Labs/Compact-Transformers)
 - [Visformer](https://github.com/danczs/Visformer)
+- [Dense-Prediction-Transformer](https://github.com/isl-org/DPT)
 
 <br>
 
@@ -173,6 +174,19 @@ swin_encoder = SwinEncoder(
       author={Zhengsu Chen and Lingxi Xie and Jianwei Niu and Xuefeng Liu and Longhui Wei and Qi Tian},
       year={2021},
       eprint={2104.12533},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
+
+<b>Vision Transformers for Dense Prediction</b>
+
+```bibtex
+@misc{ranftl2021vision,
+      title={Vision Transformers for Dense Prediction},
+      author={René Ranftl and Alexey Bochkovskiy and Vladlen Koltun},
+      year={2021},
+      eprint={2103.13413},
       archivePrefix={arXiv},
       primaryClass={cs.CV}
 }
