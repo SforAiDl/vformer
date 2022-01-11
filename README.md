@@ -7,7 +7,8 @@
 [![Docs](https://readthedocs.org/projects/vformer/badge/?version=latest)](https://vformer.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/SforAiDl/vformer/branch/main/graph/badge.svg?token=5QKCZ67CM2)](https://codecov.io/gh/SforAiDl/vformer)
 
-
+**[Documentation](https://vformer.readthedocs.io/en/latest/)**
+    
 </div>
 
 ## Library Features
