@@ -101,7 +101,7 @@ swin_encoder = SwinEncoder(
 - [CrossViT](https://github.com/IBM/CrossViT)
 - [Compact-Transformers](https://github.com/SHI-Labs/Compact-Transformers)
 - [Visformer](https://github.com/danczs/Visformer)
-- [Dense-Prediction-Transformer](https://github.com/isl-org/DPT)
+- [DPT](https://github.com/isl-org/DPT)
 
 <br>
 
