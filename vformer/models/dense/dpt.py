@@ -457,7 +457,7 @@ class DPTDepth(nn.Module):
 
 
 class Slice(nn.Module):
-    """Handles readout operation when `readout` parameter is `ignore`. Removes `cls_token` or  `readout_token` by index slicing """
+    """Handles readout operation when `readout` parameter is `ignore`. Removes `cls_token` or  `readout_token` by index slicing"""
 
     def __init__(self, start_index=1):
         super(Slice, self).__init__()
@@ -468,7 +468,7 @@ class Slice(nn.Module):
 
 
 class AddReadout(nn.Module):
-    """Handles readout operation when `readout` parameter is `add`. Removes `cls_token` or  `readout_token` from tensor and adds it to the rest of tensor """
+    """Handles readout operation when `readout` parameter is `add`. Removes `cls_token` or  `readout_token` from tensor and adds it to the rest of tensor"""
 
     def __init__(self, start_index=1):
         super(AddReadout, self).__init__()

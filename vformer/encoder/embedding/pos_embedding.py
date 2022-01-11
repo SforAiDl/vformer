@@ -77,6 +77,7 @@ class PVTPosEmbedding(nn.Module):
 class PosEmbedding(nn.Module):
     def __init__(self, shape, dim, drop=None, sinusoidal=False, std=0.02):
         super(PosEmbedding, self).__init__()
+
         if not sinusoidal:
             if isinstance(shape, int):
                 shape = [1, shape, dim]

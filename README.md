@@ -100,6 +100,7 @@ swin_encoder = SwinEncoder(
 - [vit-explain](https://github.com/jacobgil/vit-explain)
 - [CrossViT](https://github.com/IBM/CrossViT)
 - [Compact-Transformers](https://github.com/SHI-Labs/Compact-Transformers)
+- [Vis-former](https://github.com/danczs/Visformer)
 
 <br>
 
@@ -161,6 +162,19 @@ swin_encoder = SwinEncoder(
 	eprint       = {2104.05704},
 	archiveprefix = {arXiv},
 	primaryclass = {cs.CV}
+}
+```
+
+<b>Visformer: The Vision-friendly Transformer</b>
+
+```bibtex
+@misc{chen2021visformer,
+      title={Visformer: The Vision-friendly Transformer},
+      author={Zhengsu Chen and Lingxi Xie and Jianwei Niu and Xuefeng Liu and Longhui Wei and Qi Tian},
+      year={2021},
+      eprint={2104.12533},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }
 ```
 </details>

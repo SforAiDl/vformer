@@ -11,3 +11,4 @@ Classification
     pyramid
     swin
     vanilla
+    visformer
