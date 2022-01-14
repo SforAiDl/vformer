@@ -55,9 +55,10 @@ def test_MultiScaleAttention():
 
     test_tensor1 = torch.randn(96,8,56,56)
     test_tensor2 = torch.randn(768,8,14,14)
+    thw  = [2,2,2]
 
     attention = ATTENTION_REGISTRY.get("MultiScaleAttention")(dim=192)
-    out = attention(test_tensor1)
+    out = attention(test_tensor1, thw)
     assert out.shape == (192,8,28,28)
     del attention
 
