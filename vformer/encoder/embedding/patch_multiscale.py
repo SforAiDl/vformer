@@ -1,3 +1,5 @@
+import torch.nn as nn
+
 class PatchEmbed(nn.Module):
     """
     arameters
