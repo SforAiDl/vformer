@@ -15,45 +15,52 @@ class MultiScaleViT(BaseClassificationModel):
     Parameters
     ----------
     """
-def __init__(self, cfg):
+def __init__(self,
+             spatial_size = 224,
+             pool_first = False,
+             temporal_size = 8,
+             in_chans = 3,
+             use_2d_patch = False,
+             patch_stride = [2,4,4],
+             num_classes = 400
+             embed_dim = 96
+             num_heads = 1
+             mlp_ratio = 4.0
+             qkv_bias = True
+             drop_rate = 0.0
+             depth = 16
+             drop_path_rate = 0.1
+             mode = "conv"
+             cls_embed_on = True
+             sep_pos_embed = False
+             norm_stem = False
+             norm_layer = partial(nn.LayerNorm, eps=1e-6)
+             patch_kernel = (3, 7, 7)
+             patch_stride = (2, 4, 4)
+             patch_padding = (1, 3, 3)
+             DIM_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
+             HEAD_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
+             POOL_KVQ_KERNEL: [3, 3, 3]
+             POOL_KV_STRIDE_ADAPTIVE: [1, 8, 8]
+             POOL_Q_STRIDE: [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]]
+             ):
         super().__init__()
-        # Get parameters.
-        pool_first = False
-        # Prepare input.
-        spatial_size = 224
-        temporal_size = 8
-        in_chans = 3
-        use_2d_patch = False
-        self.patch_stride = [2, 4, 4]
+        self.patch_stride = patch_stride
         if use_2d_patch:
             self.patch_stride = [1] + self.patch_stride
-        # Prepare output.
-        num_classes = 400
-        embed_dim = 96
-        # Prepare backbone
-        num_heads = 1
-        mlp_ratio = 4.0
-        qkv_bias = True
-        self.drop_rate = 0.0
-        depth = 16
-        drop_path_rate = 0.1
-        mode = "conv"
-        self.cls_embed_on = True
-        self.sep_pos_embed = False
-        norm_stem = False
-        norm_layer = partial(nn.LayerNorm, eps=1e-6)
-        DIM_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
-        HEAD_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
-        POOL_KVQ_KERNEL: [3, 3, 3]
-        POOL_KV_STRIDE_ADAPTIVE: [1, 8, 8]
-        POOL_Q_STRIDE: [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]]
+        
+        self.drop_rate = DROPOUT_RATE
+        
+        self.cls_embed_on = cls_embed_on
+        self.sep_pos_embed = sep_pos_embed
+        
         self.num_classes = num_classes
         self.patch_embed = stem_helper.PatchEmbed(
             dim_in=in_chans,
             dim_out=embed_dim,
-            kernel=(3, 7, 7),
-            stride=(2, 4, 4),
-            padding=(1, 3, 3),
+            kernel=patch_kernel,
+            stride=patch_stride,
+            padding=patch_padding,
             conv_2d=use_2d_patch,
         )
         self.input_dims = [temporal_size, spatial_size, spatial_size]
