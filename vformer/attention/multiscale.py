@@ -52,7 +52,7 @@ def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
         tensor = tensor.squeeze(1)
     return tensor, thw_shape
 
-
+@ATTENTION_REGISTRY.register()
 class MultiScaleAttention(nn.Module):
     """
     Multiscale Attention
