@@ -2,10 +2,10 @@ import math
 import torch
 import torch.nn as nn
 
-from vformer.common import BaseClassificationModel
-from vformer.encoder.embedding.patch_multiscale import PatchEmbed
-from vformer.decoder.mlp import MLPDecoder
-from vformer.encoder.multiscale import MultiScaleBlock
+from ...common import BaseClassificationModel
+from ...decoder import MLPDecoder
+from ...encoder import MultiScaleBlock, PatchEmbed
+from ...utils import MODEL_REGISTRY
 
 @MODEL_REGISTRY.register()
 class MultiScaleViT(BaseClassificationModel):
