@@ -159,7 +159,15 @@ def test_CrossVit():
     assert out.shape == (2, 10)
     del model
 
+def test_MultiScale():
 
+    model = MODEL_REGISTRY.get("MultiScaleViT")()
+    out = model(img_3channels_224)
+    assert out.shape == (8, 400)
+    del model
+
+    
+    
 def test_pvt():
     # classification
     model = MODEL_REGISTRY.get("PVTClassification")(
