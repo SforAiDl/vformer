@@ -49,7 +49,7 @@ def __init__(self,
         if use_2d_patch:
             self.patch_stride = [1] + self.patch_stride
         
-        self.drop_rate = DROPOUT_RATE
+        self.drop_rate = drop_rate
         
         self.cls_embed_on = cls_embed_on
         self.sep_pos_embed = sep_pos_embed
