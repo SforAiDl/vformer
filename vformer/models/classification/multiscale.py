@@ -42,13 +42,18 @@ def __init__(self, cfg):
         self.sep_pos_embed = False
         norm_stem = False
         norm_layer = partial(nn.LayerNorm, eps=1e-6)
+        DIM_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
+        HEAD_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
+        POOL_KVQ_KERNEL: [3, 3, 3]
+        POOL_KV_STRIDE_ADAPTIVE: [1, 8, 8]
+        POOL_Q_STRIDE: [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]]
         self.num_classes = num_classes
         self.patch_embed = stem_helper.PatchEmbed(
             dim_in=in_chans,
             dim_out=embed_dim,
-            kernel=cfg.MVIT.PATCH_KERNEL,
-            stride=cfg.MVIT.PATCH_STRIDE,
-            padding=cfg.MVIT.PATCH_PADDING,
+            kernel=(3, 7, 7),
+            stride=(2, 4, 4),
+            padding=(1, 3, 3),
             conv_2d=use_2d_patch,
         )
         self.input_dims = [temporal_size, spatial_size, spatial_size]
@@ -91,59 +96,56 @@ def __init__(self, cfg):
             self.pos_drop = nn.Dropout(p=self.drop_rate)
 
         dim_mul, head_mul = torch.ones(depth + 1), torch.ones(depth + 1)
-        for i in range(len(cfg.MVIT.DIM_MUL)):
-            dim_mul[cfg.MVIT.DIM_MUL[i][0]] = cfg.MVIT.DIM_MUL[i][1]
-        for i in range(len(cfg.MVIT.HEAD_MUL)):
-            head_mul[cfg.MVIT.HEAD_MUL[i][0]] = cfg.MVIT.HEAD_MUL[i][1]
+        for i in range(len(DIM_MUL)):
+            dim_mul[DIM_MUL[i][0]] = DIM_MUL[i][1]
+        for i in range(len(HEAD_MUL)):
+            head_mul[HEAD_MUL[i][0]] = HEAD_MUL[i][1]
 
         pool_q = [[] for i in range(depth)]
         pool_kv = [[] for i in range(depth)]
         stride_q = [[] for i in range(depth)]
         stride_kv = [[] for i in range(depth)]
 
-        for i in range(len(cfg.MVIT.POOL_Q_STRIDE)):
-            stride_q[cfg.MVIT.POOL_Q_STRIDE[i][0]] = cfg.MVIT.POOL_Q_STRIDE[i][
+        for i in range(len(POOL_Q_STRIDE)):
+            stride_q[POOL_Q_STRIDE[i][0]] = POOL_Q_STRIDE[i][
                 1:
             ]
             if cfg.MVIT.POOL_KVQ_KERNEL is not None:
-                pool_q[cfg.MVIT.POOL_Q_STRIDE[i][0]] = cfg.MVIT.POOL_KVQ_KERNEL
+                pool_q[POOL_Q_STRIDE[i][0]] = POOL_KVQ_KERNEL
             else:
-                pool_q[cfg.MVIT.POOL_Q_STRIDE[i][0]] = [
-                    s + 1 if s > 1 else s for s in cfg.MVIT.POOL_Q_STRIDE[i][1:]
+                pool_q[POOL_Q_STRIDE[i][0]] = [
+                    s + 1 if s > 1 else s for s in POOL_Q_STRIDE[i][1:]
                 ]
 
         # If POOL_KV_STRIDE_ADAPTIVE is not None, initialize POOL_KV_STRIDE.
-        if cfg.MVIT.POOL_KV_STRIDE_ADAPTIVE is not None:
-            _stride_kv = cfg.MVIT.POOL_KV_STRIDE_ADAPTIVE
-            cfg.MVIT.POOL_KV_STRIDE = []
-            for i in range(cfg.MVIT.DEPTH):
+        if POOL_KV_STRIDE_ADAPTIVE is not None:
+            _stride_kv = POOL_KV_STRIDE_ADAPTIVE
+            POOL_KV_STRIDE = []
+            for i in range(depth):
                 if len(stride_q[i]) > 0:
                     _stride_kv = [
                         max(_stride_kv[d] // stride_q[i][d], 1)
                         for d in range(len(_stride_kv))
                     ]
-                cfg.MVIT.POOL_KV_STRIDE.append([i] + _stride_kv)
+                POOL_KV_STRIDE.append([i] + _stride_kv)
 
-        for i in range(len(cfg.MVIT.POOL_KV_STRIDE)):
-            stride_kv[cfg.MVIT.POOL_KV_STRIDE[i][0]] = cfg.MVIT.POOL_KV_STRIDE[
+        for i in range(len(POOL_KV_STRIDE)):
+            stride_kv[POOL_KV_STRIDE[i][0]] = POOL_KV_STRIDE[
                 i
             ][1:]
-            if cfg.MVIT.POOL_KVQ_KERNEL is not None:
+            if POOL_KVQ_KERNEL is not None:
                 pool_kv[
-                    cfg.MVIT.POOL_KV_STRIDE[i][0]
-                ] = cfg.MVIT.POOL_KVQ_KERNEL
+                    POOL_KV_STRIDE[i][0]
+                ] = KVQ_KERNEL
             else:
-                pool_kv[cfg.MVIT.POOL_KV_STRIDE[i][0]] = [
+                pool_kv[POOL_KV_STRIDE[i][0]] = [
                     s + 1 if s > 1 else s
-                    for s in cfg.MVIT.POOL_KV_STRIDE[i][1:]
+                    for s in POOL_KV_STRIDE[i][1:]
                 ]
 
         self.norm_stem = norm_layer(embed_dim) if norm_stem else None
 
         self.blocks = nn.ModuleList()
-
-        if cfg.MODEL.ACT_CHECKPOINT:
-            validate_checkpoint_wrapper_import(checkpoint_wrapper)
 
         for i in range(depth):
             num_heads = round_width(num_heads, head_mul[i])
@@ -180,7 +182,7 @@ def __init__(self, cfg):
         self.head = head_helper.TransformerBasicHead(
             embed_dim,
             num_classes,
-            dropout_rate=cfg.MODEL.DROPOUT_RATE,
+            dropout_rate=self.drop_rate,
             act_func=cfg.MODEL.HEAD_ACT,
         )
         if self.sep_pos_embed:
