@@ -4,7 +4,9 @@ from torch import nn
 from timm.models.layers import DropPath
 from .nn import FeedForward as Mlp
 from ..attention import MultiScaleAttention
+from ..utils import ENCODER_REGISTRY
 
+@ENCODER_REGISTRY.register()
 class MultiScaleBlock(nn.Module):
     """
     Multiscale Attention Block
