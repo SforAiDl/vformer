@@ -1,6 +1,7 @@
 import numpy
 import torch
 import torch.nn as nn
+from ..utils import ATTENTION_REGISTRY
 
 def attention_pool(tensor, pool, thw_shape, has_cls_embed=True, norm=None):
     """
