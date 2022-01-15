@@ -1,7 +1,7 @@
-#Video Patch Embedding
-#data Dim is in following format - Batch,Time,Channels,Height,Width
+# Video Patch Embedding
+# data Dim is in following format - Batch,Time,Channels,Height,Width
 
-#As discussed in paper; this embedding is just Like Vanilla Embedding where we take non overlapping image patches and map them into multidimension embedding
+# As discussed in paper; this embedding is just Like Vanilla Embedding where we take non overlapping image patches and map them into multidimension embedding
 
 import torch
 import torch.nn as nn
@@ -35,9 +35,9 @@ class LinearVideoEmbedding(nn.Module):
 
         self.patch_embedding = nn.Sequential(
             Rearrange(
-                "b t c (h p1) (w p2) -> b t (h w) (p1 p2 c)",
-                p1=patch_height,
-                p2=patch_width,
+                "b t c (h ph) (w pw) -> b t (h w) (ph pw c)",
+                ph=patch_height,
+                pw=patch_width,
             ),
             nn.Linear(patch_dim, embedding_dim),
         )
@@ -60,7 +60,6 @@ class LinearVideoEmbedding(nn.Module):
         return self.patch_embedding(x)
 
 
-
 #
 class TubeletEmbedding(nn.Module):
     """
@@ -77,15 +76,21 @@ class TubeletEmbedding(nn.Module):
         Width of single tube/patch
 
     """
-    def __init__(self,embedding_dim,tubelet_t,tubelet_h,tubelet_w,in_channels):
+
+    def __init__(self, embedding_dim, tubelet_t, tubelet_h, tubelet_w, in_channels):
         super(TubeletEmbedding, self).__init__()
-        tubelet_dim = in_channels*tubelet_h*tubelet_w*tubelet_t
+        tubelet_dim = in_channels * tubelet_h * tubelet_w * tubelet_t
         self.tubelet_embedding = nn.Sequential(
-            Rearrange('b c (t pt) (h ph) (w pw) -> b t (h w) (pt ph pw c)', pt=tubelet_t, ph=tubelet_h, pw=tubelet_w),
-            nn.Linear(tubelet_dim, embedding_dim)
+            Rearrange(
+                "b c (t pt) (h ph) (w pw) -> b t (h w) (pt ph pw c)",
+                pt=tubelet_t,
+                ph=tubelet_h,
+                pw=tubelet_w,
+            ),
+            nn.Linear(tubelet_dim, embedding_dim),
         )
 
-    def forwar(self,x):
+    def forwar(self, x):
         """
 
         Parameters
