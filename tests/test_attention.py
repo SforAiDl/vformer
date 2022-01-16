@@ -53,18 +53,13 @@ def test_CrossAttention():
 
 def test_MultiScaleAttention():
 
-    test_tensor1 = torch.randn(96,8,56,56)
-    test_tensor2 = torch.randn(768,8,14,14)
+    test_tensor1 = torch.randn(96,56,56)
+    test_tensor2 = torch.randn(768,14,14)
     thw  = [2,2,2]
 
-    attention = ATTENTION_REGISTRY.get("MultiScaleAttention")(dim=192)
-    out = attention(test_tensor1, thw)
-    assert out.shape == (192,8,28,28)
-    del attention
-
-    attention = ATTENTION_REGISTRY.get("VanillaSelfAttention")(dim=768)
-    out = attention(test_tensor2)
-    assert out.shape == (768,8,14,14)
+    attention = ATTENTION_REGISTRY.get("MultiScaleAttention")(dim=56)
+    out,_ = attention(test_tensor1, thw)
+    assert out.shape == (96,56,56)
     del attention
 
 

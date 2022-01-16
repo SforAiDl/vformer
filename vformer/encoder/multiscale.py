@@ -5,6 +5,7 @@ from timm.models.layers import DropPath
 from .nn import FeedForward as Mlp
 from ..attention import MultiScaleAttention
 from ..utils import ENCODER_REGISTRY
+from ..attention.multiscale import attention_pool
 
 @ENCODER_REGISTRY.register()
 class MultiScaleBlock(nn.Module):

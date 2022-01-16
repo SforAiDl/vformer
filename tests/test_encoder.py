@@ -58,15 +58,17 @@ def test_SwinEncoder():
 
 def test_MultiScaleBlock():
 
-    test_tensor1 = torch.randn(96,8,56,56)
-    encoder1 = ENCODER_REGISTRY.get("MultiScaleBlock")(dim=192)
-    out1 = encoder1(test_tensor)
-    assert out1.shape == (192,8,28,28)  
+    thw  = [1,5,11]
+    test_tensor1 = torch.randn(96,56,56)
+    encoder1 = ENCODER_REGISTRY.get("MultiScaleBlock")(56,56,8)
+    out1, _ = encoder1(test_tensor1, thw)
+    assert out1.shape == (96,56,56)  
     
-    test_tensor2 = torch.randn(768,8,14,14)
-    encoder2 = ENCODER_REGISTRY.get("MultiScaleBlock")(dim=768)
-    out2 = encoder2(test_tensor)
-    assert out2.shape == (768,8,14,14)  # shape remains same
+    thw  = [1,13,1]
+    test_tensor2 = torch.randn(768,14,14)
+    encoder2 = ENCODER_REGISTRY.get("MultiScaleBlock")(14,14,14)
+    out2, _ = encoder2(test_tensor2, thw)
+    assert out2.shape == (768,14,14)  # shape remains same
     
     
     del encoder1, encoder2, test_tensor1, test_tensor2

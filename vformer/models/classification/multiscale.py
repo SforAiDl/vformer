@@ -15,7 +15,7 @@ class MultiScaleViT(BaseClassificationModel):
     Parameters
     ----------
     """
-def __init__(self,
+    def __init__(self,
              spatial_size = 224,
              pool_first = False,
              temporal_size = 8,
