@@ -66,9 +66,9 @@ def test_MultiScaleBlock():
     
     thw  = [1,13,1]
     test_tensor2 = torch.randn(768,14,14)
-    encoder2 = ENCODER_REGISTRY.get("MultiScaleBlock")(14,14,14)
+    encoder2 = ENCODER_REGISTRY.get("MultiScaleBlock")(14,28,7)
     out2, _ = encoder2(test_tensor2, thw)
-    assert out2.shape == (768,14,14)  # shape remains same
+    assert out2.shape == (768,14,28)  # shape remains same
     
     
     del encoder1, encoder2, test_tensor1, test_tensor2
