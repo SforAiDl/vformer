@@ -178,7 +178,7 @@ class MultiScaleViT(BaseClassificationModel):
                 has_cls_embed=self.cls_embed_on,
                 pool_first=pool_first,
             )
-            if cfg.MODEL.ACT_CHECKPOINT:
+            if ACT_CHECKPOINT:
                 attention_block = checkpoint_wrapper(attention_block)
             self.blocks.append(attention_block)
 
