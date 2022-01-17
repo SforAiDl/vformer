@@ -35,14 +35,13 @@ class MultiScaleViT(BaseClassificationModel):
              sep_pos_embed = False
              norm_stem = False
              norm_layer = partial(nn.LayerNorm, eps=1e-6)
-             patch_kernel = (3, 7, 7)
-             patch_stride = (2, 4, 4)
-             patch_padding = (1, 3, 3)
-             DIM_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
-             HEAD_MUL: [[1, 2.0], [3, 2.0], [14, 2.0]]
-             POOL_KVQ_KERNEL: [3, 3, 3]
-             POOL_KV_STRIDE_ADAPTIVE: [1, 8, 8]
-             POOL_Q_STRIDE: [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]]
+             patch_kernel = (3, 7, 7),
+             patch_padding = (1, 3, 3),
+             DIM_MUL=[[1, 2.0], [3, 2.0], [14, 2.0]],
+             HEAD_MUL= [[1, 2.0], [3, 2.0], [14, 2.0]],
+             POOL_KVQ_KERNEL= [3, 3, 3],
+             POOL_KV_STRIDE_ADAPTIVE=[1, 8, 8],
+             POOL_Q_STRIDE= [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]],
              ):
         super().__init__()
         self.patch_stride = patch_stride
