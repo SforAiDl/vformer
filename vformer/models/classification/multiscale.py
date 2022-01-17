@@ -189,7 +189,7 @@ class MultiScaleViT(BaseClassificationModel):
             embed_dim,
             num_classes,
             dropout_rate=self.drop_rate,
-            act_func=cfg.MODEL.HEAD_ACT,
+            act_func=HEAD_ACT,
         )
         if self.sep_pos_embed:
             trunc_normal_(self.pos_embed_spatial, std=0.02)
