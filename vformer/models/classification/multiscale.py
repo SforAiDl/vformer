@@ -116,7 +116,7 @@ class MultiScaleViT(BaseClassificationModel):
             stride_q[POOL_Q_STRIDE[i][0]] = POOL_Q_STRIDE[i][
                 1:
             ]
-            if cfg.MVIT.POOL_KVQ_KERNEL is not None:
+            if POOL_KVQ_KERNEL is not None:
                 pool_q[POOL_Q_STRIDE[i][0]] = POOL_KVQ_KERNEL
             else:
                 pool_q[POOL_Q_STRIDE[i][0]] = [
