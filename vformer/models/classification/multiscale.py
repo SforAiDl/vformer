@@ -1,7 +1,7 @@
 import math
 import torch
 import torch.nn as nn
-
+from functools import partial
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import MultiScaleBlock, PatchEmbed
