@@ -6,6 +6,7 @@ from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import MultiScaleBlock, PatchEmbed
 from ...utils import MODEL_REGISTRY
+from timm.models.layers import trunc_normal_
 
 @MODEL_REGISTRY.register()
 class MultiScaleViT(BaseClassificationModel):
