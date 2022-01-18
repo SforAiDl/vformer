@@ -4,3 +4,4 @@ from .cvt import CVT
 from .pyramid import PVTClassification, PVTClassificationV2
 from .swin import SwinTransformer
 from .vanilla import VanillaViT
+from .multiscale import MultiScaleViT
