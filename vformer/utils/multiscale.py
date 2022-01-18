@@ -1,7 +1,5 @@
 import logging
 
-logger = logging.get_logger(__name__)
-
 def get_logger(name):
     """
     Retrieve the logger with the specified name or, if name is None, return a
@@ -11,6 +9,7 @@ def get_logger(name):
     """
     return logging.getLogger(name)
 
+logger = logging.get_logger(__name__)
 
 def round_width(width, multiplier, min_width=1, divisor=1, verbose=False):
     if not multiplier:
