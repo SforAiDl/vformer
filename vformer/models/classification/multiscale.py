@@ -4,7 +4,8 @@ import torch.nn as nn
 from functools import partial
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
-from ...encoder import MultiScaleBlock, PatchEmbed
+from ...encoder import MultiScaleBlock
+from ...encoder.embedding import MultiScaleBlockPatchEmbed
 from ...utils import MODEL_REGISTRY
 from ...utils.multiscale import round_width
 from timm.models.layers import trunc_normal_
