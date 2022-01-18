@@ -5,11 +5,11 @@ from functools import partial
 from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import MultiScaleBlock
-from ...encoder.embedding import PatchEmbed
+from ...encoder.embedding.patch_multiscale import PatchEmbed
 from ...utils import MODEL_REGISTRY
-from ...utils.multiscale import round_width
+from ...utils.multiscale import round_width,TransformerBasicHead
 from timm.models.layers import trunc_normal_
-
+from fairscale.nn.checkpoint import checkpoint_wrapper
 @MODEL_REGISTRY.register()
 class MultiScaleViT(BaseClassificationModel):
     """
@@ -18,38 +18,39 @@ class MultiScaleViT(BaseClassificationModel):
     Parameters
     ----------
     """
-    def __init__(self,
-             spatial_size = 224,
-             pool_first = False,
-             temporal_size = 8,
-             in_chans = 3,
-             use_2d_patch = False,
-             patch_stride = [2,4,4],
-             num_classes = 400,
-             embed_dim = 96,
-             num_heads = 1,
-             mlp_ratio = 4.0,
-             qkv_bias = True,
-             drop_rate = 0.0,
-             depth = 16,
-             drop_path_rate = 0.1,
-             mode = "conv",
-             cls_embed_on = True,
-             sep_pos_embed = False,
-             norm_stem = False,
-             norm_layer = partial(nn.LayerNorm, eps=1e-6),
-             patch_kernel = (3, 7, 7),
-             patch_padding = (1, 3, 3),
-             DIM_MUL=[[1, 2.0], [3, 2.0], [14, 2.0]],
-             HEAD_MUL= [[1, 2.0], [3, 2.0], [14, 2.0]],
-             POOL_KVQ_KERNEL= [3, 3, 3],
-             POOL_KV_STRIDE_ADAPTIVE=[1, 8, 8],
-             POOL_Q_STRIDE= [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]],
-             ):
-        super().__init__()
-        self.patch_stride = patch_stride
+    def __init__(
+            self,
+            img_size = 224,
+            pool_first = False,
+            temporal_size = 8,
+            in_chans = 3,
+            use_2d_patch = False,
+            patch_size = [2,4,4],
+            num_classes = 400,
+            embed_dim = 96,
+            num_heads = 1,
+            mlp_ratio = 4.0,
+            qkv_bias = True,
+            drop_rate = 0.0,
+            depth = 16,
+            drop_path_rate = 0.1,
+            mode = "conv",
+            cls_embed_on = True,
+            sep_pos_embed = False,
+            norm_stem = False,
+            norm_layer = partial(nn.LayerNorm, eps=1e-6),
+            patch_kernel = (3, 7, 7),
+            patch_padding = (1, 3, 3),
+            DIM_MUL=[[1, 2.0], [3, 2.0], [14, 2.0]],
+            HEAD_MUL= [[1, 2.0], [3, 2.0], [14, 2.0]],
+            POOL_KVQ_KERNEL= [3, 3, 3],
+            POOL_KV_STRIDE_ADAPTIVE=[1, 8, 8],
+            POOL_Q_STRIDE= [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]],
+            ):
+        super(MultiScaleViT, self).__init__()
+        self.patch_size = patch_size
         if use_2d_patch:
-            self.patch_stride = [1] + self.patch_stride
+            self.patch_size = [1] + self.patch_size
         
         self.drop_rate = drop_rate
         
@@ -61,14 +62,14 @@ class MultiScaleViT(BaseClassificationModel):
             dim_in=in_chans,
             dim_out=embed_dim,
             kernel=patch_kernel,
-            stride=patch_stride,
+            stride=patch_size,
             padding=patch_padding,
             conv_2d=use_2d_patch,
         )
-        self.input_dims = [temporal_size, spatial_size, spatial_size]
+        self.input_dims = [temporal_size, img_size, img_size]
         assert self.input_dims[1] == self.input_dims[2]
         self.patch_dims = [
-            self.input_dims[i] // self.patch_stride[i]
+            self.input_dims[i] // self.patch_size[i]
             for i in range(len(self.input_dims))
         ]
         num_patches = math.prod(self.patch_dims)
@@ -188,7 +189,7 @@ class MultiScaleViT(BaseClassificationModel):
         embed_dim = dim_out
         self.norm = norm_layer(embed_dim)
 
-        self.head = head_helper.TransformerBasicHead(
+        self.head = TransformerBasicHead(
             embed_dim,
             num_classes,
             dropout_rate=self.drop_rate,
@@ -214,13 +215,13 @@ class MultiScaleViT(BaseClassificationModel):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    def forward(self,spatial_size,temporal_size, x):
+    def forward(self,img_size,temporal_size, x):
         x = x[0]
         x = self.patch_embed(x)
         
-        T = temporal_size // self.patch_stride[0]
-        H = spatial_size // self.patch_stride[1]
-        W = spatial_size // self.patch_stride[2]
+        T = temporal_size // self.patch_size[0]
+        H = img_size // self.patch_size[1]
+        W = img_size // self.patch_size[2]
         B, N, C = x.shape
 
         if self.cls_embed_on:
