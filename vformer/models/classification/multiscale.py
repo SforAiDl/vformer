@@ -31,12 +31,12 @@ class MultiScaleViT(BaseClassificationModel):
              qkv_bias = True,
              drop_rate = 0.0,
              depth = 16,
-             drop_path_rate = 0.1
-             mode = "conv"
-             cls_embed_on = True
-             sep_pos_embed = False
-             norm_stem = False
-             norm_layer = partial(nn.LayerNorm, eps=1e-6)
+             drop_path_rate = 0.1,
+             mode = "conv",
+             cls_embed_on = True,
+             sep_pos_embed = False,
+             norm_stem = False,
+             norm_layer = partial(nn.LayerNorm, eps=1e-6),
              patch_kernel = (3, 7, 7),
              patch_padding = (1, 3, 3),
              DIM_MUL=[[1, 2.0], [3, 2.0], [14, 2.0]],
