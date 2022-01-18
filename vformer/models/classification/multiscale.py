@@ -6,6 +6,7 @@ from ...common import BaseClassificationModel
 from ...decoder import MLPDecoder
 from ...encoder import MultiScaleBlock, PatchEmbed
 from ...utils import MODEL_REGISTRY
+from ...utils.multiscale import round_width
 from timm.models.layers import trunc_normal_
 
 @MODEL_REGISTRY.register()
@@ -55,7 +56,7 @@ class MultiScaleViT(BaseClassificationModel):
         self.sep_pos_embed = sep_pos_embed
         
         self.num_classes = num_classes
-        self.patch_embed = stem_helper.PatchEmbed(
+        self.patch_embed = PatchEmbed(
             dim_in=in_chans,
             dim_out=embed_dim,
             kernel=patch_kernel,
