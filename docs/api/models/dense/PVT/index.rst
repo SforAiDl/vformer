@@ -1,5 +1,5 @@
 Pyramid Vision Transformer
-============
+=================================
 
 .. toctree::
     :caption: Contents
