@@ -86,3 +86,9 @@ def test_ConvVTAttention():
     out = attention(test_tensor1)
     assert out.shape == torch.Size([16, 196, 128])
     del attention
+
+    test_tensor1 = torch.randn(16, 196, 384)
+    attention = ATTENTION_REGISTRY.get("ConvVTAttention")(384, 128, 4, 14, method="avg")
+    out = attention(test_tensor1)
+    assert out.shape == torch.Size([16, 196, 128])
+    del attention
