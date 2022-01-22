@@ -62,21 +62,13 @@ class ConvVTStage(nn.Module):
         patch_stride=4,
         patch_padding=0,
         in_channels=3,
-        img_size=224,
         embedding_dim=64,
         depth=1,
-        num_heads=6,
-        mlp_ratio=4.0,
         p_dropout=0.0,
-        attn_dropout=0.0,
         drop_path_rate=0.0,
         with_cls_token=False,
-        kernel_size=3,
-        padding_q=1,
-        padding_kv=1,
-        stride_kv=2,
-        stride_q=1,
         init="trunc_norm",
+        **kwargs
     ):
         super().__init__()
 
@@ -104,18 +96,10 @@ class ConvVTStage(nn.Module):
                 ConvVTBlock(
                     dim_in=embedding_dim,
                     dim_out=embedding_dim,
-                    num_heads=num_heads,
-                    img_size=img_size,
-                    mlp_ratio=mlp_ratio,
                     p_dropout=p_dropout,
                     with_cls_token=with_cls_token,
-                    attn_dropout=attn_dropout,
                     drop_path=dpr[j],
-                    kernel_size=kernel_size,
-                    padding_q=padding_q,
-                    padding_kv=padding_kv,
-                    stride_kv=stride_kv,
-                    stride_q=stride_q,
+                    **kwargs
                 )
             )
         self.blocks = nn.ModuleList(blocks)
@@ -193,30 +177,12 @@ class ConvVTBlock(nn.Module):
     """
 
     def __init__(
-        self,
-        dim_in,
-        dim_out,
-        num_heads,
-        img_size,
-        mlp_ratio=4.0,
-        p_dropout=0.0,
-        attn_dropout=0.0,
-        drop_path=0.0,
-        with_cls_token=False,
-        **kwargs
+        self, dim_in, dim_out, mlp_ratio=4.0, p_dropout=0.0, drop_path=0.0, **kwargs
     ):
         super().__init__()
 
         self.norm1 = nn.LayerNorm(dim_in)
-        self.attn = ConvVTAttention(
-            dim_in,
-            dim_out,
-            num_heads,
-            img_size,
-            attn_dropout=attn_dropout,
-            with_cls_token=with_cls_token,
-            **kwargs
-        )
+        self.attn = ConvVTAttention(dim_in, dim_out, **kwargs)
 
         self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
         self.norm2 = nn.LayerNorm(dim_out)
