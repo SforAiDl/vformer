@@ -92,3 +92,14 @@ def test_CrossEncoder():
     assert out[0].shape == test_tensor1.shape
     assert out[1].shape == test_tensor2.shape
     del encoder
+
+
+def test_ConvitEncoder():
+
+    test_tensor = torch.randn(2, 64, 1024)
+    encoder = ENCODER_REGISTRY.get("ConvitEncoder")(
+        embedding_dim=1024, depth=6, num_heads=16, head_dim=64, mlp_dim=2048
+    )
+    out = encoder(test_tensor)
+    assert out.shape == test_tensor.shape  # shape remains same
+    del encoder, test_tensor

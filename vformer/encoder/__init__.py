@@ -1,3 +1,4 @@
+from .conv import ConvitEncoder
 from .cross import CrossEncoder
 from .embedding import *
 from .nn import FeedForward
