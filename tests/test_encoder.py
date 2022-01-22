@@ -110,3 +110,20 @@ def test_ConvVTStage():
     out, cls_tokens = encoder(test_tensor1)
     assert out.shape == torch.Size([32, 64, 56, 56])
     del encoder
+
+    test_tensor1 = torch.randn(32, 3, 224, 224)
+
+    encoder = ENCODER_REGISTRY.get("ConvVTStage")(
+        patch_size=7,
+        patch_stride=4,
+        patch_padding=2,
+        img_size=56,
+        embedding_dim=64,
+        depth=1,
+        num_heads=1,
+        with_cls_token=True,
+        init="xavier",
+    )
+    out, cls_tokens = encoder(test_tensor1)
+    assert out.shape == torch.Size([32, 64, 56, 56])
+    del encoder
