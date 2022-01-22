@@ -78,3 +78,21 @@ def test_SpatialAttention():
     )
     out = attention(test_tensor1, 56, 56)
     assert out.shape == test_tensor1.shape
+
+
+def test_GatedPositionalSelfAttention():
+
+    test_tensor1 = torch.randn(2, 64, 1024)
+    test_tensor2 = torch.randn(2, 256, 1024)
+
+    attention = ATTENTION_REGISTRY.get("GatedPositionalSelfAttention")(dim=1024)
+    out = attention(test_tensor1)
+    assert out.shape == (2, 64, 1024)
+    del attention
+
+    attention = ATTENTION_REGISTRY.get("GatedPositionalSelfAttention")(
+        dim=1024, num_heads=16
+    )
+    out = attention(test_tensor2)
+    assert out.shape == (2, 256, 1024)
+    del attention
