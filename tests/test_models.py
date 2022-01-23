@@ -465,16 +465,24 @@ def test_dpt():
 
 def test_Vivit():
     test_tensor1 = torch.randn([1, 16, 3, 224, 224])
-    test_tensor2 = torch.randn([3,16,3,224,224])
+    test_tensor2 = torch.randn([3, 16, 3, 224, 224])
 
-    model = MODEL_REGISTRY.get("ViViT")(img_size=224,in_channels=3,patch_size=16,embedding_dim=192,depth=4,num_heads=3,head_dim=64,num_frames=1,n_classes=10)
+    model = MODEL_REGISTRY.get("ViViT")(
+        img_size=224,
+        in_channels=3,
+        patch_size=16,
+        embedding_dim=192,
+        depth=4,
+        num_heads=3,
+        head_dim=64,
+        num_frames=1,
+        n_classes=10,
+    )
 
     out = model(test_tensor1)
-    assert out.shape == (1,10)
+    assert out.shape == (1, 10)
 
-    out=model(test_tensor2)
-    assert out.shape == (3,10)
+    out = model(test_tensor2)
+    assert out.shape == (3, 10)
 
     del model
-
-
