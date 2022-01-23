@@ -461,3 +461,24 @@ def test_dpt():
     out = model(img)
     assert out.shape == (4, 384, 384)
     del model
+
+
+def test_ConViT():
+
+    model = MODEL_REGISTRY.get("ConViT")(
+        img_size=256, patch_size=32, n_classes=10, in_channels=3
+    )
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
+    del model
+
+    model = MODEL_REGISTRY.get("ConViT")(
+        img_size=256,
+        patch_size=32,
+        n_classes=10,
+        embedding_dim=1024,
+        decoder_config=(1024, 512),
+    )
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
+    del model

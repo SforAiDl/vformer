@@ -1,4 +1,5 @@
 from .cct import CCT
+from .conv import ConViT
 from .cross import CrossViT
 from .cvt import CVT
 from .pyramid import PVTClassification, PVTClassificationV2
