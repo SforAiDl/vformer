@@ -19,8 +19,6 @@ class LinearVideoEmbedding(nn.Module):
         Height of the patch
     patch_width: int
         Width of the patch
-    patch_dim: int
-        Dimension of the patch
 
     """
 
@@ -31,8 +29,8 @@ class LinearVideoEmbedding(nn.Module):
         patch_width,
         patch_dim,
     ):
-        super().__init__()
 
+        super().__init__()
         self.patch_embedding = nn.Sequential(
             Rearrange(
                 "b t c (h ph) (w pw) -> b t (h w) (ph pw c)",
@@ -82,7 +80,7 @@ class TubeletEmbedding(nn.Module):
         tubelet_dim = in_channels * tubelet_h * tubelet_w * tubelet_t
         self.tubelet_embedding = nn.Sequential(
             Rearrange(
-                "b c (t pt) (h ph) (w pw) -> b t (h w) (pt ph pw c)",
+                "b  (t pt) c (h ph) (w pw) -> b t (h w) (pt ph pw c)",
                 pt=tubelet_t,
                 ph=tubelet_h,
                 pw=tubelet_w,
@@ -90,7 +88,7 @@ class TubeletEmbedding(nn.Module):
             nn.Linear(tubelet_dim, embedding_dim),
         )
 
-    def forwar(self, x):
+    def forward(self, x):
         """
 
         Parameters

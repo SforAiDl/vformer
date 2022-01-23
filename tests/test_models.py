@@ -461,3 +461,24 @@ def test_dpt():
     out = model(img)
     assert out.shape == (4, 384, 384)
     del model
+
+
+def test_Vivit():
+    img = torch.randn([1, 16, 3, 224, 224])
+    from vformer.models.classification import ViViT
+
+    model = ViViT(
+        img_size=224,
+        in_channels=3,
+        patch_size=16,
+        embedding_dim=192,
+        depth=4,
+        num_heads=3,
+        head_dim=64,
+        num_frames=16,
+        n_classes=10,
+    )
+
+    # model = MODEL_REGISTRY.get("ViViT")(img_size=224,in_channels=3,patch_size=16,embedding_dim=192,depth=4,num_heads=3,head_dim=64,num_frames=1,n_classes=10)
+
+    out = model(img)
