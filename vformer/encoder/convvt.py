@@ -148,6 +148,7 @@ class ConvVTStage(nn.Module):
         if self.cls_token is not None:
             cls_tokens, x = torch.split(x, [1, H * W], 1)
         x = rearrange(x, "b (h w) c -> b c h w", h=H, w=W)
+
         return x, cls_tokens
 
 
