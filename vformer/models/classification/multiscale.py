@@ -11,7 +11,7 @@ from ...utils.multiscale import round_width,TransformerBasicHead
 from timm.models.layers import trunc_normal_
 from fairscale.nn.checkpoint import checkpoint_wrapper
 @MODEL_REGISTRY.register()
-class MultiScaleViT(BaseClassificationModel):
+class MultiScaleViT(nn.Module):
     """
     Implementation of 'Multiscale Vision Transformers'
     https://arxiv.org/abs/2104.11227
