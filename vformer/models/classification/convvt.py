@@ -78,6 +78,7 @@ class ConvVT(nn.Module):
         num_classes=1000,
     ):
         super().__init__()
+
         self.num_classes = num_classes
 
         self.num_stages = num_stages
