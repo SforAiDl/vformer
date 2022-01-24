@@ -129,6 +129,7 @@ class ConvVTStage(nn.Module):
             nn.init.constant_(m.weight, 1.0)
 
     def forward(self, x):
+
         x = self.patch_embed(x)
         B, C, H, W = x.size()
 
