@@ -194,6 +194,7 @@ class ConvVTBlock(nn.Module):
         )
 
     def forward(self, x):
+
         res = x
 
         x = self.norm1(x)
