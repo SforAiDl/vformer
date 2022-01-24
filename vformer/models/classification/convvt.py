@@ -117,6 +117,7 @@ class ConvVT(nn.Module):
         trunc_normal_(self.head.weight, std=0.02)
 
     def forward(self, x):
+
         for i in range(self.num_stages):
             x, cls_tokens = self.stages[i](x)
 
