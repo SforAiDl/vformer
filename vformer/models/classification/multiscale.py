@@ -45,6 +45,7 @@ class MultiScaleViT(nn.Module):
             POOL_KVQ_KERNEL= [3, 3, 3],
             POOL_KV_STRIDE_ADAPTIVE=[1, 8, 8],
             POOL_Q_STRIDE= [[1, 1, 2, 2], [3, 1, 2, 2], [14, 1, 2, 2]],
+            HEAD_ACT = "softmax",
             ):
         super(MultiScaleViT, self).__init__()
         self.patch_size = patch_size
@@ -145,7 +146,7 @@ class MultiScaleViT(nn.Module):
             if POOL_KVQ_KERNEL is not None:
                 pool_kv[
                     POOL_KV_STRIDE[i][0]
-                ] = KVQ_KERNEL
+                ] = POOL_KVQ_KERNEL
             else:
                 pool_kv[POOL_KV_STRIDE[i][0]] = [
                     s + 1 if s > 1 else s
