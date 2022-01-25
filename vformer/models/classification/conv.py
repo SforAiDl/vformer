@@ -1,7 +1,7 @@
 import torch
 from einops import repeat
 
-from ...encoder import ConvitEncoder
+from ...encoder import ConViTEncoder
 from ...utils import MODEL_REGISTRY
 from .vanilla import VanillaViT
 
