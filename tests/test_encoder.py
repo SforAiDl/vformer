@@ -94,6 +94,17 @@ def test_CrossEncoder():
     del encoder
 
 
+def test_ConViTEncoder():
+
+    test_tensor = torch.randn(2, 64, 1024)
+    encoder = ENCODER_REGISTRY.get("ConViTEncoder")(
+        embedding_dim=1024, depth=6, num_heads=16, head_dim=64, mlp_dim=2048
+    )
+    out = encoder(test_tensor)
+    assert out.shape == test_tensor.shape  # shape remains same
+    del encoder, test_tensor
+
+
 def test_ConvVTStage():
     test_tensor1 = torch.randn(32, 3, 224, 224)
 

@@ -1,3 +1,4 @@
+from .convit import ConViTEncoder
 from .convvt import ConvVTStage
 from .cross import CrossEncoder
 from .embedding import *

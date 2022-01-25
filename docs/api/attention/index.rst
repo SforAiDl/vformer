@@ -9,3 +9,4 @@ Attention
    attention_cross
    attention_spatial
    attention_window
+   attention_gated_positional
