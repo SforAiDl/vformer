@@ -12,3 +12,4 @@ Classification
     swin
     vanilla
     visformer
+    convit
