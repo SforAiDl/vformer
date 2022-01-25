@@ -9,7 +9,7 @@ from .vanilla import VanillaEncoder
 
 
 @ENCODER_REGISTRY.register()
-class ConvitEncoder(VanillaEncoder):
+class ConViTEncoder(VanillaEncoder):
     """
 
     Parameters
@@ -54,6 +54,7 @@ class ConvitEncoder(VanillaEncoder):
             drop_path_rate,
         )
         self.encoder = nn.ModuleList([])
+
         for _ in range(depth):
             self.encoder.append(
                 nn.ModuleList(
