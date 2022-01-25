@@ -79,7 +79,8 @@ class ConViT(VanillaViT):
             p_dropout_encoder,
             p_dropout_embedding,
         )
-        self.encoder_gpsa = ConvitEncoder(
+
+        self.encoder_gpsa = ConViTEncoder(
             embedding_dim,
             depth_gpsa,
             attn_heads_gpsa,
