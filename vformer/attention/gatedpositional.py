@@ -32,6 +32,7 @@ class GatedPositionalSelfAttention(VanillaSelfAttention):
         self.n_prev = 0
 
     def rel_embedding(self, n):
+
         l = int(n ** 0.5)
         rel_indices_x = torch.arange(l).reshape(1, -1)
         rel_indices_y = torch.arange(l).reshape(-1, 1)
