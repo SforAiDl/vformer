@@ -9,7 +9,6 @@ from ...encoder.embedding.patch_multiscale import PatchEmbed
 from ...utils import MODEL_REGISTRY
 from ...utils.multiscale import round_width,TransformerBasicHead
 from timm.models.layers import trunc_normal_
-from fairscale.nn.checkpoint import checkpoint_wrapper
 @MODEL_REGISTRY.register()
 class MultiScaleViT(nn.Module):
     """
@@ -182,8 +181,6 @@ class MultiScaleViT(nn.Module):
                 has_cls_embed=self.cls_embed_on,
                 pool_first=pool_first,
             )
-            if ACT_CHECKPOINT:
-                attention_block = checkpoint_wrapper(attention_block)
             self.blocks.append(attention_block)
 
         embed_dim = dim_out
