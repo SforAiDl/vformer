@@ -1,5 +1,5 @@
 from .cross import CrossAttention
-from .gatedpositional import GatedPositionalSelfAttention
+from .gated_positional import GatedPositionalSelfAttention
 from .spatial import SpatialAttention
 from .vanilla import VanillaSelfAttention
 from .window import WindowAttention
