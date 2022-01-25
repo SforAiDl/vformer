@@ -94,7 +94,7 @@ def test_CrossEncoder():
     del encoder
 
 
-def test_ConvitEncoder():
+def test_ConViTEncoder():
 
     test_tensor = torch.randn(2, 64, 1024)
     encoder = ENCODER_REGISTRY.get("ConvitEncoder")(
