@@ -1,4 +1,5 @@
 from .conv import ConvitEncoder
+from .convvt import ConvVTStage
 from .cross import CrossEncoder
 from .embedding import *
 from .nn import FeedForward

@@ -1,3 +1,4 @@
+from .convvt import ConvVTAttention
 from .cross import CrossAttention
 from .gated_positional import GatedPositionalSelfAttention
 from .spatial import SpatialAttention

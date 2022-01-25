@@ -482,3 +482,17 @@ def test_ConViT():
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
     del model
+
+
+def test_ConvVT():
+    img = torch.randn(4, 3, 224, 224)
+    model = MODEL_REGISTRY.get("ConvVT")()
+    out = model(img)
+    assert out.shape == torch.Size([4, 1000])
+    del model
+
+    model = MODEL_REGISTRY.get("ConvVT")(img_size=384)
+    img2 = torch.randn(4, 3, 384, 384)
+    out = model(img2)
+    assert out.shape == torch.Size([4, 1000])
+    del model
