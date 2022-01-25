@@ -9,7 +9,7 @@ from .vanilla import VanillaEncoder
 
 
 @ENCODER_REGISTRY.register()
-class ConvitEncoder(VanillaEncoder):
+class ConViTEncoder(VanillaEncoder):
     """
 
     Parameters
