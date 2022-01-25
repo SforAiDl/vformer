@@ -36,6 +36,7 @@ python setup.py install
 - [x] [Compact Convolutional Transformer](https://arxiv.org/abs/2104.05704)
 - [x] [Vision-friendly Transformer](https://arxiv.org/abs/2104.12533)
 - [x] [Vision Transformers for Dense Prediction](https://arxiv.org/abs/2103.13413)
+- [x] [ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases](https://arxiv.org/abs/2103.10697)
 
 ## Example usage
 
