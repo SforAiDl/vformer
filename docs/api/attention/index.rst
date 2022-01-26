@@ -10,3 +10,4 @@ Attention
    attention_spatial
    attention_window
    attention_gated_positional
+   attention_convvt

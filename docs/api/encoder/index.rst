@@ -12,3 +12,4 @@ Encoder
     swin
     vanilla
     convit
+    convvt

@@ -1,4 +1,4 @@
-ConViT Transformer
+ConViT
 ================================
 
 .. automodule:: vformer.models.classification.convit

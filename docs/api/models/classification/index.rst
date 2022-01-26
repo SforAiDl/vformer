@@ -13,3 +13,4 @@ Classification
     vanilla
     visformer
     convit
+    convvt
