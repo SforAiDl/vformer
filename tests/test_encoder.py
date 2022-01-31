@@ -139,8 +139,8 @@ def test_ConvVTStage():
     assert out.shape == torch.Size([32, 64, 56, 56])
     del encoder
 
-    
-    def test_TubeletEmbedding():
+
+def test_TubeletEmbedding():
     from vformer.encoder.embedding.video_patch_embeddings import TubeletEmbedding
 
     test_tensor = torch.randn(
