@@ -496,7 +496,7 @@ def test_ConvVT():
     out = model(img2)
     assert out.shape == torch.Size([4, 1000])
     del model
-    
+
 
 def test_Vivit():
     test_tensor1 = torch.randn([1, 16, 3, 224, 224])
@@ -518,4 +518,4 @@ def test_Vivit():
     assert out.shape == (1, 10)
 
     out = model(test_tensor2)
-    assert out.shape == (3, 10)    
+    assert out.shape == (3, 10)
