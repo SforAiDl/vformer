@@ -34,8 +34,10 @@ python setup.py install
 - [x] [CrossViT](https://arxiv.org/abs/2103.14899)
 - [x] [Compact Vision Transformer](https://arxiv.org/abs/2104.05704)
 - [x] [Compact Convolutional Transformer](https://arxiv.org/abs/2104.05704)
-- [x] [Vision-friendly Transformer](https://arxiv.org/abs/2104.12533)
+- [x] [Visformer](https://arxiv.org/abs/2104.12533)
 - [x] [Vision Transformers for Dense Prediction](https://arxiv.org/abs/2103.13413)
+- [x] [CvT](https://arxiv.org/abs/2103.15808)
+- [x] [ConViT](https://arxiv.org/abs/2103.10697)
 
 ## Example usage
 
@@ -103,8 +105,10 @@ swin_encoder = SwinEncoder(
 - [Compact-Transformers](https://github.com/SHI-Labs/Compact-Transformers)
 - [Visformer](https://github.com/danczs/Visformer)
 - [DPT](https://github.com/isl-org/DPT)
+- [CvT](https://github.com/microsoft/CvT)
+- [convit](https://github.com/facebookresearch/convit)
 
-<br>
+<!-- <br>
 
 <details>
   <summary><strong>Citations</strong> (click to expand)</summary>
@@ -192,4 +196,4 @@ swin_encoder = SwinEncoder(
       primaryClass={cs.CV}
 }
 ```
-</details>
+</details> -->

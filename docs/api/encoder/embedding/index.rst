@@ -9,3 +9,4 @@ Embedding Layers
     overlappatch
     patch
     pos_embedding
+    convvt

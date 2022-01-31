@@ -1,3 +1,4 @@
+from .convvt import ConvEmbedding
 from .cvt import CVTEmbedding
 from .linear import LinearEmbedding
 from .overlappatch import OverlapPatchEmbed

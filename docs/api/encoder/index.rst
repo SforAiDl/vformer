@@ -11,3 +11,5 @@ Encoder
     pyramid
     swin
     vanilla
+    convit
+    convvt

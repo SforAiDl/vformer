@@ -94,7 +94,53 @@ def test_CrossEncoder():
     del encoder
 
 
-def test_TubeletEmbedding():
+def test_ConViTEncoder():
+
+    test_tensor = torch.randn(2, 64, 1024)
+    encoder = ENCODER_REGISTRY.get("ConViTEncoder")(
+        embedding_dim=1024, depth=6, num_heads=16, head_dim=64, mlp_dim=2048
+    )
+    out = encoder(test_tensor)
+    assert out.shape == test_tensor.shape  # shape remains same
+    del encoder, test_tensor
+
+
+def test_ConvVTStage():
+    test_tensor1 = torch.randn(32, 3, 224, 224)
+
+    encoder = ENCODER_REGISTRY.get("ConvVTStage")(
+        patch_size=7,
+        patch_stride=4,
+        patch_padding=2,
+        img_size=56,
+        embedding_dim=64,
+        depth=1,
+        num_heads=1,
+        with_cls_token=True,
+    )
+    out, cls_tokens = encoder(test_tensor1)
+    assert out.shape == torch.Size([32, 64, 56, 56])
+    del encoder
+
+    test_tensor1 = torch.randn(32, 3, 224, 224)
+
+    encoder = ENCODER_REGISTRY.get("ConvVTStage")(
+        patch_size=7,
+        patch_stride=4,
+        patch_padding=2,
+        img_size=56,
+        embedding_dim=64,
+        depth=1,
+        num_heads=1,
+        with_cls_token=True,
+        init="xavier",
+    )
+    out, cls_tokens = encoder(test_tensor1)
+    assert out.shape == torch.Size([32, 64, 56, 56])
+    del encoder
+
+    
+    def test_TubeletEmbedding():
     from vformer.encoder.embedding.video_patch_embeddings import TubeletEmbedding
 
     test_tensor = torch.randn(

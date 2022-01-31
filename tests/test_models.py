@@ -463,6 +463,41 @@ def test_dpt():
     del model
 
 
+def test_ConViT():
+
+    model = MODEL_REGISTRY.get("ConViT")(
+        img_size=256, patch_size=32, n_classes=10, in_channels=3
+    )
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
+    del model
+
+    model = MODEL_REGISTRY.get("ConViT")(
+        img_size=256,
+        patch_size=32,
+        n_classes=10,
+        embedding_dim=1024,
+        decoder_config=(1024, 512),
+    )
+    out = model(img_3channels_256)
+    assert out.shape == (2, 10)
+    del model
+
+
+def test_ConvVT():
+    img = torch.randn(4, 3, 224, 224)
+    model = MODEL_REGISTRY.get("ConvVT")()
+    out = model(img)
+    assert out.shape == torch.Size([4, 1000])
+    del model
+
+    model = MODEL_REGISTRY.get("ConvVT")(img_size=384)
+    img2 = torch.randn(4, 3, 384, 384)
+    out = model(img2)
+    assert out.shape == torch.Size([4, 1000])
+    del model
+    
+
 def test_Vivit():
     test_tensor1 = torch.randn([1, 16, 3, 224, 224])
     test_tensor2 = torch.randn([3, 16, 3, 224, 224])
@@ -483,6 +518,4 @@ def test_Vivit():
     assert out.shape == (1, 10)
 
     out = model(test_tensor2)
-    assert out.shape == (3, 10)
-
-    del model
+    assert out.shape == (3, 10)    
