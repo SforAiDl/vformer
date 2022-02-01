@@ -38,6 +38,7 @@ python setup.py install
 - [x] [Vision Transformers for Dense Prediction](https://arxiv.org/abs/2103.13413)
 - [x] [CvT](https://arxiv.org/abs/2103.15808)
 - [x] [ConViT](https://arxiv.org/abs/2103.10697)
+- [x] [ViViT](https://arxiv.org/abs/2103.15691)
 
 ## Example usage
 
@@ -107,7 +108,7 @@ swin_encoder = SwinEncoder(
 - [DPT](https://github.com/isl-org/DPT)
 - [CvT](https://github.com/microsoft/CvT)
 - [convit](https://github.com/facebookresearch/convit)
-- [ViViT Official JAX implementation](https://github.com/google-research/scenic) | [Refence Pytorch Implementation](https://github.com/google-research/scenic)
+- [ViViT-pytorch](https://github.com/rishikksh20/ViViT-pytorch)
 
 <!-- <br>
 
