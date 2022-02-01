@@ -10,3 +10,4 @@ Embedding Layers
     patch
     pos_embedding
     convvt
+    video_patch_embeddings

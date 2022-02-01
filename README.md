@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/SforAiDl/vformer/branch/main/graph/badge.svg?token=5QKCZ67CM2)](https://codecov.io/gh/SforAiDl/vformer)
 
 **[Documentation](https://vformer.readthedocs.io/en/latest/)**
-    
+
 </div>
 
 ## Library Features
@@ -107,6 +107,7 @@ swin_encoder = SwinEncoder(
 - [DPT](https://github.com/isl-org/DPT)
 - [CvT](https://github.com/microsoft/CvT)
 - [convit](https://github.com/facebookresearch/convit)
+- [ViViT Official JAX implementation](https://github.com/google-research/scenic) | [Refence Pytorch Implementation](https://github.com/google-research/scenic)
 
 <!-- <br>
 
