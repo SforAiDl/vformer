@@ -498,7 +498,7 @@ def test_ConvVT():
     del model
 
 
-def test_Vivit():
+def test_ViViT():
     test_tensor1 = torch.randn([1, 16, 3, 224, 224])
     test_tensor2 = torch.randn([3, 16, 3, 224, 224])
 

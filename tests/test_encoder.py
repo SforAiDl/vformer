@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+from vformer.encoder.embedding import TubeletEmbedding
 from vformer.functional import PatchMerging
 from vformer.utils import ENCODER_REGISTRY
 
@@ -141,8 +142,6 @@ def test_ConvVTStage():
 
 
 def test_TubeletEmbedding():
-    from vformer.encoder.embedding.video_patch_embeddings import TubeletEmbedding
-
     test_tensor = torch.randn(
         7, 20, 3, 224, 224
     )  # batch_size,time,in_channels,height,width
