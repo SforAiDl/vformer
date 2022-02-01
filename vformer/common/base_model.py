@@ -25,12 +25,12 @@ class BaseClassificationModel(nn.Module):
             img_height % patch_height == 0 and img_width % patch_width == 0
         ), "Image dimensions must be divisible by the patch size."
 
-        n_patches = (img_height // patch_height) * (img_width // patch_width)
+        num_patches = (img_height // patch_height) * (img_width // patch_width)
         patch_dim = in_channels * patch_height * patch_width
 
         self.patch_height = patch_height
         self.patch_width = patch_width
-        self.n_patches = n_patches
+        self.num_patches = num_patches
         self.patch_dim = patch_dim
 
         assert pool in {

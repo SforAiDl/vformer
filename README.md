@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/SforAiDl/vformer/branch/main/graph/badge.svg?token=5QKCZ67CM2)](https://codecov.io/gh/SforAiDl/vformer)
 
 **[Documentation](https://vformer.readthedocs.io/en/latest/)**
-    
+
 </div>
 
 ## Library Features
@@ -38,6 +38,7 @@ python setup.py install
 - [x] [Vision Transformers for Dense Prediction](https://arxiv.org/abs/2103.13413)
 - [x] [CvT](https://arxiv.org/abs/2103.15808)
 - [x] [ConViT](https://arxiv.org/abs/2103.10697)
+- [x] [ViViT](https://arxiv.org/abs/2103.15691)
 
 ## Example usage
 
@@ -107,6 +108,7 @@ swin_encoder = SwinEncoder(
 - [DPT](https://github.com/isl-org/DPT)
 - [CvT](https://github.com/microsoft/CvT)
 - [convit](https://github.com/facebookresearch/convit)
+- [ViViT-pytorch](https://github.com/rishikksh20/ViViT-pytorch)
 
 <!-- <br>
 

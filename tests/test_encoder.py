@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+from vformer.encoder.embedding import TubeletEmbedding
 from vformer.functional import PatchMerging
 from vformer.utils import ENCODER_REGISTRY
 
@@ -138,3 +139,26 @@ def test_ConvVTStage():
     out, cls_tokens = encoder(test_tensor1)
     assert out.shape == torch.Size([32, 64, 56, 56])
     del encoder
+
+
+def test_TubeletEmbedding():
+    test_tensor = torch.randn(
+        7, 20, 3, 224, 224
+    )  # batch_size,time,in_channels,height,width
+    embedding = TubeletEmbedding(
+        embedding_dim=192, tubelet_w=16, tubelet_t=5, tubelet_h=16, in_channels=3
+    )
+    out = embedding(test_tensor)
+    assert out.shape == (
+        7,
+        4,
+        196,
+        192,
+    )  # batch,time/tubelet_t,height*width/(tubelet_h,tubelet_w),embeeding_dim
+    del embedding
+
+    test_tensor = torch.randn(11, 15, 1, 28, 28)
+    embedding = TubeletEmbedding(96, 5, 7, 7, 1)
+    out = embedding(test_tensor)
+    assert out.shape == (11, 3, 16, 96)
+    del embedding

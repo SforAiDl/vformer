@@ -67,7 +67,7 @@ class VanillaViT(BaseClassificationModel):
         )
 
         self.pos_embedding = PosEmbedding(
-            shape=self.n_patches + 1,
+            shape=self.num_patches + 1,
             dim=embedding_dim,
             drop=p_dropout_embedding,
             sinusoidal=False,

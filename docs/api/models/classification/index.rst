@@ -14,3 +14,4 @@ Classification
     visformer
     convit
     convvt
+    vivit
