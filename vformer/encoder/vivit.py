@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 
 from ..attention import VanillaSelfAttention
+from ..functional.norm import PreNorm
 from ..utils.registry import ENCODER_REGISTRY
 from .nn import FeedForward
 
@@ -15,11 +16,11 @@ class ViViTEncoderBlock(nn.Module):
     ):
         super(ViViTEncoderBlock, self).__init__()
 
-        self.temporal_attention = VanillaSelfAttention(
-            dim, num_heads, head_dim, p_dropout
+        self.temporal_attention = PreNorm(
+            dim=dim, fn=VanillaSelfAttention(dim, num_heads, head_dim, p_dropout)
         )
-        self.spatial_attention = VanillaSelfAttention(
-            dim, num_heads, head_dim, p_dropout
+        self.spatial_attention = PreNorm(
+            dim=dim, fn=VanillaSelfAttention(dim, num_heads, head_dim, p_dropout)
         )
 
         self.mlp = FeedForward(dim=dim, hidden_dim=hidden_dim, out_dim=out_dim)
