@@ -21,7 +21,7 @@ class PVTDetection(nn.Module):
         List of patch size
     in_channels: int
         Input channels in image, default=3
-    num_classes: int
+    n_classes: int
         Number of classes for classification
     embedding_dims:  int
         Patch Embedding dimension
@@ -197,7 +197,7 @@ class PVTDetectionV2(PVTDetection):
         List of patch size
     in_channels: int
         Input channels in image, default=3
-    num_classes: int
+    n_classes: int
         Number of classes for classification
     embedding_dims:  int
         Patch Embedding dimension

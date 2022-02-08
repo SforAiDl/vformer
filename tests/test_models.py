@@ -171,7 +171,7 @@ def test_pvt():
         depths=[2, 2, 2, 2],
         sr_ratios=[8, 4, 2, 1],
         decoder_config=[512, 10],
-        num_classes=10,
+        n_classes=10,
     )
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
@@ -187,7 +187,7 @@ def test_pvt():
         depths=[2, 2, 2, 2],
         sr_ratios=[8, 4, 2, 1],
         decoder_config=512,
-        num_classes=10,
+        n_classes=10,
     )
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
@@ -198,17 +198,17 @@ def test_pvt():
     assert out.shape == (4, 1000)
     del model
 
-    model = MODEL_REGISTRY.get("PVTClassificationV2")(num_classes=10)
+    model = MODEL_REGISTRY.get("PVTClassificationV2")(n_classes=10)
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
 
-    model = MODEL_REGISTRY.get("PVTClassificationV2")(num_classes=10)
+    model = MODEL_REGISTRY.get("PVTClassificationV2")(n_classes=10)
     out = model(img_3channels_224)
     assert out.shape == (4, 10)
     del model
 
-    model = MODEL_REGISTRY.get("PVTClassification")(num_classes=12)
+    model = MODEL_REGISTRY.get("PVTClassification")(n_classes=12)
     out = model(img_3channels_224)
     assert out.shape == (4, 12)
     del model
@@ -305,7 +305,7 @@ def test_cvt():
         embedding_dim=768,
         num_heads=1,
         mlp_ratio=4.0,
-        num_classes=10,
+        n_classes=10,
         p_dropout=0.5,
         attn_dropout=0.3,
         drop_path=0.2,
@@ -356,7 +356,7 @@ def test_cct():
         embedding_dim=768,
         num_heads=1,
         mlp_ratio=4.0,
-        num_classes=10,
+        n_classes=10,
         p_dropout=0.5,
         attn_dropout=0.3,
         drop_path=0.2,

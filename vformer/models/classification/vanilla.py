@@ -108,7 +108,7 @@ class VanillaViT(BaseClassificationModel):
         Returns
         ----------
         torch.Tensor
-            Returns tensor of size `num_classes`
+            Returns tensor of size `n_classes`
 
         """
         x = self.patch_embedding(x)

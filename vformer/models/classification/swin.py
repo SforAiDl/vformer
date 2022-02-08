@@ -149,7 +149,7 @@ class SwinTransformer(BaseClassificationModel):
         Returns
         ----------
         torch.Tensor
-            Returns tensor of size `num_classes`
+            Returns tensor of size `n_classes`
 
         """
         x = self.patch_embed(x)
