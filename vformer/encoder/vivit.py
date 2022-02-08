@@ -68,4 +68,5 @@ class ViViTEncoder(nn.Module):
         for blk in self.encoder:
             x = blk(x)
         x = x.reshape(b, -1, x.shape[-1])
+
         return x
