@@ -65,7 +65,8 @@ Now putting it all together
     import torch.nn as nn
     from vformer.encoder import SwinEncoder
     from vformer.encoder.embedding import PatchEmbedding
-    from vformer.decoder import MLPDeocoder
+    from vformer.decoder import MLPDecoder
+    from vformer.functional import PatchMerging
 
     class SwinTransformer(nn.Module):
         def __init__(self,
@@ -73,7 +74,7 @@ Now putting it all together
                     n_classes=10, embedding_dim=96, depths=[2, 2, 6, 2],
                     num_heads=[3, 6, 12, 24], window_size=7,
                     mlp_ratio=4.0, norm_layer=nn.LayerNorm,
-                    decoder_config=[96,32,10], patch_norm=True,):
+                    decoder_config=[768,256,32,10], patch_norm=True,):
             super().__init__()
             self.patch_embed = PatchEmbedding(
                     img_size=img_size,
@@ -82,6 +83,7 @@ Now putting it all together
                     embedding_dim=embedding_dim,
                     norm_layer=norm_layer,
             )
+            self.patch_resolution = self.patch_embed.patch_resolution
 
             self.encoder = nn.ModuleList()
 
@@ -100,17 +102,20 @@ Now putting it all together
                 )
                 self.encoder.append(layer)
 
-            self.decoder = MLPDecoder(config=decoder_config,n_classes)
+            self.pool = nn.AdaptiveAvgPool1d(1)
+            self.decoder = MLPDecoder(config=decoder_config,n_classes=n_classes)
         def forward(self,x):
             #forward pass
 
             x = self.patch_embed(x)
-            x=self.encoder(x)
+            for layer in self.encoder:
+                x=layer(x)
+
+            x = self.pool(x.transpose(1, 2)).flatten(1)
             return self.decoder(x)
 
 
     model = SwinTransformer()
-
 
 Some popular Vision Transformer models are already implemented in VFormer, you can use them directly from vformer/models directory
 
