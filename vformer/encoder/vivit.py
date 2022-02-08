@@ -65,6 +65,7 @@ class ViViTEncoder(nn.Module):
 
     def forward(self, x):
         b = x.shape[0]
+
         for blk in self.encoder:
             x = blk(x)
 
