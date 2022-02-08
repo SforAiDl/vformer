@@ -58,12 +58,12 @@ importing swin Encoder
                 dim= embedding_dim * 2**i ,#Dimension of the embedding at ith stage,
                 input_resolution= (
                     (patch_resolution[0] // (2 ** i)),
-                    patch_resolution[1] // (2 ** i),) #Resolution of patches at ith stage,
+                    patch_resolution[1] // (2 ** i),), #Resolution of patches at ith stage,
                 depth=depths[i],
-                num_heads=num_heads[i]#Number of Attention heads at ith stage ,
-                window_size=window_size#Insert window size, refert to window-self attention for more insight
-                norm_layer=nn.LayerNorm#Normalisation layer object,
-                downsample = PatchMerging # in the last stage nn.Identity should be used
+                num_heads=num_heads[i],#Number of Attention heads at ith stage ,
+                window_size=window_size,#Insert window size, refert to window-self attention for more insight
+                norm_layer=nn.LayerNorm,#Normalisation layer object,
+                downsample = PatchMerging, # in the last stage nn.Identity should be used
                 ))
      #This swin_encoder ModuleList  contains all 4 stages and patchmerging blocks
 
@@ -73,7 +73,7 @@ This encodeded tensors are then passed through Decoder for classification
 
     from vformer.decoder import MLPDecoder
 
-    decoder = MLPDecoder(config =[768,256,32] #List of decoding dimensions,
+    decoder = MLPDecoder(config =[768,256,32], #List of decoding dimensions,
                          n_classes =10) #Number of classes
 
 Now putting it all together

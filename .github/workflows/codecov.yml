@@ -9,9 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-           
+
     steps:
-      
+
       - uses: actions/cache@v2
         if: startsWith(runner.os, 'Linux')
         with:
@@ -19,14 +19,14 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      
+
       - uses: actions/checkout@v2
       - name: Set up Python 3.7
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
 
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -35,6 +35,11 @@ jobs:
 
       - name: Code coverage test
         run: pytest --cov-report xml --cov='./vformer/' --cov-config=.coveragerc
+
+      - name: .RST Code Format check
+        run:|
+          pip install rstcheck
+          rstcheck .\docs\Tutorial\Tutorial.rst
 
       - name: Generate report using codecov
         uses: codecov/codecov-action@v1
