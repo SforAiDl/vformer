@@ -239,7 +239,6 @@ class ViViTModel3(BaseClassificationModel):
 
         x = self.tubelet_embedding(x)
         x = self.pos_embbedding(x)
-
         x = self.encoder(x)
 
         x = x.mean(dim=1)
