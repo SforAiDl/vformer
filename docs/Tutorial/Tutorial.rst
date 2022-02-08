@@ -1,5 +1,5 @@
 ============
-Build Swin Transformer with VFormer
+Building Swin Transformer Model with VFormer
 ============
 
 In this tutorial, we will guide you to build Swin Transformer with the building blocks available in the library.
