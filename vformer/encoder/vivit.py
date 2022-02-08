@@ -26,6 +26,7 @@ class ViViTEncoderBlock(nn.Module):
         self.mlp = FeedForward(dim=dim, hidden_dim=hidden_dim, out_dim=out_dim)
 
     def forward(self, x):
+
         b, n, s, d = x.shape
         x = torch.flatten(x, start_dim=0, end_dim=1)  # 1×nt·nh·nw·d --> nt×nh·nw·d
 
