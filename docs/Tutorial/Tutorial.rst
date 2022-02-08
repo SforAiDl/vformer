@@ -23,6 +23,7 @@ These patches can be overlapping or can be non-overlapping; There are different 
 .. code-block:: python
 
     import torch.nn as nn
+
     from vformer.encoder.embedding import PatchEmbedding
 
     patch_embedding = PatchEmbedding(
@@ -34,6 +35,8 @@ These patches can be overlapping or can be non-overlapping; There are different 
                               )
 
 
+
+
 These embeddings are then encoded with Swin Encoder block. Swin Encoder block consists of Multi-Head-Self-Attention(MHSA) followed by Multi Layer Perceptron(MLP). I am not going in detail how the encoder is implemented;
 
 importing swin Encoder
@@ -41,6 +44,7 @@ importing swin Encoder
 .. code-block:: python
 
     import torch.nn as nn
+
     from vformer.encoder import SwinEncoder
     from vformer.functional import PatchMerging
 
@@ -61,6 +65,7 @@ importing swin Encoder
                 norm_layer=nn.LayerNorm#Normalisation layer object,
                 downsample = PatchMerging # in the last stage nn.Identity should be used
                 ))
+     #This swin_encoder ModuleList  contains all 4 stages and patchmerging blocks
 
 This encodeded tensors are then passed through Decoder for classification
 
@@ -77,6 +82,7 @@ Now putting it all together
 
     import torch
     import torch.nn as nn
+
     from vformer.encoder import SwinEncoder
     from vformer.encoder.embedding import PatchEmbedding
     from vformer.decoder import MLPDecoder
