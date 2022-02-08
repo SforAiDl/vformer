@@ -502,7 +502,7 @@ def test_ViViT():
     test_tensor1 = torch.randn([1, 16, 3, 224, 224])
     test_tensor2 = torch.randn([3, 16, 3, 224, 224])
 
-    model = MODEL_REGISTRY.get("ViViT")(
+    model = MODEL_REGISTRY.get("ViViTModel2")(
         img_size=224,
         in_channels=3,
         patch_size=16,
@@ -511,7 +511,7 @@ def test_ViViT():
         num_heads=3,
         head_dim=64,
         num_frames=1,
-        n_classes=10,
+        num_classes=10,
     )
 
     out = model(test_tensor1)
@@ -519,3 +519,42 @@ def test_ViViT():
 
     out = model(test_tensor2)
     assert out.shape == (3, 10)
+    del model
+
+    model = MODEL_REGISTRY.get("ViViTModel3")(
+        num_frames=32,
+        img_size=(64, 64),
+        patch_t=8,
+        patch_h=4,
+        patch_w=4,
+        num_classes=10,
+        embedding_dim=512,
+        depth=3,
+        num_heads=4,
+        head_dim=32,
+        p_dropout=0.0,
+        in_channels=3,
+    )
+    test_tensor3 = torch.randn(32, 32, 3, 64, 64)
+    logits = model(test_tensor3)
+    assert logits.shape == (32, 10)
+    del model
+
+    model = MODEL_REGISTRY.get("ViViTModel3")(
+        num_frames=16,
+        img_size=(64, 64),
+        patch_t=8,
+        patch_h=4,
+        patch_w=4,
+        num_classes=10,
+        embedding_dim=512,
+        depth=3,
+        num_heads=4,
+        head_dim=32,
+        p_dropout=0.0,
+        in_channels=1,
+    )
+
+    test_tensor4 = torch.randn(7, 16, 1, 64, 64)
+    logits = model(test_tensor4)
+    assert logits.shape == (7, 10)
