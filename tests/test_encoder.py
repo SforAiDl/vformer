@@ -162,3 +162,14 @@ def test_TubeletEmbedding():
     out = embedding(test_tensor)
     assert out.shape == (11, 3, 16, 96)
     del embedding
+
+
+def test_ViViTEncoder():
+
+    encoder = ENCODER_REGISTRY.get("ViViTEncoder")(
+        dim=192, num_heads=3, head_dim=64, p_dropout=0.0, depth=3
+    )
+
+    test_tensor = torch.randn(7, 20, 196, 192)
+    logits = encoder(test_tensor)
+    assert logits.shape == (7, 3920, 192)
