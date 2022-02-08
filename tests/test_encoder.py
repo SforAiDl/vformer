@@ -171,7 +171,6 @@ def test_ViViTEncoder():
     )
 
     test_tensor = torch.randn(7, 20, 196, 192)
-
     logits = encoder(test_tensor)
 
     assert logits.shape == (7, 3920, 192)
