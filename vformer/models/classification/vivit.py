@@ -242,4 +242,5 @@ class ViViTModel3(BaseClassificationModel):
         x = self.encoder(x)
         x = x.mean(dim=1)
         x = self.decoder(x)
+
         return x
