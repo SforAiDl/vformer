@@ -537,7 +537,6 @@ def test_ViViT():
     )
     test_tensor3 = torch.randn(32, 32, 3, 64, 64)
     logits = model(test_tensor3)
-
     assert logits.shape == (32, 10)
 
     del model
