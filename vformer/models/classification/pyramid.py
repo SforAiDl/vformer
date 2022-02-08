@@ -22,7 +22,7 @@ class PVTClassification(nn.Module):
         List of patch size
     in_channels: int
         Input channels in image, default=3
-    num_classes: int
+    n_classes: int
         Number of classes for classification
     embed_dims:  int
         Patch Embedding dimension
@@ -61,7 +61,7 @@ class PVTClassification(nn.Module):
         img_size=224,
         patch_size=[7, 3, 3, 3],
         in_channels=3,
-        num_classes=1000,
+        n_classes=1000,
         embed_dims=[64, 128, 256, 512],
         num_heads=[1, 2, 4, 8],
         mlp_ratio=[4, 4, 4, 4],
@@ -159,9 +159,9 @@ class PVTClassification(nn.Module):
             assert (
                 decoder_config[0] == embed_dims[-1]
             ), f"Configurations do not match for MLPDecoder, First element of `decoder_config` expected to be {embed_dims[-1]}, got {decoder_config[0]} "
-            self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+            self.decoder = MLPDecoder(config=decoder_config, n_classes=n_classes)
         else:
-            self.decoder = MLPDecoder(config=embed_dims[-1], n_classes=num_classes)
+            self.decoder = MLPDecoder(config=embed_dims[-1], n_classes=n_classes)
 
     def forward(self, x):
         """
@@ -173,7 +173,7 @@ class PVTClassification(nn.Module):
         Returns
         ----------
         torch.Tensor
-            Returns tensor of size `num_classes`
+            Returns tensor of size `n_classes`
 
         """
         B = x.shape[0]
@@ -216,7 +216,7 @@ class PVTClassificationV2(PVTClassification):
         List of patch size
     in_channels: int
         Input channels in image, default is 3
-    num_classes: int
+    n_classes: int
         Number of classes for classification
     embedding_dims:  int
         Patch Embedding dimension
@@ -255,7 +255,7 @@ class PVTClassificationV2(PVTClassification):
         img_size=224,
         patch_size=[7, 3, 3, 3],
         in_channels=3,
-        num_classes=1000,
+        n_classes=1000,
         embedding_dims=[64, 128, 256, 512],
         num_heads=[1, 2, 4, 8],
         mlp_ratio=[4, 4, 4, 4],
@@ -276,7 +276,7 @@ class PVTClassificationV2(PVTClassification):
             img_size=img_size,
             patch_size=patch_size,
             in_channels=in_channels,
-            num_classes=num_classes,
+            n_classes=n_classes,
             embed_dims=embedding_dims,
             num_heads=num_heads,
             mlp_ratio=mlp_ratio,

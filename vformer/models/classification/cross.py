@@ -204,7 +204,7 @@ class CrossViT(BaseClassificationModel):
         Returns
         ----------
         torch.Tensor
-            Returns tensor of size `num_classes`
+            Returns tensor of size `n_classes`
 
         """
         emb_s = self.s(img)

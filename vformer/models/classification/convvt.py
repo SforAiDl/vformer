@@ -20,7 +20,7 @@ class ConvVT(nn.Module):
         Number of input channels in image, default is 3
     num_stages: int
         Number of stages in encoder block, default is 3
-    num_classes: int
+    n_classes: int
         Number of classes for classification, default is 1000
     * The following are all in list of int/float with length num_stages
     patch_size: list[int]
@@ -75,11 +75,11 @@ class ConvVT(nn.Module):
         stride_q=[1, 1, 1],
         in_channels=3,
         num_stages=3,
-        num_classes=1000,
+        n_classes=1000,
     ):
         super().__init__()
 
-        self.num_classes = num_classes
+        self.n_classes = n_classes
 
         self.num_stages = num_stages
         self.stages = []
@@ -111,9 +111,7 @@ class ConvVT(nn.Module):
 
         # Classifier head
         self.head = (
-            nn.Linear(embedding_dim[-1], num_classes)
-            if num_classes > 0
-            else nn.Identity()
+            nn.Linear(embedding_dim[-1], n_classes) if n_classes > 0 else nn.Identity()
         )
         trunc_normal_(self.head.weight, std=0.02)
 
