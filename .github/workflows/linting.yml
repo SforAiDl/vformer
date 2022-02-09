@@ -33,3 +33,8 @@ jobs:
       run: |
         pre-commit install
         pre-commit run -a
+
+    - name: .RST Code Format check
+      run: |
+        pip install rstcheck
+        rstcheck .\docs\Tutorial\Tutorial.rst
