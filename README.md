@@ -18,11 +18,21 @@
 
 ## Installation
 
+### From source (recommended)
+
 ```shell
 
 git clone https://github.com/SforAiDl/vformer.git
 cd vformer/
 python setup.py install
+
+```
+
+### From PyPI
+
+```shell
+
+pip install vformer
 
 ```
 
