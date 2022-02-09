@@ -526,7 +526,7 @@ class Interpolate(nn.Module):
         self.align_corners = align_corners
 
     def forward(self, x):
-        """ Forward pass """
+        """Forward pass"""
 
         x = self.interp(
             x,
@@ -596,7 +596,7 @@ class ResidualConvUnit_custom(nn.Module):
         self.skip_add = nn.quantized.FloatFunctional()
 
     def forward(self, x):
-        """ forward pass"""
+        """forward pass"""
         out = self.activation(x)
         out = self.conv1(out)
         if self.bn == True:
@@ -651,7 +651,7 @@ class FeatureFusionBlock_custom(nn.Module):
         self.skip_add = nn.quantized.FloatFunctional()
 
     def forward(self, *xs):
-        """Forward pass """
+        """Forward pass"""
         output = xs[0]
 
         if len(xs) == 2:

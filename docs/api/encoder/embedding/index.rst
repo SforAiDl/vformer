@@ -9,3 +9,5 @@ Embedding Layers
     overlappatch
     patch
     pos_embedding
+    convvt
+    video_patch_embeddings

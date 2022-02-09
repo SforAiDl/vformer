@@ -8,7 +8,7 @@
 [![codecov](https://codecov.io/gh/SforAiDl/vformer/branch/main/graph/badge.svg?token=5QKCZ67CM2)](https://codecov.io/gh/SforAiDl/vformer)
 
 **[Documentation](https://vformer.readthedocs.io/en/latest/)**
-    
+
 </div>
 
 ## Library Features
@@ -34,9 +34,15 @@ python setup.py install
 - [x] [CrossViT](https://arxiv.org/abs/2103.14899)
 - [x] [Compact Vision Transformer](https://arxiv.org/abs/2104.05704)
 - [x] [Compact Convolutional Transformer](https://arxiv.org/abs/2104.05704)
-- [x] [Vision-friendly Transformer](https://arxiv.org/abs/2104.12533)
+- [x] [Visformer](https://arxiv.org/abs/2104.12533)
 - [x] [Vision Transformers for Dense Prediction](https://arxiv.org/abs/2103.13413)
+<<<<<<< HEAD
 - [x] [ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases](https://arxiv.org/abs/2103.10697)
+=======
+- [x] [CvT](https://arxiv.org/abs/2103.15808)
+- [x] [ConViT](https://arxiv.org/abs/2103.10697)
+- [x] [ViViT](https://arxiv.org/abs/2103.15691)
+>>>>>>> 12d21a9f2c62c304a06bce84d371328e73e4904b
 
 ## Example usage
 
@@ -104,8 +110,11 @@ swin_encoder = SwinEncoder(
 - [Compact-Transformers](https://github.com/SHI-Labs/Compact-Transformers)
 - [Visformer](https://github.com/danczs/Visformer)
 - [DPT](https://github.com/isl-org/DPT)
+- [CvT](https://github.com/microsoft/CvT)
+- [convit](https://github.com/facebookresearch/convit)
+- [ViViT-pytorch](https://github.com/rishikksh20/ViViT-pytorch)
 
-<br>
+<!-- <br>
 
 <details>
   <summary><strong>Citations</strong> (click to expand)</summary>
@@ -193,4 +202,4 @@ swin_encoder = SwinEncoder(
       primaryClass={cs.CV}
 }
 ```
-</details>
+</details> -->

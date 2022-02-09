@@ -32,7 +32,7 @@ class CCT(BaseClassificationModel):
         Number of heads in each transformer layer
     mlp_ratio:float
         Ratio of mlp heads to embedding dimension
-    num_classes: int
+    n_classes: int
         Number of classes for classification
     p_dropout: float
         Dropout probability
@@ -63,7 +63,7 @@ class CCT(BaseClassificationModel):
         head_dim=96,
         num_heads=1,
         mlp_ratio=4.0,
-        num_classes=1000,
+        n_classes=1000,
         p_dropout=0.1,
         attn_dropout=0.1,
         drop_path=0.1,
@@ -163,10 +163,10 @@ class CCT(BaseClassificationModel):
             assert (
                 decoder_config[0] == embedding_dim
             ), f"Configurations do not match for MLPDecoder, First element of `decoder_config` expected to be {embedding_dim}, got {decoder_config[0]} "
-            self.decoder = MLPDecoder(config=decoder_config, n_classes=num_classes)
+            self.decoder = MLPDecoder(config=decoder_config, n_classes=n_classes)
 
         else:
-            self.decoder = MLPDecoder(config=embedding_dim, n_classes=num_classes)
+            self.decoder = MLPDecoder(config=embedding_dim, n_classes=n_classes)
 
     def forward(self, x):
         """
@@ -178,7 +178,7 @@ class CCT(BaseClassificationModel):
         Returns
         ----------
         torch.Tensor
-            Returns tensor of size `num_classes`
+            Returns tensor of size `n_classes`
 
         """
         x = self.embedding(x)

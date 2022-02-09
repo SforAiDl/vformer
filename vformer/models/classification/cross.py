@@ -24,7 +24,7 @@ class _cross_p(BaseClassificationModel):
         )
 
         self.pos_embedding = nn.Parameter(
-            torch.randn(1, self.n_patches + 1, latent_dim)
+            torch.randn(1, self.num_patches + 1, latent_dim)
         )
         self.cls_token = nn.Parameter(torch.randn(1, 1, latent_dim))
         self.embedding_dropout = nn.Dropout(p_dropout_embedding)
@@ -204,7 +204,7 @@ class CrossViT(BaseClassificationModel):
         Returns
         ----------
         torch.Tensor
-            Returns tensor of size `num_classes`
+            Returns tensor of size `n_classes`
 
         """
         emb_s = self.s(img)
