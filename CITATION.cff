@@ -7,6 +7,8 @@ authors:
   given-names: "Aditya"
 - family-names: "Shah"
   given-names: "Neelay"
+- family-names: "Li"
+  given-names: "Alvin"
 title: "VFormer: A modular PyTorch library for vision transformers"
 date-released: 2022-01-11
 url: "https://github.com/SforAiDl/vformer"
