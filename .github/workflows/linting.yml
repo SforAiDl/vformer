@@ -37,5 +37,6 @@ jobs:
     - name: .RST Code Format check
       run: |
         pip install rstcheck
-        cd docs\Tutorial
+        cd docs
+        cd Tutorial
         rstcheck Tutorial.rst
