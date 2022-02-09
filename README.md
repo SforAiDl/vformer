@@ -36,13 +36,9 @@ python setup.py install
 - [x] [Compact Convolutional Transformer](https://arxiv.org/abs/2104.05704)
 - [x] [Visformer](https://arxiv.org/abs/2104.12533)
 - [x] [Vision Transformers for Dense Prediction](https://arxiv.org/abs/2103.13413)
-<<<<<<< HEAD
-- [x] [ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases](https://arxiv.org/abs/2103.10697)
-=======
 - [x] [CvT](https://arxiv.org/abs/2103.15808)
 - [x] [ConViT](https://arxiv.org/abs/2103.10697)
 - [x] [ViViT](https://arxiv.org/abs/2103.15691)
->>>>>>> 12d21a9f2c62c304a06bce84d371328e73e4904b
 
 ## Example usage
 
