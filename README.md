@@ -94,6 +94,8 @@ swin_encoder = SwinEncoder(
 
 ```
 
+Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) to know more. 
+
 <br>
 
 ### References
