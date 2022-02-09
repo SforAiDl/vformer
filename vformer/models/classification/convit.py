@@ -109,7 +109,10 @@ class ConViT(VanillaViT):
         cls_tokens = repeat(self.cls_token, "() n d -> b n d", b=b)
         x = torch.cat((cls_tokens, x), dim=1)
         x = self.pos_embedding(x)
-        x[:, 1:, :] = self.encoder_gpsa(x[:, 1:, :])
+        x_cls = x[:, 0:1, :]
+        x = x[:, 1:, :]
+        x = self.encoder_gpsa(x)
+        x = torch.cat((x_cls, x), dim=1)
         x = self.encoder(x)
         x = self.pool(x)
         x = self.decoder(x)
