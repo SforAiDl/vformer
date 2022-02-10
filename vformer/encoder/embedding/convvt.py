@@ -48,7 +48,6 @@ class ConvEmbedding(nn.Module):
         torch.Tensor
             Returns output tensor (embedding) by applying a convolution operations on input tensor
         """
-        print(self.proj.weight.device)
         x = self.proj(x)
         B, C, H, W = x.shape
         x = rearrange(x, "b c h w -> b (h w) c")
