@@ -82,7 +82,7 @@ class ConvVT(nn.Module):
         self.n_classes = n_classes
 
         self.num_stages = num_stages
-        self.stages = []
+        self.stages = nn.ModuleList([])
         for i in range(self.num_stages):
             stage = ConvVTStage(
                 in_channels=in_channels,
