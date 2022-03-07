@@ -61,7 +61,7 @@ class MemoryEfficientAttention(nn.Module):
         ]
         for i, (start, size) in enumerate(zip(starts, sizes)):
             x = torch.index_select(
-                x, i, torch.tensor(range(start, start + size)), device=x.device
+                x, i, torch.tensor(range(start, start + size), device=x.device)
             )
         return x
 
