@@ -13,6 +13,8 @@ class MemoryEfficientAttention(nn.Module):
     Implementation of Memory-Efficient O(1) Attention:
     https://arxiv.org/abs/2112.05682
 
+    Implementation based on https://github.com/AminRezaei0x443/memory-efficient-attention
+
     Parameters
     ----------
     dim: int
@@ -58,7 +60,9 @@ class MemoryEfficientAttention(nn.Module):
             np.clip(starts[i], 0, x.shape[i] - sizes[i]) for i in range(len(starts))
         ]
         for i, (start, size) in enumerate(zip(starts, sizes)):
-            x = torch.index_select(x, i, torch.tensor(range(start, start + size)))
+            x = torch.index_select(
+                x, i, torch.tensor(range(start, start + size)), device=x.device
+            )
         return x
 
     @staticmethod
