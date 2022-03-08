@@ -49,6 +49,7 @@ pip install vformer
 - [x] [CvT](https://arxiv.org/abs/2103.15808)
 - [x] [ConViT](https://arxiv.org/abs/2103.10697)
 - [x] [ViViT](https://arxiv.org/abs/2103.15691)
+- [x] [Memory Efficient Attention](https://arxiv.org/abs/2112.05682)
 
 ## Example usage
 
