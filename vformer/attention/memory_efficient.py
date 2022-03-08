@@ -137,7 +137,6 @@ class MemoryEfficientAttention(nn.Module):
 
         """
         qkv = self.to_qkv(x).chunk(3, dim=-1)
-        print("qkv", qkv[0].size())
         q, k, v = map(
             lambda t: rearrange(t, "b n (h d) -> b n h d", h=self.num_heads), qkv
         )
@@ -166,7 +165,6 @@ class MemoryEfficientAttention(nn.Module):
         rl = [res[i] for i in range(res.shape[0])]
         att = torch.cat(rl, dim=-3)
 
-        print(att.size())
         out = rearrange(att, "b n h d -> b n (h d)")
 
         return self.to_out(out)
