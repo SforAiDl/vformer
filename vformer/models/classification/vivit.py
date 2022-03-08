@@ -33,7 +33,7 @@ class ViViTModel2(BaseClassificationModel):
         Number of attention heads
     head_dim:int
         Dimension of head
-    num_classes:int
+    n_classes:int
         Number of classes
     mlp_dim: int
         Dimension of hidden layer
@@ -57,7 +57,7 @@ class ViViTModel2(BaseClassificationModel):
         depth,
         num_heads,
         head_dim,
-        num_classes,
+        n_classes,
         mlp_dim=None,
         pool="cls",
         p_dropout=0.0,
@@ -113,7 +113,7 @@ class ViViTModel2(BaseClassificationModel):
             config=[
                 embedding_dim,
             ],
-            n_classes=num_classes,
+            n_classes=n_classes,
         )
 
     def forward(self, x):
@@ -165,7 +165,7 @@ class ViViTModel3(BaseClassificationModel):
         Width  of single tube/patch in tubelet embedding
     in_channels: int
         Number of input channels, default is 3
-    num_classes:int
+    n_classes:int
         Number of classes
     num_frames :int
         Number of seconds in each Video
@@ -190,7 +190,7 @@ class ViViTModel3(BaseClassificationModel):
         patch_h,
         patch_w,
         in_channels,
-        num_classes,
+        n_classes,
         num_frames,
         embedding_dim,
         depth,
@@ -232,7 +232,7 @@ class ViViTModel3(BaseClassificationModel):
             config=[
                 embedding_dim,
             ],
-            n_classes=num_classes,
+            n_classes=n_classes,
         )
 
     def forward(self, x):
