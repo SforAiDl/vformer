@@ -49,6 +49,7 @@ pip install vformer
 - [x] [CvT](https://arxiv.org/abs/2103.15808)
 - [x] [ConViT](https://arxiv.org/abs/2103.10697)
 - [x] [ViViT](https://arxiv.org/abs/2103.15691)
+- [x] [Memory Efficient Attention](https://arxiv.org/abs/2112.05682)
 
 ## Example usage
 
@@ -104,7 +105,7 @@ swin_encoder = SwinEncoder(
 
 ```
 
-Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) to know more. 
+Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) to know more.
 
 <br>
 
@@ -121,7 +122,7 @@ Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) t
 - [CvT](https://github.com/microsoft/CvT)
 - [convit](https://github.com/facebookresearch/convit)
 - [ViViT-pytorch](https://github.com/rishikksh20/ViViT-pytorch)
-
+- [memory-efficient-attention](https://github.com/AminRezaei0x443/memory-efficient-attention)
 <!-- <br>
 
 <details>
