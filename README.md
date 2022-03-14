@@ -122,7 +122,7 @@ Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) t
 - [CvT](https://github.com/microsoft/CvT)
 - [convit](https://github.com/facebookresearch/convit)
 - [ViViT-pytorch](https://github.com/rishikksh20/ViViT-pytorch)
-- [memory_efficient_attention](https://github.com/AminRezaei0x443/memory-efficient-attention)
+- [memory-efficient-attention](https://github.com/AminRezaei0x443/memory-efficient-attention)
 <!-- <br>
 
 <details>
