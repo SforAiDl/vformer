@@ -511,7 +511,7 @@ def test_ViViT():
         num_heads=3,
         head_dim=64,
         num_frames=1,
-        num_classes=10,
+        n_classes=10,
     )
 
     out = model(test_tensor1)
@@ -527,7 +527,7 @@ def test_ViViT():
         patch_t=8,
         patch_h=4,
         patch_w=4,
-        num_classes=10,
+        n_classes=10,
         embedding_dim=512,
         depth=3,
         num_heads=4,
@@ -546,7 +546,7 @@ def test_ViViT():
         patch_t=8,
         patch_h=4,
         patch_w=4,
-        num_classes=10,
+        n_classes=10,
         embedding_dim=512,
         depth=3,
         num_heads=4,
