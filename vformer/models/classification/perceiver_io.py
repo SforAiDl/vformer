@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 
-from ...common import BaseClassificationModel
 from ...decoder import PerceiverIODecoder
 from ...encoder import PerceiverIOEncoder
 from ...utils import MODEL_REGISTRY
@@ -12,6 +11,9 @@ class PerceiverIO(nn.Module):
     """
     Implementation of 'Perceiver IO: A General Architecture for Structured Inputs & Outputs'
     https://arxiv.org/abs/2107.14795
+
+    Code Implementation based on:
+    https://github.com/lucidrains/perceiver-pytorch
 
     Parameters
     ----------

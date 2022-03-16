@@ -61,7 +61,6 @@ class PerceiverIOEncoder(nn.Module):
             latent_dim, num_heads=num_latent_heads, head_dim=latent_head_dim
         )
         get_latent_ff = PreNorm(latent_dim, FeedForward(latent_dim))
-        # get_latent_attn, get_latent_ff = map(cache_fn, (get_latent_attn, get_latent_ff))
 
         self.layers = nn.ModuleList([])
 

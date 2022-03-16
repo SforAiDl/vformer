@@ -82,7 +82,7 @@ def test_PerceiverIODecoder():
     del decoder, out
 
     decoder = DECODER_REGISTRY.get("PerceiverIODecoder")(
-        latent_dim=256, logits_dim=10, queries_dim=100
+        latent_dim=256, decoder_ff=True, logits_dim=10, queries_dim=100
     )
     out = decoder(test_tensor, queries=test_output_query)
     assert out.shape == (2, 1, 10)
