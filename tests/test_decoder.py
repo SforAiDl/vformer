@@ -74,6 +74,14 @@ def test_PerceiverIODecoder():
     assert out.shape == (2, 255, 256)
     del decoder, out
 
+    test_output_query2 = torch.randn(1, 100)
+    decoder = DECODER_REGISTRY.get("PerceiverIODecoder")(
+        latent_dim=256, queries_dim=100
+    )
+    out = decoder(test_tensor, queries=test_output_query2)
+    assert out.shape == (2, 1, 100)
+    del decoder, out
+
     decoder = DECODER_REGISTRY.get("PerceiverIODecoder")(
         latent_dim=256, decoder_ff=True, queries_dim=100
     )
