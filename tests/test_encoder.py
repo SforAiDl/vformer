@@ -178,9 +178,14 @@ def test_ViViTEncoder():
 def test_PerceiverIOEncoder():
 
     encoder = ENCODER_REGISTRY.get("PerceiverIOEncoder")(
-        dim=3, num_latent_heads=3, cross_head_dim=64, depth=3
+        dim=3,
+        num_latent_heads=5,
+        cross_head_dim=64,
+        depth=2,
+        latent_dim=276,
+        num_latents=511,
     )
     # (bs, img_w * img_h, img_channel)
     test_tensor = torch.randn(7, 10000, 3)
     logits = encoder(test_tensor)
-    assert logits.shape == (7, 512, 512)
+    assert logits.shape == (7, 511, 276)

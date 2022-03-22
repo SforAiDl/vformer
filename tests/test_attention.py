@@ -53,11 +53,11 @@ def test_CrossAttentionWithClsToken():
 
 
 def test_CrossAttention():
-    test_tensor1 = torch.randn(64, 108, 32)
-    test_tensor2 = torch.randn(64, 32, 20)
-    test_tensor_mask = torch.randn(64, 32) > 0.8
+    test_tensor1 = torch.randn(64, 9, 14)
+    test_tensor2 = torch.randn(64, 17, 37)
+    test_tensor_mask = torch.randn(64, 17) > 0.8
 
-    attention = ATTENTION_REGISTRY.get("CrossAttention")(32, 20)
+    attention = ATTENTION_REGISTRY.get("CrossAttention")(14, 37)
     out = attention(test_tensor1, test_tensor2, test_tensor_mask)
     assert out.shape == test_tensor1.shape
     del attention
