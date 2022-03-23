@@ -5,19 +5,6 @@ from einops import rearrange, repeat
 from ..utils import ATTENTION_REGISTRY
 
 
-class _Projection(nn.Module):
-    def __init__(self, in_dim, out_dim):
-        super().__init__()
-
-        if not in_dim == out_dim:
-            self.l1 = nn.Linear(in_dim, out_dim)
-        else:
-            self.l1 = nn.Identity()
-
-    def forward(self, x):
-        return self.l1(x)
-
-
 @ATTENTION_REGISTRY.register()
 class CrossAttentionWithClsToken(nn.Module):
     """
@@ -47,7 +34,11 @@ class CrossAttentionWithClsToken(nn.Module):
         self.to_k = nn.Linear(patch_dim, inner_dim)
         self.to_v = nn.Linear(patch_dim, inner_dim)
         self.to_q = nn.Linear(patch_dim, inner_dim)
-        self.cls_project = _Projection(inner_dim, patch_dim)
+        self.cls_project = (
+            nn.Linear(inner_dim, patch_dim)
+            if not inner_dim == patch_dim
+            else nn.Identity()
+        )
         self.attend = nn.Softmax(dim=-1)
 
     def forward(self, cls, patches):
@@ -101,7 +92,11 @@ class CrossAttention(nn.Module):
         self.to_q = nn.Linear(query_dim, inner_dim)
         self.to_k = nn.Linear(context_dim, inner_dim)
         self.to_v = nn.Linear(context_dim, inner_dim)
-        self.to_out = _Projection(inner_dim, query_dim)
+        self.to_out = (
+            nn.Linear(inner_dim, query_dim)
+            if not inner_dim == query_dim
+            else nn.Identity()
+        )
         self.attend = nn.Softmax(dim=-1)
 
     def forward(self, x, context, mask=None):
