@@ -9,6 +9,8 @@ class PreNorm(nn.Module):
         Dimension of the embedding
     fn:nn.Module
         Attention class
+    context_dim: int
+        Dimension of the context array used in cross attention
     """
 
     def __init__(self, dim, fn, context_dim=None):
