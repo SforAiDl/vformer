@@ -5,7 +5,6 @@ from einops import rearrange
 from ..utils import ATTENTION_REGISTRY
 
 
-
 @ATTENTION_REGISTRY.register()
 class CrossAttention(nn.Module):
     """
@@ -30,14 +29,20 @@ class CrossAttention(nn.Module):
         inner_dim = num_heads * head_dim
         self.num_heads = num_heads
         self.scale = head_dim ** -0.5
-        self.fl = nn.Linear(cls_dim, patch_dim) if cls_dim != patch_dim else nn.Identity()
+        self.fl = (
+            nn.Linear(cls_dim, patch_dim) if cls_dim != patch_dim else nn.Identity()
+        )
 
-        self.gl = nn.Linear(patch_dim, cls_dim) if patch_dim != cls_dim else nn.Identity()
+        self.gl = (
+            nn.Linear(patch_dim, cls_dim) if patch_dim != cls_dim else nn.Identity()
+        )
 
         self.to_k = nn.Linear(patch_dim, inner_dim)
         self.to_v = nn.Linear(patch_dim, inner_dim)
         self.to_q = nn.Linear(patch_dim, inner_dim)
-        self.cls_project = nn.Linear(inner_dim, patch_dim) if inner_dim != patch_dim else nn.Identity()
+        self.cls_project = (
+            nn.Linear(inner_dim, patch_dim) if inner_dim != patch_dim else nn.Identity()
+        )
 
         self.attend = nn.Softmax(dim=-1)
 
