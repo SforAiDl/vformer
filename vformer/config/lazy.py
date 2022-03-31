@@ -39,4 +39,3 @@ class LazyCall:
         kwargs["_target_"] = target
 
         return DictConfig(content=kwargs, flags={"allow_objects": True})
-    
