@@ -1,10 +1,12 @@
+from collections import abc
+from dataclasses import is_dataclass
+
 from omegaconf import DictConfig
 
 from .config_utils import _convert_target_to_string
-from collections import abc
-from dataclasses import  is_dataclass
 
-#copied from detectron 2
+# copied from detectron 2
+
 
 class LazyCall:
     """
@@ -41,11 +43,14 @@ class LazyCall:
 
 if __name__ == "__main__":
     import vformer.models
+
     print("ok lets check :)")
-    model_config = LazyCall(vformer.models.VanillaViT)(img_size = 224, patch_size = 7, n_classes = 4)
+    model_config = LazyCall(vformer.models.VanillaViT)(
+        img_size=224, patch_size=7, n_classes=4
+    )
     print(model_config)
     # change kwargs
-    model_config["img_size"], model_config["patch_size"] = 256 , 8
+    model_config["img_size"], model_config["patch_size"] = 256, 8
     print(model_config)
 
     from config_utils import instantiate

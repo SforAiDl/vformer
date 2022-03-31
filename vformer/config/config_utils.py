@@ -1,14 +1,12 @@
 import logging
+import pydoc
 from collections import abc
 from typing import Any
-import pydoc
-
 
 
 def _convert_target_to_string(t: Any) -> str:
 
     module, qualname = t.__module__, t.__qualname__
-
 
     module_parts = module.split(".")
     for k in range(1, len(module_parts)):
@@ -24,14 +22,12 @@ def _convert_target_to_string(t: Any) -> str:
 
 def locate(name: str) -> Any:
 
-
     obj = pydoc.locate(name)
 
     # Some cases (e.g. torch.optim.sgd.SGD) not handled correctly
     # by pydoc.locate. Try a private function from hydra.
     if obj is None:
-        raise TypeError( f"can't locate object {obj} !")
-
+        raise TypeError(f"can't locate object {obj} !")
 
 
 def instantiate(cfg):
