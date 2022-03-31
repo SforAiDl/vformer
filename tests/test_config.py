@@ -27,7 +27,7 @@ def test_lazy():
         num_heads=3,
         head_dim=64,
         num_frames=1,
-        num_classes=10,
+        n_classes=10,
     )
 
     # dense models
