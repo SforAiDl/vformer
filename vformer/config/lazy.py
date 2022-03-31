@@ -39,21 +39,4 @@ class LazyCall:
         kwargs["_target_"] = target
 
         return DictConfig(content=kwargs, flags={"allow_objects": True})
-
-
-if __name__ == "__main__":
-    import vformer.models
-
-    print("ok lets check :)")
-    model_config = LazyCall(vformer.models.VanillaViT)(
-        img_size=224, patch_size=7, n_classes=4
-    )
-    print(model_config)
-    # change kwargs
-    model_config["img_size"], model_config["patch_size"] = 256, 8
-    print(model_config)
-
-    from config_utils import instantiate
-
-    model = instantiate(model_config)
-    print(model)
+    
