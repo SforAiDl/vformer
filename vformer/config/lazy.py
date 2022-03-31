@@ -1,6 +1,6 @@
 from omegaconf import DictConfig
 
-from utils import _convert_target_to_string
+from .config_utils import _convert_target_to_string
 from collections import abc
 from dataclasses import  is_dataclass
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     model_config["img_size"], model_config["patch_size"] = 256 , 8
     print(model_config)
 
-    from utils import instantiate
+    from config_utils import instantiate
 
     model = instantiate(model_config)
     print(model)

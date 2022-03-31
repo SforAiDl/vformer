@@ -6,17 +6,10 @@ import pydoc
 
 
 def _convert_target_to_string(t: Any) -> str:
-    """
-    Inverse of ``locate()``.
-    Args:
-        t: any object with ``__module__`` and ``__qualname__``
-    """
+
     module, qualname = t.__module__, t.__qualname__
 
-    # Compress the path to this object, e.g. ``module.submodule._impl.class``
-    # may become ``module.submodule.class``, if the later also resolves to the same
-    # object. This simplifies the string, and also is less affected by moving the
-    # class implementation.
+
     module_parts = module.split(".")
     for k in range(1, len(module_parts)):
         prefix = ".".join(module_parts[:k])
@@ -30,11 +23,8 @@ def _convert_target_to_string(t: Any) -> str:
 
 
 def locate(name: str) -> Any:
-    """
-    Locate and return an object ``x`` using an input string ``{x.__module__}.{x.__qualname__}``,
-    such as "module.submodule.class_name".
-    Raise Exception if it cannot be found.
-    """
+
+
     obj = pydoc.locate(name)
 
     # Some cases (e.g. torch.optim.sgd.SGD) not handled correctly
@@ -45,23 +35,13 @@ def locate(name: str) -> Any:
 
 
 def instantiate(cfg):
-    """
-    Recursively instantiate objects defined in dictionaries by
-    "_target_" and arguments.
-    Args:
-        cfg: a dict-like object with "_target_" that defines the caller, and
-            other keys that define the arguments
-    Returns:
-        object instantiated by cfg
-    """
+
     from omegaconf import ListConfig
 
     if isinstance(cfg, ListConfig):
         lst = [instantiate(x) for x in cfg]
         return ListConfig(lst, flags={"allow_objects": True})
     if isinstance(cfg, list):
-        # Specialize for list, because many classes take
-        # list[objects] as arguments, such as ResNet, DatasetMapper
         return [instantiate(x) for x in cfg]
 
     if isinstance(cfg, abc.Mapping) and "_target_" in cfg:
