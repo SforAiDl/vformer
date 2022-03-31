@@ -19,6 +19,7 @@ jinja2-time==0.2.0
 MarkupSafe==2.0.1
 nodeenv==1.6.0
 olefile
+omegaconf
 packaging==21.0
 Pillow
 platformdirs==2.3.0
