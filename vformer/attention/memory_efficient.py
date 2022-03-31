@@ -95,7 +95,7 @@ class MemoryEfficientAttention(nn.Module):
         num_kv, num_heads, k_features = key.shape[-3:]
         v_features = value.shape[-1]
         key_chunk_size = min(self.key_chunk_size, num_kv)
-        query = query / (k_features ** 0.5)
+        query = query / (k_features**0.5)
 
         def chunk_scanner(chunk_idx):
             key_chunk = self.dynamic_slice(
