@@ -71,7 +71,7 @@ class ViViTModel2(BaseClassificationModel):
             pool=pool,
         )
 
-        patch_dim = in_channels * patch_size ** 2
+        patch_dim = in_channels * patch_size**2
         self.patch_embedding = LinearVideoEmbedding(
             embedding_dim=embedding_dim,
             patch_height=patch_size,

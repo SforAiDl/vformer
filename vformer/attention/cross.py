@@ -41,7 +41,7 @@ class CrossAttention(nn.Module):
 
         inner_dim = num_heads * head_dim
         self.num_heads = num_heads
-        self.scale = head_dim ** -0.5
+        self.scale = head_dim**-0.5
         self.fl = _Projection(cls_dim, patch_dim)
         self.gl = _Projection(patch_dim, cls_dim)
         self.to_k = nn.Linear(patch_dim, inner_dim)

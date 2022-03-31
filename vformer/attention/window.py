@@ -43,7 +43,7 @@ class WindowAttention(nn.Module):
         self.window_size = pair(window_size)
         self.num_heads = num_heads
         self.head_dim = dim // num_heads
-        self.scale = qk_scale or self.head_dim ** -0.5
+        self.scale = qk_scale or self.head_dim**-0.5
         self.qkv_bias = True
         self.relative_position_bias_table = nn.Parameter(
             torch.zeros(

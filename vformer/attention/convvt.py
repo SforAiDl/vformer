@@ -65,7 +65,7 @@ class ConvVTAttention(nn.Module):
         self.with_cls_token = with_cls_token
         self.dim = dim_out
         self.num_heads = num_heads
-        self.scale = dim_out ** -0.5
+        self.scale = dim_out**-0.5
         self.h, self.w = img_size, img_size
         self.conv_proj_q = self._build_projection(
             dim_in, kernel_size, padding_q, stride_q, method
