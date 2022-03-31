@@ -110,3 +110,20 @@ def test_ConvVTAttention():
     out = attention(test_tensor1)
     assert out.shape == torch.Size([16, 196, 128])
     del attention
+
+
+def test_MemoryEfficientAttention():
+    test_tensor1 = torch.randn(2, 65, 1024)
+    test_tensor2 = torch.randn(2, 257, 1024)
+
+    attention = ATTENTION_REGISTRY.get("MemoryEfficientAttention")(dim=1024)
+    out = attention(test_tensor1)
+    assert out.shape == (2, 65, 1024)
+    del attention
+
+    attention = ATTENTION_REGISTRY.get("MemoryEfficientAttention")(
+        dim=1024, num_heads=16
+    )
+    out = attention(test_tensor2)
+    assert out.shape == (2, 257, 1024)
+    del attention
