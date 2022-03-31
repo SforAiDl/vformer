@@ -4,6 +4,8 @@ from .config_utils import _convert_target_to_string
 from collections import abc
 from dataclasses import  is_dataclass
 
+#copied from detectron 2
+
 class LazyCall:
     """
     Wrap a callable so that when it's called, the call will not be executed,
