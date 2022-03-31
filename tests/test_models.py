@@ -511,7 +511,7 @@ def test_ViViT():
         num_heads=3,
         head_dim=64,
         num_frames=1,
-        nun_classes=10,
+        num_classes=10,
     )
 
     out = model(test_tensor1)
