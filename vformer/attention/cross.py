@@ -5,19 +5,6 @@ from einops import rearrange
 from ..utils import ATTENTION_REGISTRY
 
 
-class _Projection(nn.Module):
-    def __init__(self, in_dim, out_dim):
-        super().__init__()
-
-        if not in_dim == out_dim:
-            self.l1 = nn.Linear(in_dim, out_dim)
-        else:
-            self.l1 = nn.Identity()
-
-    def forward(self, x):
-        return self.l1(x)
-
-
 @ATTENTION_REGISTRY.register()
 class CrossAttention(nn.Module):
     """
@@ -42,12 +29,21 @@ class CrossAttention(nn.Module):
         inner_dim = num_heads * head_dim
         self.num_heads = num_heads
         self.scale = head_dim ** -0.5
-        self.fl = _Projection(cls_dim, patch_dim)
-        self.gl = _Projection(patch_dim, cls_dim)
+        self.fl = (
+            nn.Linear(cls_dim, patch_dim) if cls_dim != patch_dim else nn.Identity()
+        )
+
+        self.gl = (
+            nn.Linear(patch_dim, cls_dim) if patch_dim != cls_dim else nn.Identity()
+        )
+
         self.to_k = nn.Linear(patch_dim, inner_dim)
         self.to_v = nn.Linear(patch_dim, inner_dim)
         self.to_q = nn.Linear(patch_dim, inner_dim)
-        self.cls_project = _Projection(inner_dim, patch_dim)
+        self.cls_project = (
+            nn.Linear(inner_dim, patch_dim) if inner_dim != patch_dim else nn.Identity()
+        )
+
         self.attend = nn.Softmax(dim=-1)
 
     def forward(self, cls, patches):
