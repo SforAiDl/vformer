@@ -35,14 +35,14 @@ class CrossAttentionWithClsToken(nn.Module):
         self.gl = (
             nn.Linear(patch_dim, cls_dim) if not cls_dim == patch_dim else nn.Identity()
         )
+
         self.to_k = nn.Linear(patch_dim, inner_dim)
         self.to_v = nn.Linear(patch_dim, inner_dim)
         self.to_q = nn.Linear(patch_dim, inner_dim)
         self.cls_project = (
-            nn.Linear(inner_dim, patch_dim)
-            if not inner_dim == patch_dim
-            else nn.Identity()
+            nn.Linear(inner_dim, patch_dim) if inner_dim != patch_dim else nn.Identity()
         )
+
         self.attend = nn.Softmax(dim=-1)
 
     def forward(self, cls, patches):
