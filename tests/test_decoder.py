@@ -62,3 +62,36 @@ def test_SegmentationHead():
     )
     out = head(test_tensor_segmentation_head)
     assert out.shape == (3, 2, 384, 384)
+
+
+def test_PerceiverIODecoder():
+
+    test_tensor = torch.randn(2, 255, 256)
+    test_output_query = torch.randn(2, 1, 100)
+
+    decoder = DECODER_REGISTRY.get("PerceiverIODecoder")(latent_dim=256)
+    out = decoder(test_tensor)
+    assert out.shape == (2, 255, 256)
+    del decoder, out
+
+    test_output_query2 = torch.randn(1, 100)
+    decoder = DECODER_REGISTRY.get("PerceiverIODecoder")(
+        latent_dim=256, queries_dim=100
+    )
+    out = decoder(test_tensor, queries=test_output_query2)
+    assert out.shape == (2, 1, 100)
+    del decoder, out
+
+    decoder = DECODER_REGISTRY.get("PerceiverIODecoder")(
+        latent_dim=256, decoder_ff=True, queries_dim=100
+    )
+    out = decoder(test_tensor, queries=test_output_query)
+    assert out.shape == (2, 1, 100)
+    del decoder, out
+
+    decoder = DECODER_REGISTRY.get("PerceiverIODecoder")(
+        latent_dim=256, decoder_ff=True, logits_dim=10, queries_dim=100
+    )
+    out = decoder(test_tensor, queries=test_output_query)
+    assert out.shape == (2, 1, 10)
+    del decoder, out
