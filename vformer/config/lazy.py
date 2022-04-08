@@ -1,10 +1,10 @@
 from collections import abc
 from dataclasses import is_dataclass
-
-from omegaconf import DictConfig
+import os
+import pkg_resources
+from omegaconf import DictConfig, ListConfig
 
 from .config_utils import _convert_target_to_string
-
 # copied from detectron 2
 
 

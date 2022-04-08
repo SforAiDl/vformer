@@ -4,6 +4,7 @@ from collections import abc
 from typing import Any
 
 
+
 def _convert_target_to_string(t: Any) -> str:
 
     module, qualname = t.__module__, t.__qualname__
@@ -65,3 +66,5 @@ def instantiate(cfg):
             logger.error(f"Error when instantiating {cls_name}!")
             raise
     return cfg  # return as-is if don't know what to do
+
+

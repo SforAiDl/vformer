@@ -46,3 +46,5 @@ def test_lazy():
     assert swin_vit(rand_img_tensor).shape == (4, 10)
     assert pvt(rand_img_tensor).shape == (4, 1, 224, 224)
     assert vivit(rand_vdo_tensor).shape == (32, 10)
+
+
