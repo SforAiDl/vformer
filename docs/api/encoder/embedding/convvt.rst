@@ -1,5 +1,5 @@
-Conv
+Convvt
 ================
 
-.. automodule:: vformer.encoder.embedding.conv
+.. automodule:: vformer.encoder.embedding.convvt
     :members:
