@@ -54,6 +54,6 @@ def test_lazyconfig():
 
     obj = LazyConfig()
 
-    dict_obj = obj.load(file_addr)
+    dict_obj = obj.load_rel(file_addr)
     print(type(dict_obj))
     print(dict_obj)
