@@ -1,6 +1,8 @@
 import codecs
-import os,glob
+import glob
+import os
 import shutil
+
 from setuptools import find_packages, setup
 
 # Basic information

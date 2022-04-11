@@ -1,23 +1,27 @@
-from collections import abc
-from dataclasses import is_dataclass
-import os
-import pkg_resources
-import hydra
-import cloudpickle
-from omegaconf import DictConfig, ListConfig, OmegaConf
-import inspect
-import ast
-import uuid
-import importlib
-import logging
-from copy import deepcopy
 import builtins
+import importlib
+import inspect
+import logging
+import os
+from collections import abc
 from contextlib import contextmanager
-from typing import Union, Tuple, List
+from copy import deepcopy
+from dataclasses import is_dataclass
+from typing import List, Tuple, Union
+
+import cloudpickle
 import yaml
+from omegaconf import DictConfig, ListConfig, OmegaConf
 
+from .config_utils import (
+    _CFG_PACKAGE_NAME,
+    _cast_to_config,
+    _convert_target_to_string,
+    _random_package_name,
+    _validate_py_syntax,
+    _visit_dict_config,
+)
 
-from .config_utils import _convert_target_to_string
 # copied from detectron 2
 
 
@@ -52,47 +56,6 @@ class LazyCall:
         kwargs["_target_"] = target
 
         return DictConfig(content=kwargs, flags={"allow_objects": True})
-
-
-
-def _validate_py_syntax(filename):
-    # see also https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/config.py
-    with open(filename, "r") as f:
-        content = f.read()
-    try:
-        ast.parse(content)
-    except SyntaxError as e:
-        raise SyntaxError(f"Config file {filename} has syntax error!") from e
-
-
-
-
-def _visit_dict_config(cfg, func):
-    """
-    Apply func recursively to all DictConfig in cfg.
-    """
-    if isinstance(cfg, DictConfig):
-        func(cfg)
-        for v in cfg.values():
-            _visit_dict_config(v, func)
-    elif isinstance(cfg, ListConfig):
-        for v in cfg:
-            _visit_dict_config(v, func)
-
-
-def _cast_to_config(obj):
-    # if given a dict, return DictConfig instead
-    if isinstance(obj, dict):
-        return DictConfig(obj, flags={"allow_objects": True})
-    return obj
-
-
-_CFG_PACKAGE_NAME = "vformer.cfg_loader"
-
-
-def _random_package_name(filename):
-    # generate a random package name when loading config files
-    return _CFG_PACKAGE_NAME + str(uuid.uuid4())[:4] + "." + os.path.basename(filename)
 
 
 @contextmanager
@@ -154,7 +117,6 @@ def _patch_import():
     builtins.__import__ = old_import
 
 
-
 class LazyConfig:
     """
     Provide methods to save, load, and overrides an omegaconf config object
@@ -188,7 +150,7 @@ class LazyConfig:
         has_keys = keys is not None
         filename = filename.replace("/./", "/")  # redundant
         if os.path.splitext(filename)[1] not in [".py", ".yaml", ".yml"]:
-            raise ValueError(f"Config file {filename} has to be a python or yaml file.")
+            raise ValueError(f"Config file {filename} has to be a python file.")
         if filename.endswith(".py"):
             _validate_py_syntax(filename)
 
@@ -259,7 +221,9 @@ class LazyConfig:
         save_pkl = False
         try:
             dict = OmegaConf.to_container(cfg, resolve=False)
-            dumped = yaml.dump(dict, default_flow_style=None, allow_unicode=True, width=9999)
+            dumped = yaml.dump(
+                dict, default_flow_style=None, allow_unicode=True, width=9999
+            )
             with open(filename, "w") as f:
                 f.write(dumped)
 
@@ -375,7 +339,11 @@ class LazyConfig:
                     + "}"
                 )
             elif isinstance(obj, list):
-                return "[" + ",".join(_to_str(x, inside_call=inside_call) for x in obj) + "]"
+                return (
+                    "["
+                    + ",".join(_to_str(x, inside_call=inside_call) for x in obj)
+                    + "]"
+                )
             else:
                 return repr(obj)
 

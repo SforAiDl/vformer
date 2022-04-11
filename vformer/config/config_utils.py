@@ -1,8 +1,12 @@
+import ast
 import logging
+import os
 import pydoc
+import uuid
 from collections import abc
 from typing import Any
 
+from omegaconf import DictConfig, ListConfig
 
 
 def _convert_target_to_string(t: Any) -> str:
@@ -68,3 +72,39 @@ def instantiate(cfg):
     return cfg  # return as-is if don't know what to do
 
 
+def _validate_py_syntax(filename):
+    # see also https://github.com/open-mmlab/mmcv/blob/master/mmcv/utils/config.py
+    with open(filename, "r") as f:
+        content = f.read()
+    try:
+        ast.parse(content)
+    except SyntaxError as e:
+        raise SyntaxError(f"Config file {filename} has syntax error!") from e
+
+
+def _visit_dict_config(cfg, func):
+    """
+    Apply func recursively to all DictConfig in cfg.
+    """
+    if isinstance(cfg, DictConfig):
+        func(cfg)
+        for v in cfg.values():
+            _visit_dict_config(v, func)
+    elif isinstance(cfg, ListConfig):
+        for v in cfg:
+            _visit_dict_config(v, func)
+
+
+def _cast_to_config(obj):
+    # if given a dict, return DictConfig instead
+    if isinstance(obj, dict):
+        return DictConfig(obj, flags={"allow_objects": True})
+    return obj
+
+
+_CFG_PACKAGE_NAME = "vformer.cfg_loader"
+
+
+def _random_package_name(filename):
+    # generate a random package name when loading config files
+    return _CFG_PACKAGE_NAME + str(uuid.uuid4())[:4] + "." + os.path.basename(filename)

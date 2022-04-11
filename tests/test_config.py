@@ -48,3 +48,12 @@ def test_lazy():
     assert vivit(rand_vdo_tensor).shape == (32, 10)
 
 
+def test_lazyconfig():
+    file_addr = "./../configs/VanillaViT/vit_tiny.py"
+    from vformer.config import LazyConfig
+
+    obj = LazyConfig()
+
+    dict_obj = obj.load(file_addr)
+    print(type(dict_obj))
+    print(dict_obj)
