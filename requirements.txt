@@ -7,10 +7,12 @@ cfgv==3.3.1
 chardet==4.0.0
 charset-normalizer==2.0.4
 click==8.0.1
+cloudpickle==2.0.0
 cookiecutter==1.7.3
 distlib==0.3.2
 einops==0.3.2
 filelock==3.0.12
+hydra-core==1.1.1
 identify==2.2.13
 idna==3.2
 iniconfig==1.1.1
@@ -42,4 +44,5 @@ timm==0.4.12
 typing-extensions
 urllib3==1.26.6
 virtualenv==20.7.2
+PYyaml==5.4.1
 
