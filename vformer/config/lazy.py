@@ -14,13 +14,14 @@ import yaml
 from omegaconf import DictConfig, ListConfig, OmegaConf
 
 from .config_utils import (
-    _CFG_PACKAGE_NAME,
     _cast_to_config,
     _convert_target_to_string,
     _random_package_name,
     _validate_py_syntax,
     _visit_dict_config,
 )
+
+_CFG_PACKAGE_NAME = "vformer.cfg_loader"
 
 # copied from detectron 2
 
@@ -352,3 +353,42 @@ class LazyConfig:
             return black.format_str(py_str, mode=black.Mode())
         except black.InvalidInput:
             return py_str
+
+
+def get_config_file(config_path):
+    """
+    Returns path to a builtin config file.
+    Args:
+        config_path (str): config file name relative to detectron2's "configs/"
+            directory, e.g., "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"
+    Returns:
+        str: the real path to the config file.
+    """
+    cfg_file = open( os.path.join("vformer","configs", config_path)
+    )
+    if not os.path.exists(cfg_file):
+        raise RuntimeError("{} not available in configs!".format(config_path))
+    return cfg_file
+
+
+def get_config(config_path, trained: bool = False):
+    """
+    Returns a config object for a model in model zoo.
+    Args:
+        config_path (str): config file name relative to detectron2's "configs/"
+            directory, e.g., "COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_1x.yaml"
+        trained (bool): If True, will set ``MODEL.WEIGHTS`` to trained model zoo weights.
+            If False, the checkpoint specified in the config file's ``MODEL.WEIGHTS`` is used
+            instead; this will typically (though not always) initialize a subset of weights using
+            an ImageNet pre-trained model, while randomly initializing the other weights.
+    Returns:
+        CfgNode or omegaconf.DictConfig: a config object
+    """
+    cfg_file = get_config_file(config_path)
+
+    if cfg_file.endswith(".py"):
+        cfg = LazyConfig.load(cfg_file)
+
+        return cfg
+    else:
+        raise NotImplementedError

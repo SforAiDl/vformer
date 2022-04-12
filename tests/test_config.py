@@ -1,6 +1,6 @@
 import torch
 
-from vformer.config import LazyCall, instantiate
+from vformer.config import LazyCall, instantiate, get_config
 from vformer.models import PVTSegmentation, SwinTransformer, VanillaViT, ViViTModel2
 
 
@@ -49,11 +49,10 @@ def test_lazy():
 
 
 def test_lazyconfig():
-    file_addr = "./../configs/VanillaViT/vit_tiny.py"
+    file_addr = "../configs/trial/vit_tiny.py"
     from vformer.config import LazyConfig
 
     obj = LazyConfig()
 
-    dict_obj = obj.load_rel(file_addr)
-    print(type(dict_obj))
-    print(dict_obj)
+    print(LazyConfig.to_py(get_config(file_addr)))
+

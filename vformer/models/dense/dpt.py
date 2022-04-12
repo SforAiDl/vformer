@@ -114,7 +114,7 @@ class DPTDepth(nn.Module):
                 384,
                 768,
             )
-            self.model = MODEL_REGISTRY.get("VanillaViT")(
+            self.model = MODEL_REGISTRY.get("trial")(
                 img_size=img_size,
                 patch_size=16,
                 embedding_dim=768,
@@ -131,7 +131,7 @@ class DPTDepth(nn.Module):
         elif backbone == "vitl16":
 
             scratch_in_features = (256, 512, 1024, 1024)
-            self.model = MODEL_REGISTRY.get("VanillaViT")(
+            self.model = MODEL_REGISTRY.get("trial")(
                 img_size=img_size,
                 patch_size=16,
                 embedding_dim=1024,
@@ -148,7 +148,7 @@ class DPTDepth(nn.Module):
         elif backbone == "vit_tiny":
 
             scratch_in_features = (48, 96, 144, 192)
-            self.model = MODEL_REGISTRY.get("VanillaViT")(
+            self.model = MODEL_REGISTRY.get("trial")(
                 img_size=img_size,
                 patch_size=16,
                 embedding_dim=192,

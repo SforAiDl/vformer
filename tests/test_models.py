@@ -11,14 +11,14 @@ img_1channels_224 = torch.randn(2, 1, 224, 224)
 
 def test_VanillaViT():
 
-    model = MODEL_REGISTRY.get("VanillaViT")(
+    model = MODEL_REGISTRY.get("trial")(
         img_size=256, patch_size=32, n_classes=10, in_channels=3
     )
     out = model(img_3channels_256)
     assert out.shape == (2, 10)
     del model
 
-    model = MODEL_REGISTRY.get("VanillaViT")(
+    model = MODEL_REGISTRY.get("trial")(
         img_size=256,
         patch_size=32,
         n_classes=10,
