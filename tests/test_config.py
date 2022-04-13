@@ -9,13 +9,7 @@ from omegaconf import DictConfig
 from vformer.config import LazyCall
 from vformer.config import LazyCall as L
 from vformer.config import LazyConfig, instantiate
-from vformer.models import (
-    PVTSegmentation,
-    SwinTransformer,
-    VanillaViT,
-    ViViTModel2,
-    classification,
-)
+from vformer.models import PVTSegmentation, SwinTransformer, VanillaViT, ViViTModel2
 
 
 def test_lazy():
