@@ -151,7 +151,9 @@ class LazyConfig:
         has_keys = keys is not None
         filename = filename.replace("/./", "/")  # redundant
         if os.path.splitext(filename)[1] not in [".py", ".yaml", ".yml"]:
-            raise ValueError(f"Config file {filename} has to be a python file.")
+            raise ValueError(
+                f"Config file {filename}  is not supported, supported  file types are : [`.py`, `.yaml`]."
+            )
         if filename.endswith(".py"):
             _validate_py_syntax(filename)
 
@@ -169,8 +171,14 @@ class LazyConfig:
                 exec(compile(content, filename, "exec"), module_namespace)
 
             ret = module_namespace
+        elif filename.endswith(".yaml"):
+
+            with open(filename) as f:
+                obj = yaml.unsafe_load(f)
+            ret = OmegaConf.create(obj, flags={"allow_objects": True})
+
         else:
-            raise NotImplementedError("Only python files supported for now. ")
+            raise NotImplementedError("Only python and yaml files supported for now. ")
 
         if has_keys:
             if isinstance(keys, str):
@@ -364,8 +372,7 @@ def get_config_file(config_path):
     Returns:
         str: the real path to the config file.
     """
-    cfg_file = open( os.path.join("vformer","configs", config_path)
-    )
+    cfg_file = open(os.path.join("vformer", "configs", config_path))
     if not os.path.exists(cfg_file):
         raise RuntimeError("{} not available in configs!".format(config_path))
     return cfg_file
