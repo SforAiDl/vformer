@@ -1,7 +1,14 @@
+import pytest
 import torch
 
 from vformer.config import LazyCall, instantiate, get_config
 from vformer.models import PVTSegmentation, SwinTransformer, VanillaViT, ViViTModel2
+import os
+import tempfile
+from itertools import count
+
+from vformer.config import LazyConfig, LazyCall as L
+from omegaconf import DictConfig
 
 
 def test_lazy():
@@ -48,11 +55,72 @@ def test_lazy():
     assert vivit(rand_vdo_tensor).shape == (32, 10)
 
 
-def test_lazyconfig():
-    file_addr = "../configs/trial/vit_tiny.py"
-    from vformer.config import LazyConfig
 
-    obj = LazyConfig()
+root_filename = os.path.join(os.path.dirname(__file__), "root_cfg.py")
 
-    print(LazyConfig.to_py(get_config(file_addr)))
+def test_load():
+    cfg = LazyConfig.load(root_filename)
 
+    assert cfg.dir1a_dict.a == "modified"
+
+    assert  cfg.dir1b_dict.a == 1
+    assert cfg.lazyobj.x == "base_a_1"
+
+    cfg.lazyobj.x = "new_x"
+    # reload
+    cfg = LazyConfig.load(root_filename)
+    assert  cfg.lazyobj.x == "base_a_1"
+
+def test_save_load():
+    cfg = LazyConfig.load(root_filename)
+    with tempfile.TemporaryDirectory(prefix="vformer") as d:
+        fname = os.path.join(d, "test_config.yaml")
+        LazyConfig.save(cfg, fname)
+        cfg2 = LazyConfig.load(fname)
+
+    assert cfg2.lazyobj._target_ == "itertools.count"
+    assert cfg.lazyobj._target_ == count
+    cfg2.lazyobj.pop("_target_")
+    cfg.lazyobj.pop("_target_")
+    # the rest are equal
+    assert cfg == cfg2
+
+def test_failed_save():
+    cfg = DictConfig({"x": lambda: 3}, flags={"allow_objects": True})
+    with tempfile.TemporaryDirectory(prefix="vformer") as d:
+        fname = os.path.join(d, "test_config.yaml")
+        LazyConfig.save(cfg, fname)
+        assert os.path.exists(fname) == True
+        assert  os.path.exists(fname + ".pkl") == True
+
+def test_overrides():
+    cfg = LazyConfig.load(root_filename)
+    LazyConfig.apply_overrides(cfg, ["lazyobj.x=123", 'dir1b_dict.a="123"'])
+    assert cfg.dir1b_dict.a == "123"
+    assert cfg.lazyobj.x == 123
+
+def test_invalid_overrides():
+    cfg = LazyConfig.load(root_filename)
+    with pytest.raises(KeyError):
+        LazyConfig.apply_overrides(cfg, ["lazyobj.x.xxx=123"])
+
+def test_to_py():
+    cfg = LazyConfig.load(root_filename)
+    cfg.lazyobj.x = {"a": 1, "b": 2, "c": L(count)(x={"r": "a", "s": 2.4, "t": [1, 2, 3, "z"]})}
+    cfg.list = ["a", 1, "b", 3.2]
+    py_str = LazyConfig.to_py(cfg)
+    expected = """cfg.dir1a_dict.a = "modified"
+cfg.dir1a_dict.b = 2
+cfg.dir1b_dict.a = 1
+cfg.dir1b_dict.b = 2
+cfg.lazyobj = itertools.count(
+x={
+    "a": 1,
+    "b": 2,
+    "c": itertools.count(x={"r": "a", "s": 2.4, "t": [1, 2, 3, "z"]}),
+},
+y="base_a_1_from_b",
+)
+cfg.list = ["a", 1, "b", 3.2]
+"""
+    assert py_str == expected
