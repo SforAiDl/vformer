@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from timm.models.layers import trunc_normal_
 
 from ..utils import ATTENTION_REGISTRY, get_relative_position_bias_index, pair
 
@@ -56,7 +55,7 @@ class WindowAttention(nn.Module):
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
         self.to_out_1 = nn.Sequential(nn.Softmax(dim=-1), nn.Dropout(attn_dropout))
         self.to_out_2 = nn.Sequential(nn.Linear(dim, dim), nn.Dropout(proj_dropout))
-        trunc_normal_(self.relative_position_bias_table, std=0.2)
+        nn.init.trunc_normal_(self.relative_position_bias_table, std=0.2)
 
     def forward(self, x, mask=None):
         """

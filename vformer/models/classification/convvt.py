@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from timm.models.layers import trunc_normal_
 
 from ...encoder.convvt import ConvVTStage
 from ...utils import MODEL_REGISTRY
@@ -113,7 +112,7 @@ class ConvVT(nn.Module):
         self.head = (
             nn.Linear(embedding_dim[-1], n_classes) if n_classes > 0 else nn.Identity()
         )
-        trunc_normal_(self.head.weight, std=0.02)
+        nn.init.trunc_normal_(self.head.weight, std=0.02)
 
     def forward(self, x):
 
