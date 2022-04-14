@@ -511,7 +511,7 @@ def test_ViViT():
         num_heads=3,
         head_dim=64,
         num_frames=1,
-        num_classes=10,
+        n_classes=10,
     )
 
     out = model(test_tensor1)
@@ -527,7 +527,7 @@ def test_ViViT():
         patch_t=8,
         patch_h=4,
         patch_w=4,
-        num_classes=10,
+        n_classes=10,
         embedding_dim=512,
         depth=3,
         num_heads=4,
@@ -546,7 +546,7 @@ def test_ViViT():
         patch_t=8,
         patch_h=4,
         patch_w=4,
-        num_classes=10,
+        n_classes=10,
         embedding_dim=512,
         depth=3,
         num_heads=4,
@@ -558,3 +558,23 @@ def test_ViViT():
     test_tensor4 = torch.randn(7, 16, 1, 64, 64)
     logits = model(test_tensor4)
     assert logits.shape == (7, 10)
+
+
+def test_PerceiverIO():
+    # (bs, img_w * img_h, img_channel)
+    test_tensor = torch.randn(12, 10000, 7)
+    test_output_query = torch.randn(12, 3, 100)
+
+    model = MODEL_REGISTRY.get("PerceiverIO")(
+        dim=7,
+        num_latent_heads=3,
+        cross_head_dim=64,
+        depth=3,
+        latent_dim=256,
+        logits_dim=15,
+        queries_dim=100,
+        decoder_ff=True,
+    )
+
+    out = model(test_tensor, test_output_query)
+    assert out.shape == (12, 3, 15)

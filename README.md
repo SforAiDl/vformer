@@ -6,6 +6,7 @@
 [![Tests](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml/badge.svg)](https://github.com/SforAiDl/vformer/actions/workflows/package-test.yml)
 [![Docs](https://readthedocs.org/projects/vformer/badge/?version=latest)](https://vformer.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/SforAiDl/vformer/branch/main/graph/badge.svg?token=5QKCZ67CM2)](https://codecov.io/gh/SforAiDl/vformer)
+[![Downloads](https://pepy.tech/badge/vformer)](https://pepy.tech/project/vformer)
 
 **[Documentation](https://vformer.readthedocs.io/en/latest/)**
 
@@ -49,6 +50,8 @@ pip install vformer
 - [x] [CvT](https://arxiv.org/abs/2103.15808)
 - [x] [ConViT](https://arxiv.org/abs/2103.10697)
 - [x] [ViViT](https://arxiv.org/abs/2103.15691)
+- [x] [Perceiver IO](https://arxiv.org/abs/2107.14795)
+- [x] [Memory Efficient Attention](https://arxiv.org/abs/2112.05682)
 
 ## Example usage
 
@@ -104,7 +107,7 @@ swin_encoder = SwinEncoder(
 
 ```
 
-Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) to know more. 
+Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) to know more.
 
 <br>
 
@@ -121,7 +124,8 @@ Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) t
 - [CvT](https://github.com/microsoft/CvT)
 - [convit](https://github.com/facebookresearch/convit)
 - [ViViT-pytorch](https://github.com/rishikksh20/ViViT-pytorch)
-
+- [perceiver-pytorch](https://github.com/lucidrains/perceiver-pytorch)
+- [memory-efficient-attention](https://github.com/AminRezaei0x443/memory-efficient-attention)
 <!-- <br>
 
 <details>

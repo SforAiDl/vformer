@@ -101,10 +101,10 @@ class SwinTransformer(BaseClassificationModel):
 
         for i_layer in range(len(depths)):
             layer = SwinEncoder(
-                dim=int(embedding_dim * (2 ** i_layer)),
+                dim=int(embedding_dim * (2**i_layer)),
                 input_resolution=(
-                    (self.patch_resolution[0] // (2 ** i_layer)),
-                    self.patch_resolution[1] // (2 ** i_layer),
+                    (self.patch_resolution[0] // (2**i_layer)),
+                    self.patch_resolution[1] // (2**i_layer),
                 ),
                 depth=depths[i_layer],
                 num_heads=num_heads[i_layer],

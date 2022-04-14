@@ -15,3 +15,4 @@ Classification
     convit
     convvt
     vivit
+    perceiver_io

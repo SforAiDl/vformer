@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 # Basic information
 NAME = "vformer"
 DESCRIPTION = "A modular PyTorch library for vision transformer models"
-VERSION = "0.1.0"
+VERSION = "0.1.2"
 AUTHOR = "Neelay Shah"
 EMAIL = "nstraum1@gmail.com"
 LICENSE = "MIT"
