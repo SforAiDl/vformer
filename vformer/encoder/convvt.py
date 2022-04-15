@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from einops import rearrange
-from timm.models.layers import DropPath, trunc_normal_
+from torchvision.ops import StochasticDepth
 
 from ..attention.convvt import ConvVTAttention
 from ..encoder.nn import FeedForward
@@ -105,7 +105,7 @@ class ConvVTStage(nn.Module):
         self.blocks = nn.ModuleList(blocks)
 
         if self.cls_token is not None:
-            trunc_normal_(self.cls_token, std=0.02)
+            nn.init.trunc_normal_(self.cls_token, std=0.02)
 
         if init == "xavier":
             self.apply(self._init_weights_xavier)
@@ -116,7 +116,7 @@ class ConvVTStage(nn.Module):
 
     def _init_weights_trunc_normal(self, m):
         if isinstance(m, nn.Linear):
-            trunc_normal_(m.weight, std=0.02)
+            nn.init.trunc_normal_(m.weight, std=0.02)
         elif isinstance(m, (nn.LayerNorm, nn.BatchNorm2d)):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
@@ -179,14 +179,25 @@ class ConvVTBlock(nn.Module):
     """
 
     def __init__(
-        self, dim_in, dim_out, mlp_ratio=4.0, p_dropout=0.0, drop_path=0.0, **kwargs
+        self,
+        dim_in,
+        dim_out,
+        mlp_ratio=4.0,
+        p_dropout=0.0,
+        drop_path=0.0,
+        drop_path_mode="batch",
+        **kwargs
     ):
         super().__init__()
 
         self.norm1 = nn.LayerNorm(dim_in)
         self.attn = ConvVTAttention(dim_in, dim_out, **kwargs)
 
-        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
+        self.drop_path = (
+            StochasticDepth(p=drop_path, mode=drop_path_mode)
+            if drop_path > 0.0
+            else nn.Identity()
+        )
         self.norm2 = nn.LayerNorm(dim_out)
 
         dim_mlp_hidden = int(dim_out * mlp_ratio)
