@@ -85,7 +85,7 @@ class ConvVT(nn.Module):
         for i in range(self.num_stages):
             stage = ConvVTStage(
                 in_channels=in_channels,
-                img_size=img_size // (4 * 2 ** i),
+                img_size=img_size // (4 * 2**i),
                 with_cls_token=False if i < self.num_stages - 1 else True,
                 patch_size=patch_size[i],
                 patch_stride=patch_stride[i],

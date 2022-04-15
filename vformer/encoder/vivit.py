@@ -9,7 +9,7 @@ from .nn import FeedForward
 
 @ENCODER_REGISTRY.register()
 class ViViTEncoderBlock(nn.Module):
-    """For model 3 only """
+    """For model 3 only"""
 
     def __init__(
         self, dim, num_heads, head_dim, p_dropout, out_dim=None, hidden_dim=None

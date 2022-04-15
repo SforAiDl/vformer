@@ -30,7 +30,7 @@ class VanillaSelfAttention(nn.Module):
         project_out = not (num_heads == 1 and head_dim == dim)
 
         self.num_heads = num_heads
-        self.scale = head_dim ** -0.5
+        self.scale = head_dim**-0.5
 
         self.attend = nn.Softmax(dim=-1)
         self.to_qkv = nn.Linear(dim, inner_dim * 3, bias=False)

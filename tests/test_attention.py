@@ -41,13 +41,24 @@ def test_WindowAttention():
     del attention
 
 
-def test_CrossAttention():
+def test_CrossAttentionWithClsToken():
 
     test_tensor1 = torch.randn(64, 1, 64)
     test_tensor2 = torch.randn(64, 24, 128)
 
-    attention = ATTENTION_REGISTRY.get("CrossAttention")(64, 128, 64)
+    attention = ATTENTION_REGISTRY.get("CrossAttentionWithClsToken")(64, 128, 64)
     out = attention(test_tensor1, test_tensor2)
+    assert out.shape == test_tensor1.shape
+    del attention
+
+
+def test_CrossAttention():
+    test_tensor1 = torch.randn(64, 9, 14)
+    test_tensor2 = torch.randn(64, 17, 37)
+    test_tensor_mask = torch.randn(64, 17) > 0.8
+
+    attention = ATTENTION_REGISTRY.get("CrossAttention")(14, 37)
+    out = attention(test_tensor1, test_tensor2, test_tensor_mask)
     assert out.shape == test_tensor1.shape
     del attention
 
@@ -109,4 +120,21 @@ def test_ConvVTAttention():
     attention = ATTENTION_REGISTRY.get("ConvVTAttention")(384, 128, 4, 14, method="avg")
     out = attention(test_tensor1)
     assert out.shape == torch.Size([16, 196, 128])
+    del attention
+
+
+def test_MemoryEfficientAttention():
+    test_tensor1 = torch.randn(2, 65, 1024)
+    test_tensor2 = torch.randn(2, 257, 1024)
+
+    attention = ATTENTION_REGISTRY.get("MemoryEfficientAttention")(dim=1024)
+    out = attention(test_tensor1)
+    assert out.shape == (2, 65, 1024)
+    del attention
+
+    attention = ATTENTION_REGISTRY.get("MemoryEfficientAttention")(
+        dim=1024, num_heads=16
+    )
+    out = attention(test_tensor2)
+    assert out.shape == (2, 257, 1024)
     del attention
