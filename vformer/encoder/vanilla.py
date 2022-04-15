@@ -41,6 +41,7 @@ class VanillaEncoder(nn.Module):
         p_dropout=0.0,
         attn_dropout=0.0,
         drop_path_rate=0.0,
+        drop_path_mode="batch",
     ):
         super().__init__()
 
@@ -70,7 +71,7 @@ class VanillaEncoder(nn.Module):
                 )
             )
         self.drop_path = (
-            StochasticDepth(p=drop_path_rate, mode="batch")
+            StochasticDepth(p=drop_path_rate, mode=drop_path_mode)
             if drop_path_rate > 0.0
             else nn.Identity()
         )

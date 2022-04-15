@@ -42,6 +42,7 @@ class ConViTEncoder(VanillaEncoder):
         p_dropout=0,
         attn_dropout=0,
         drop_path_rate=0,
+        drop_path_mode="batch",
     ):
         super().__init__(
             embedding_dim,
@@ -80,7 +81,7 @@ class ConViTEncoder(VanillaEncoder):
                 )
             )
         self.drop_path = (
-            StochasticDepth(p=drop_path_rate, mode="batch")
+            StochasticDepth(p=drop_path_rate, mode=drop_path_mode)
             if drop_path_rate > 0.0
             else nn.Identity()
         )

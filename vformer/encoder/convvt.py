@@ -179,7 +179,14 @@ class ConvVTBlock(nn.Module):
     """
 
     def __init__(
-        self, dim_in, dim_out, mlp_ratio=4.0, p_dropout=0.0, drop_path=0.0, **kwargs
+        self,
+        dim_in,
+        dim_out,
+        mlp_ratio=4.0,
+        p_dropout=0.0,
+        drop_path=0.0,
+        drop_path_mode="batch",
+        **kwargs
     ):
         super().__init__()
 
@@ -187,7 +194,7 @@ class ConvVTBlock(nn.Module):
         self.attn = ConvVTAttention(dim_in, dim_out, **kwargs)
 
         self.drop_path = (
-            StochasticDepth(p=drop_path, mode="batch")
+            StochasticDepth(p=drop_path, mode=drop_path_mode)
             if drop_path > 0.0
             else nn.Identity()
         )
