@@ -9,5 +9,6 @@ Attention
    attention_cross
    attention_spatial
    attention_window
+   attention_memory_efficient
    attention_gated_positional
    attention_convvt

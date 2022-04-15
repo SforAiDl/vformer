@@ -1,23 +1,21 @@
-name: Package Tests
+name: Publish to PyPI
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  release:
+    types: [published]
 
 jobs:
-  build:
 
+  deploy:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
-        python-version: ['3.7', '3.8']
+        python-version: ['3.8']
 
     steps:
-
+    
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -26,13 +24,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install black pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install build
-
     - name: Build package
       run: python -m build
 
-    - name: Test with pytest
-      run: |
-        pytest
+    - name: Publish package to PyPI
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_API_TOKEN }}

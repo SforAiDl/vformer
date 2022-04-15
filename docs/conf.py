@@ -159,6 +159,6 @@ texinfo_documents = [
         "Miscellaneous",
     ),
 ]
-autodoc_mock_imports = ["einops", "timm"]
+autodoc_mock_imports = ["einops"]
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
