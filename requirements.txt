@@ -2,6 +2,7 @@ arrow==1.1.1
 attrs==21.2.0
 backports.entry-points-selectable==1.1.0
 binaryornot==0.4.4
+black==22.3.0
 certifi==2021.5.30
 cfgv==3.3.1
 chardet==4.0.0
