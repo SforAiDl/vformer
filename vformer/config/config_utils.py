@@ -6,6 +6,7 @@ import uuid
 from collections import abc
 from typing import Any
 
+from hydra.utils import _locate
 from omegaconf import DictConfig, ListConfig
 
 
@@ -32,13 +33,7 @@ def locate(name: str) -> Any:
     # Some cases (e.g. torch.optim.sgd.SGD) not handled correctly
     # by pydoc.locate. Try a private function from hydra.
     if obj is None:
-        try:
-            # from hydra.utils import get_method - will print many errors
-            from hydra.utils import _locate
-        except ImportError as e:
-            raise ImportError(f"Cannot dynamically locate object {name}!") from e
-        else:
-            obj = _locate(name)  # it raises if fails
+        obj = _locate(name)  # it raises if fails
 
     return obj
 
@@ -50,8 +45,6 @@ def instantiate(cfg):
     if isinstance(cfg, ListConfig):
         lst = [instantiate(x) for x in cfg]
         return ListConfig(lst, flags={"allow_objects": True})
-    if isinstance(cfg, list):
-        return [instantiate(x) for x in cfg]
 
     if isinstance(cfg, abc.Mapping) and "_target_" in cfg:
         # conceptually equivalent to hydra.utils.instantiate(cfg) with _convert_=all,
@@ -68,7 +61,6 @@ def instantiate(cfg):
             try:
                 cls_name = cls.__module__ + "." + cls.__qualname__
             except Exception:
-                # target could be anything, so the above could fail
                 cls_name = str(cls)
         assert callable(cls), f"_target_ {cls} does not define a callable object"
         try:

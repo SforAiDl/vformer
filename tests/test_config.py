@@ -59,7 +59,16 @@ def test_lazy():
 def test_raise_errors():
     a = "strings"
     with pytest.raises(TypeError):
-        obj = LazyConfig(a)  # only callable objects
+        LazyConfig(a)
+    with pytest.raises(TypeError):
+        LazyCall(2)
+
+    cfg = [1, 2, 3, 4]
+    cfg2 = instantiate(cfg)
+    assert cfg2 == cfg, "it should return same object"
+
+    with pytest.raises(AssertionError):
+        instantiate({"_target_": "test"})
 
 
 def test_load():
@@ -160,10 +169,7 @@ def test_check_configs():
         "VanillaViT",
         "vit_tiny.py",
     )
-    # print(" ")
-    # print(r"C:\Users\Abhijit_asus\PycharmProjects\vformer\configs\VanillaViT\vit_tiny.py")
-    # print(config_dir)
-    # print(os.path.exists(config_dir))
+
     cfg = LazyConfig.load(config_dir)
     print(cfg)
     obj = LazyConfig.to_py(cfg)
@@ -173,3 +179,7 @@ def test_check_configs():
 
     new_model = instantiate(cfg.model)
     assert new_model(torch.randn(4, 3, 224, 224)).shape == (4, 10)
+
+    cfg.model.num_classes = 10
+    with pytest.raises(TypeError):
+        new_model = instantiate((cfg.model))
