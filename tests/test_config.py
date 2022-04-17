@@ -151,3 +151,25 @@ cfg.list = ["a", 1, "b", 3.2]
     cfg = LazyConfig.load(root_filename)
     obj = LazyConfig.to_py(cfg)
     print(obj)
+
+
+def test_check_configs():
+    config_dir = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "configs",
+        "VanillaViT",
+        "vit_tiny.py",
+    )
+    # print(" ")
+    # print(r"C:\Users\Abhijit_asus\PycharmProjects\vformer\configs\VanillaViT\vit_tiny.py")
+    # print(config_dir)
+    # print(os.path.exists(config_dir))
+    cfg = LazyConfig.load(config_dir)
+    print(cfg)
+    obj = LazyConfig.to_py(cfg)
+    cfg.model.img_size = 224
+    cfg.model.in_channels = 3
+    cfg.model.n_classes = 10
+
+    new_model = instantiate(cfg.model)
+    assert new_model(torch.randn(4, 3, 224, 224)).shape == (4, 10)
