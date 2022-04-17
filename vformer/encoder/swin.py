@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch.utils.checkpoint as checkpoint
-from timm.models.layers import DropPath
+from torchvision.ops import StochasticDepth
 
 from ..attention.window import WindowAttention
 from ..utils import (
@@ -61,6 +61,7 @@ class SwinEncoderBlock(nn.Module):
         attn_dropout=0.0,
         drop_path_rate=0.0,
         norm_layer=nn.LayerNorm,
+        drop_path_mode="batch",
     ):
         super(SwinEncoderBlock, self).__init__()
 
@@ -92,7 +93,9 @@ class SwinEncoderBlock(nn.Module):
         )
 
         self.drop_path = (
-            DropPath(drop_path_rate) if drop_path_rate > 0.0 else nn.Identity()
+            StochasticDepth(p=drop_path_rate, mode=drop_path_mode)
+            if drop_path_rate > 0.0
+            else nn.Identity()
         )
         self.norm2 = norm_layer(dim)
         self.mlp = FeedForward(dim=dim, hidden_dim=hidden_dim, p_dropout=p_dropout)

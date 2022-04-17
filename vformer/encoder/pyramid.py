@@ -1,5 +1,5 @@
 import torch.nn as nn
-from timm.models.layers import DropPath
+from torchvision.ops import StochasticDepth
 
 from ..attention import SpatialAttention
 from ..common.blocks import DWConv
@@ -141,6 +141,7 @@ class PVTEncoder(nn.Module):
         use_dwconv,
         sr_ratio,
         linear=False,
+        drop_path_mode="batch",
     ):
         super(PVTEncoder, self).__init__()
 
@@ -178,7 +179,7 @@ class PVTEncoder(nn.Module):
                 )
             )
             self.drop_path = (
-                DropPath(drop_prob=drop_path[i])
+                StochasticDepth(p=drop_path[i], mode=drop_path_mode)
                 if drop_path[i] > 0.0
                 else nn.Identity()
             )

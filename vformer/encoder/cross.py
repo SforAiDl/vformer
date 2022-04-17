@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from ..attention import CrossAttention
+from ..attention import CrossAttentionWithClsToken
 from ..utils import ENCODER_REGISTRY
 from .vanilla import VanillaEncoder
 
@@ -83,10 +83,10 @@ class CrossEncoder(nn.Module):
             mlp_dim_l,
             p_dropout_l,
         )
-        self.attend_s = CrossAttention(
+        self.attend_s = CrossAttentionWithClsToken(
             embedding_dim_s, embedding_dim_l, cross_head_s, cross_dim_head_s
         )
-        self.attend_l = CrossAttention(
+        self.attend_l = CrossAttentionWithClsToken(
             embedding_dim_l, embedding_dim_s, cross_head_l, cross_dim_head_l
         )
 

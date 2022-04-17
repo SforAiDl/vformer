@@ -50,6 +50,7 @@ pip install vformer
 - [x] [CvT](https://arxiv.org/abs/2103.15808)
 - [x] [ConViT](https://arxiv.org/abs/2103.10697)
 - [x] [ViViT](https://arxiv.org/abs/2103.15691)
+- [x] [Perceiver IO](https://arxiv.org/abs/2107.14795)
 - [x] [Memory Efficient Attention](https://arxiv.org/abs/2112.05682)
 
 ## Example usage
@@ -123,6 +124,7 @@ Please refer to our [documentation](https://vformer.readthedocs.io/en/latest/) t
 - [CvT](https://github.com/microsoft/CvT)
 - [convit](https://github.com/facebookresearch/convit)
 - [ViViT-pytorch](https://github.com/rishikksh20/ViViT-pytorch)
+- [perceiver-pytorch](https://github.com/lucidrains/perceiver-pytorch)
 - [memory-efficient-attention](https://github.com/AminRezaei0x443/memory-efficient-attention)
 <!-- <br>
 

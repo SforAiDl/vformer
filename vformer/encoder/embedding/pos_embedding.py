@@ -1,7 +1,6 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from timm.models.layers import trunc_normal_
 
 from ...utils import pair
 
@@ -32,7 +31,7 @@ class PVTPosEmbedding(nn.Module):
         self.pos_dim = pos_dim
 
         self.drop = nn.Dropout(p=p_dropout)
-        trunc_normal_(self.pos_embed, std=std)
+        nn.init.trunc_normal_(self.pos_embed, std=std)
 
     def resize_pos_embed(self, pos_embed, shape, mode="bilinear", **kwargs):
         """
@@ -96,7 +95,7 @@ class PosEmbedding(nn.Module):
             pe[:, 1::2] = torch.cos(pe[:, 1::2])
             self.pos_embed = pe
             self.pos_embed.requires_grad = False
-        trunc_normal_(self.pos_embed, std=std)
+        nn.init.trunc_normal_(self.pos_embed, std=std)
         self.pos_drop = nn.Dropout(drop) if drop is not None else nn.Identity()
 
     def forward(self, x):

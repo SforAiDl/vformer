@@ -1,4 +1,4 @@
-name: Code style
+name: Linting and Code Style
 
 on:
   push:

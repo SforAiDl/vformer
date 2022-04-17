@@ -1,7 +1,6 @@
 import numpy as np
 import torch
 import torch.nn as nn
-from timm.models.layers import trunc_normal_
 
 from ...decoder import MLPDecoder
 from ...encoder import OverlapPatchEmbed, PVTEncoder, PVTPosEmbedding
@@ -148,7 +147,7 @@ class PVTClassification(nn.Module):
             self.norms.append(norm_layer(embed_dims[i]))
         # cls_token
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dims[-1]))
-        trunc_normal_(self.cls_token, std=0.02)
+        nn.init.trunc_normal_(self.cls_token, std=0.02)
 
         if decoder_config is not None:
 
