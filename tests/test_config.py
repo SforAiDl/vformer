@@ -167,7 +167,7 @@ def test_check_configs():
         os.path.dirname(os.path.dirname(__file__)),
         "configs",
         "VanillaViT",
-        "vit_tiny.py",
+        "vit_tiny_patch_16_224.py",
     )
 
     cfg = LazyConfig.load(config_dir)
