@@ -159,27 +159,34 @@ cfg.list = ["a", 1, "b", 3.2]
     root_filename = os.path.join(os.path.dirname(__file__), "testing.yaml")
     cfg = LazyConfig.load(root_filename)
     obj = LazyConfig.to_py(cfg)
-    print(obj)
 
 
 def test_check_configs():
     config_dir = os.path.join(
         os.path.dirname(os.path.dirname(__file__)),
         "configs",
-        "VanillaViT",
+        "Vanilla",
         "vit_tiny_patch_16_224.py",
     )
 
     cfg = LazyConfig.load(config_dir)
-    print(cfg)
-    obj = LazyConfig.to_py(cfg)
     cfg.model.img_size = 224
     cfg.model.in_channels = 3
-    cfg.model.n_classes = 10
+    cfg.model.n_classes = 1000
 
     new_model = instantiate(cfg.model)
-    assert new_model(torch.randn(4, 3, 224, 224)).shape == (4, 10)
+    assert new_model(torch.randn(4, 3, 224, 224)).shape == (4, 1000)
 
     cfg.model.num_classes = 10
     with pytest.raises(TypeError):
         new_model = instantiate((cfg.model))
+
+    config_dir = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "configs",
+        "Swin",
+        "swin_base_patch4_window7_224.py",
+    )
+    cfg = LazyConfig.load(config_dir)
+    new_model = instantiate(cfg.model)
+    assert new_model(torch.randn(4, 3, 224, 224)).shape == (4, 1000)

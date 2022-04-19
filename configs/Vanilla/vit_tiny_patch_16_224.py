@@ -14,4 +14,5 @@ model = L(VanillaViT)(
     pool="cls",
     p_dropout_encoder=0.1,
     p_dropout_embedding=0.1,
+    n_classes=1000,
 )
