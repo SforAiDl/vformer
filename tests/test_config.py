@@ -179,6 +179,7 @@ def test_check_configs():
 
     cfg.model.num_classes = 10
     with pytest.raises(TypeError):
+        # this will throw an error because `num_class` is not an acceptable input keyword, we use `n_classes`
         new_model = instantiate((cfg.model))
 
     config_dir = os.path.join(
