@@ -28,7 +28,7 @@ class VanillaViT(BaseClassificationModel):
         Dimension of the attention head
     depth: int
         Number of attention layers in the encoder
-    attn_heads:int
+    num_heads:int
         Number of the attention heads
     encoder_mlp_dim: int
         Dimension of hidden layer in the encoder
@@ -52,7 +52,7 @@ class VanillaViT(BaseClassificationModel):
         embedding_dim=1024,
         head_dim=64,
         depth=6,
-        attn_heads=16,
+        num_heads=16,
         encoder_mlp_dim=2048,
         in_channels=3,
         decoder_config=None,
@@ -77,7 +77,7 @@ class VanillaViT(BaseClassificationModel):
         self.encoder = VanillaEncoder(
             embedding_dim=embedding_dim,
             depth=depth,
-            num_heads=attn_heads,
+            num_heads=num_heads,
             head_dim=head_dim,
             mlp_dim=encoder_mlp_dim,
             p_dropout=p_dropout_encoder,
