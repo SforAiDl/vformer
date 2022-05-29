@@ -26,8 +26,6 @@ from .config_utils import (
 _CFG_PACKAGE_NAME = "vformer.cfg_loader"
 
 
-
-
 class LazyCall:
     """
     Wrap a callable so that when it's called, the call will not be executed,

@@ -12,9 +12,6 @@ from vformer.config import LazyConfig, instantiate
 from vformer.models import PVTSegmentation, SwinTransformer, VanillaViT, ViViTModel2
 
 
-
-
-
 def test_raise_errors():
     a = "strings"
     with pytest.raises(TypeError):
@@ -118,19 +115,20 @@ cfg.list = ["a", 1, "b", 3.2]
     cfg = LazyConfig.load(root_filename)
     obj = LazyConfig.to_py(cfg)
 
+
 def test_lazycall():
-    #lazycall implementation; only few models implemented .
+    # lazycall implementation; only few models implemented .
     # classification models
     rand_img_tensor = torch.randn(4, 3, 224, 224)
     rand_vdo_tensor = torch.randn([32, 16, 3, 224, 224])
 
-    #vanilla vit
+    # vanilla vit
     vanilla_config = LazyCall(VanillaViT)(img_size=224, patch_size=7, n_classes=10)
     vanilla_vit = instantiate(vanilla_config)
     assert vanilla_vit(rand_img_tensor).shape == (4, 10)
-    del vanilla_vit,vanilla_config #clearing up memory
+    del vanilla_vit, vanilla_config  # clearing up memory
 
-    #swin
+    # swin
     swin_config = LazyCall(SwinTransformer)(
         img_size=224,
         patch_size=4,
@@ -145,7 +143,7 @@ def test_lazycall():
     swin_vit = instantiate(swin_config)
     assert swin_vit(rand_img_tensor).shape == (4, 10)
 
-    #video model vivit
+    # video model vivit
     vivit_config = LazyCall(ViViTModel2)(
         img_size=224,
         in_channels=3,
@@ -165,6 +163,7 @@ def test_lazycall():
     pvt_config["img_size"] = 224
     pvt = instantiate(pvt_config)
     assert pvt(rand_img_tensor).shape == (4, 1, 224, 224)
+
 
 def test_check_configs():
     config_dir = os.path.join(
