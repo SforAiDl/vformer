@@ -25,7 +25,7 @@ from .config_utils import (
 
 _CFG_PACKAGE_NAME = "vformer.cfg_loader"
 
-# copied from detectron 2
+
 
 
 class LazyCall:
