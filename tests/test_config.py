@@ -88,7 +88,6 @@ def test_load():
 
 def test_save_load():
     root_filename = os.path.join(os.path.dirname(__file__), "root_cfg.py")
-
     cfg = LazyConfig.load(root_filename)
     with tempfile.TemporaryDirectory(prefix="vformer") as d:
         fname = os.path.join(d, "test_config.yaml")
@@ -166,7 +165,7 @@ def test_check_configs():
         os.path.dirname(os.path.dirname(__file__)),
         "configs",
         "Vanilla",
-        "vit_tiny_patch_16_224.py",
+        "vit_tiny_patch16_224.py",
     )
 
     cfg = LazyConfig.load(config_dir)
