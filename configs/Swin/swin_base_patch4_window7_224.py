@@ -1,3 +1,5 @@
+import torch.nn as nn
+
 from vformer.config import LazyCall as L
 from vformer.models import SwinTransformer
 
@@ -15,6 +17,7 @@ model = L(SwinTransformer)(
     qk_scale=None,
     p_dropout=0.1,
     attn_dropout=0.1,
+    norm_layer=nn.LayerNorm,
     drop_path_rate=0.1,
     ape=True,
     decoder_config=None,

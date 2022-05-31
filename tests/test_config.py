@@ -126,7 +126,7 @@ def test_lazycall():
     vanilla_config = LazyCall(VanillaViT)(img_size=224, patch_size=7, n_classes=10)
     vanilla_vit = instantiate(vanilla_config)
     assert vanilla_vit(rand_img_tensor).shape == (4, 10)
-    del vanilla_vit, vanilla_config  # clearing up memory
+    del vanilla_vit, vanilla_config  # releasing memory
 
     # swin
     swin_config = LazyCall(SwinTransformer)(
@@ -142,6 +142,7 @@ def test_lazycall():
     )
     swin_vit = instantiate(swin_config)
     assert swin_vit(rand_img_tensor).shape == (4, 10)
+    del swin_vit, swin_config
 
     # video model vivit
     vivit_config = LazyCall(ViViTModel2)(
@@ -157,12 +158,14 @@ def test_lazycall():
     )
     vivit = instantiate(vivit_config)
     assert vivit(rand_vdo_tensor).shape == (32, 10)
+    del vivit, vivit_config
 
     # dense model pvt
     pvt_config = LazyCall(PVTSegmentation)()
     pvt_config["img_size"] = 224
     pvt = instantiate(pvt_config)
     assert pvt(rand_img_tensor).shape == (4, 1, 224, 224)
+    del pvt, pvt_config
 
 
 def test_check_configs():
@@ -195,3 +198,24 @@ def test_check_configs():
     cfg = LazyConfig.load(config_dir)
     new_model = instantiate(cfg.model)
     assert new_model(torch.randn(4, 3, 224, 224)).shape == (4, 1000)
+    del new_model
+
+    root_filename = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "Configs",
+        "Vanilla",
+        "vit_tiny_patch16_224.py",
+    )
+    cfg = LazyConfig.load(root_filename)
+    fname = os.path.join("test_config.yaml")
+    LazyConfig.save(cfg, fname)
+    cfg2 = LazyConfig.load(fname)
+    model = instantiate(cfg2.model)
+    assert model(torch.randn(4, 3, 224, 224)).shape == (4, 1000)
+
+
+def test_relative_load():
+    filename = "test_config.yaml"
+    cfg = LazyConfig.load_rel(filename)
+    model = instantiate(cfg.model)
+    assert model(torch.randn(2, 3, 224, 224)).shape == (2, 1000)
