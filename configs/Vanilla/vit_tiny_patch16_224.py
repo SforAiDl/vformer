@@ -1,5 +1,3 @@
-import torch.nn as nn
-
 from vformer.config import LazyCall as L
 from vformer.models import VanillaViT
 
