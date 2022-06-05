@@ -115,6 +115,7 @@ cfg.list = ["a", 1, "b", 3.2]
     cfg = LazyConfig.load(root_filename)
     obj = LazyConfig.to_py(cfg)
 
+
 """
 def test_lazycall():
     # lazycall implementation; only few models implemented .
@@ -168,15 +169,11 @@ def test_lazycall():
     del pvt, pvt_config
 """
 
-def test_check_configs():
-    config_dir = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        "configs",
-        "Vanilla",
-        "vit_tiny_patch16_224.py",
-    )
 
-    cfg = LazyConfig.load(config_dir)
+def test_check_configs():
+    config_dir = "vit_test_config.py"
+
+    cfg = LazyConfig.load_rel(config_dir)
     cfg.model.img_size = 224
     cfg.model.in_channels = 3
     cfg.model.n_classes = 1000
@@ -189,24 +186,7 @@ def test_check_configs():
         # this will throw an error because `num_class` is not an acceptable input keyword, we use `n_classes`
         new_model = instantiate((cfg.model))
 
-    config_dir = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        "configs",
-        "Swin",
-        "swin_base_patch4_window7_224.py",
-    )
-    cfg = LazyConfig.load(config_dir)
-    new_model = instantiate(cfg.model)
-    assert new_model(torch.randn(4, 3, 224, 224)).shape == (4, 1000)
-    del new_model
-
-    root_filename = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)),
-        "Configs",
-        "Vanilla",
-        "vit_tiny_patch16_224.py",
-    )
-    cfg = LazyConfig.load(root_filename)
+    cfg = LazyConfig.load_rel(config_dir)
     fname = os.path.join("test_config.yaml")
     LazyConfig.save(cfg, fname)
     cfg2 = LazyConfig.load(fname)
