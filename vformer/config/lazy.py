@@ -5,6 +5,7 @@ import importlib
 import inspect
 import logging
 import os
+import uuid
 from collections import abc
 from contextlib import contextmanager
 from copy import deepcopy
@@ -18,12 +19,14 @@ from omegaconf import DictConfig, ListConfig, OmegaConf
 from .config_utils import (
     _cast_to_config,
     _convert_target_to_string,
-    _random_package_name,
     _validate_py_syntax,
     _visit_dict_config,
 )
 
-_CFG_PACKAGE_NAME = "vformer.cfg_loader"
+_CFG_PACKAGE_NAME = "vformer._cfg_loader"
+"""
+A namespace to put all imported config into.
+"""
 
 
 class LazyCall:
@@ -361,3 +364,8 @@ class LazyConfig:
             return black.format_str(py_str, mode=black.Mode())
         except black.InvalidInput:
             return py_str
+
+
+def _random_package_name(filename):
+    # generate a random package name when loading config files
+    return _CFG_PACKAGE_NAME + str(uuid.uuid4())[:4] + "." + os.path.basename(filename)

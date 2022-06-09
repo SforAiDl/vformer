@@ -1,13 +1,16 @@
 import ast
 import logging
-import os
 import pydoc
-import uuid
 from collections import abc
 from typing import Any
 
 from hydra.utils import _locate
 from omegaconf import DictConfig, ListConfig
+
+_CFG_PACKAGE_NAME = "vformer._cfg_loader"
+"""
+A namespace to put all imported config into.
+"""
 
 
 def _convert_target_to_string(t: Any) -> str:
@@ -100,11 +103,3 @@ def _cast_to_config(obj):
     if isinstance(obj, dict):
         return DictConfig(obj, flags={"allow_objects": True})
     return obj
-
-
-_CFG_PACKAGE_NAME = "vformer.cfg_loader"
-
-
-def _random_package_name(filename):
-    # generate a random package name when loading config files
-    return _CFG_PACKAGE_NAME + str(uuid.uuid4())[:4] + "." + os.path.basename(filename)
