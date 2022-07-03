@@ -1,5 +1,5 @@
 <h1 align="center">VFormer</h1>
-<h3 align="center">A modular PyTorch library for Vision Transformers</h3>
+<h3 align="center">A modular PyTorch library for vision transformers models</h3>
 
 <div align='center'>
 
@@ -14,8 +14,9 @@
 
 ## Library Features
 
-- Contains implementations of prominent ViT architectures broken down into modular components like encoder, attention mechanism, and decoder.
-- Makes it easy to develop custom models by composing components of different architectures.
+- Contains implementations of prominent ViT architectures broken down into modular components like encoder, attention mechanism, and decoder
+- Makes it easy to develop custom models by composing components of different architectures
+- Utilities for visualizing attention using techniques such as gradient rollout
 
 ## Installation
 
