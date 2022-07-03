@@ -14,8 +14,9 @@
 
 ## Library Features
 
-- Contains implementations of prominent ViT architectures broken down into modular components like encoder, attention mechanism, and decoder.
-- Makes it easy to develop custom models by composing components of different architectures.
+- Contains implementations of prominent ViT architectures broken down into modular components like encoder, attention mechanism, and decoder
+- Makes it easy to develop custom models by composing components of different architectures
+- Utilities for visualizing attention using techniques such as gradient rollout
 
 ## Installation
 
