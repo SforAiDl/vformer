@@ -1,4 +1,4 @@
-name: vformer_test
+name: vformer
 channels:
   - defaults
 dependencies:
@@ -63,4 +63,3 @@ dependencies:
     - typing-extensions==4.3.0
     - urllib3==1.26.6
     - virtualenv==20.7.2
-prefix: /Applications/anaconda3/envs/vformer_test
