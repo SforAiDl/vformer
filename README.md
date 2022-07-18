@@ -16,7 +16,7 @@
 
 - Contains implementations of prominent ViT architectures broken down into modular components like encoder, attention mechanism, and decoder
 - Makes it easy to develop custom models by composing components of different architectures
-- Utilities for visualizing attention using techniques such as gradient rollout
+- Contains utilities for visualizing attention maps of models using techniques such as gradient rollout
 
 ## Installation
 
