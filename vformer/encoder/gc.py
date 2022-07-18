@@ -1,10 +1,14 @@
 import torch
 import torch.nn as nn
 
-from ...attention import WindowAttention
-from ...attention import WindowAttentionGlobal
+from ...decoder import MLPDecoder
+from ...attention import WindowAttention, WindowAttentionGlobal
 
-from ..utils import ENCODER_REGISTRY
+from ..utils import (
+    ENCODER_REGISTRY,
+    window_partition,
+    window_reverse,
+)
 
 @ENCODER_REGISTRY.register()
 class GCViTBlock(nn.Module):
