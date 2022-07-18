@@ -1,0 +1,1 @@
+model: {_target_: vformer.models.VanillaViT, decoder_config: null, depth: 12, embedding_dim: 192, encoder_mlp_dim: 192, head_dim: 192, img_size: 224, in_channels: 3, n_classes: 1000, num_heads: 3, p_dropout_embedding: 0.1, p_dropout_encoder: 0.1, patch_size: 16, pool: cls}
