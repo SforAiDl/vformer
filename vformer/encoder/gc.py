@@ -10,6 +10,73 @@ from ..utils import (
     window_reverse,
 )
 
+class SE(nn.Module):
+    def __init__(self, inp, oup, expansion=0.25):
+        super().__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Sequential(
+            nn.Linear(oup, int(inp * expansion), bias=False),
+            nn.GELU(),
+            nn.Linear(int(inp * expansion), oup, bias=False),
+            nn.Sigmoid()
+        )
+
+    def forward(self, x):
+        b, c, _, _ = x.size()
+        y = self.avg_pool(x).view(b, c)
+        y = self.fc(y).view(b, c, 1, 1)
+        return x * y
+
+class ReduceSize(nn.Module):
+    def __init__(self, dim,
+                 norm_layer=nn.LayerNorm,
+                 keep_dim=False):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(dim, dim, 3, 1, 1,
+                      groups=dim, bias=False),
+            nn.GELU(),
+            SE(dim, dim),
+            nn.Conv2d(dim, dim, 1, 1, 0, bias=False),
+        )
+        if keep_dim:
+            dim_out = dim
+        else:
+            dim_out = 2*dim
+        self.reduction = nn.Conv2d(dim, dim_out, 3, 2, 1, bias=False)
+        self.norm2 = norm_layer(dim_out)
+        self.norm1 = norm_layer(dim)
+
+    def forward(self, x):
+        x = x.contiguous()
+        x = self.norm1(x)
+        x = x.permute(0, 3, 1, 2)
+        x = x + self.conv(x)
+        x = self.reduction(x).permute(0, 2, 3, 1)
+        x = self.norm2(x)
+        return x
+
+class FeatExtract(nn.Module):
+    def __init__(self, dim, keep_dim=False):
+        super().__init__()
+        self.conv = nn.Sequential(
+            nn.Conv2d(dim, dim, 3, 1, 1,
+                      groups=dim, bias=False),
+            nn.GELU(),
+            SE(dim, dim),
+            nn.Conv2d(dim, dim, 1, 1, 0, bias=False),
+        )
+        if not keep_dim:
+            self.pool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        self.keep_dim = keep_dim
+
+    def forward(self, x):
+        x = x.contiguous()
+        x = x + self.conv(x)
+        if not self.keep_dim:
+            x = self.pool(x)
+        return x
+    
 @ENCODER_REGISTRY.register()
 class GCViTBlock(nn.Module):
     def __init__(self,
