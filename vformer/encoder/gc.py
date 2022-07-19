@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from timm.models.layers import DropPath
+from torchvision.ops import StochasticDepth
 
 from ...attention.window import WindowAttention, WindowAttentionGlobal
 from ...decoder import MLPDecoder
@@ -86,7 +86,8 @@ class GCViTBlock(nn.Module):
         qk_scale=None,
         drop=0.0,
         attn_drop=0.0,
-        drop_path=0.0,
+        drop_path_rate=0.0,
+        drop_path_mode="batch",
         act_layer=nn.GELU,
         attention=WindowAttentionGlobal,
         norm_layer=nn.LayerNorm,
@@ -106,7 +107,11 @@ class GCViTBlock(nn.Module):
             proj_drop=drop,
         )
 
-        self.drop_path = DropPath(drop_path) if drop_path > 0.0 else nn.Identity()
+        self.drop_path = (
+            StochasticDepth(p=drop_path_rate, mode=drop_path_mode)
+            if drop_path_rate > 0.0
+            else nn.Identity()
+        )
         self.norm2 = norm_layer(dim)
         self.mlp = MLPDecoder(
             in_features=dim,
@@ -159,7 +164,7 @@ class GCViTLayer(nn.Module):
         qk_scale=None,
         drop=0.0,
         attn_drop=0.0,
-        drop_path=0.0,
+        drop_path_rate=0.0,
         norm_layer=nn.LayerNorm,
         layer_scale=None,
     ):
@@ -178,9 +183,9 @@ class GCViTLayer(nn.Module):
                     else WindowAttentionGlobal,
                     drop=drop,
                     attn_drop=attn_drop,
-                    drop_path=drop_path[i]
-                    if isinstance(drop_path, list)
-                    else drop_path,
+                    drop_path_rate=drop_path_rate[i]
+                    if isinstance(drop_path_rate, list)
+                    else drop_path_rate,
                     norm_layer=norm_layer,
                     layer_scale=layer_scale,
                     input_resolution=input_resolution,
