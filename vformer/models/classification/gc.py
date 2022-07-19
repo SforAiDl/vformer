@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from timm.models.layers import trunc_normal_
 
 from ...encoder import GCViTLayer, PatchEmbedding
 from ...utils import MODEL_REGISTRY
@@ -61,7 +60,7 @@ class GCViT(nn.Module):
 
     def _init_weights(self, m):
         if isinstance(m, nn.Linear):
-            trunc_normal_(m.weight, std=0.02)
+            nn.init.trunc_normal_(m.weight, std=0.02)
             if isinstance(m, nn.Linear) and m.bias is not None:
                 nn.init.constant_(m.bias, 0)
         elif isinstance(m, nn.LayerNorm):
