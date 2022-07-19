@@ -2,6 +2,7 @@ from .convit import ConViTEncoder
 from .convvt import ConvVTStage
 from .cross import CrossEncoder
 from .embedding import *
+from .gc import GCViTBlock, GCViTLayer
 from .nn import FeedForward
 from .perceiver_io import PerceiverIOEncoder
 from .pyramid import PVTEncoder
