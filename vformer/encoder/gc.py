@@ -2,8 +2,8 @@ import torch
 import torch.nn as nn
 from torchvision.ops import StochasticDepth
 
-from ...attention.window import WindowAttention, WindowAttentionGlobal
-from ...decoder import MLPDecoder
+from ..attention.window import WindowAttention, WindowAttentionGlobal
+from ..decoder import MLPDecoder
 from ..utils import ENCODER_REGISTRY, window_partition, window_reverse
 
 
