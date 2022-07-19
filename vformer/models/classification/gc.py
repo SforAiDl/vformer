@@ -4,6 +4,7 @@ import torch.nn as nn
 from ...encoder import GCViTLayer, PatchEmbedding
 from ...utils import MODEL_REGISTRY
 
+
 class GCViT(nn.Module):
     def __init__(
         self,
