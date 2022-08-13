@@ -15,7 +15,7 @@ class VanillaViT(BaseClassificationModel):
     https://arxiv.org/abs/2010.11929
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Size of the image
     patch_size: int

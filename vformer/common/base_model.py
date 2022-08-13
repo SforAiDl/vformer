@@ -5,6 +5,9 @@ from ..utils import pair
 
 class BaseClassificationModel(nn.Module):
     """
+    
+    Parameters
+    -----------
     img_size: int
         Size of the image
     patch_size: int or tuple(int)

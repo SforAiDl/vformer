@@ -8,10 +8,11 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class CrossAttentionWithClsToken(nn.Module):
     """
-    Cross-Attention with Cls Token
+    Cross-Attention with Cls Token introduced in Paper: CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification
+    https://arxiv.org/abs/2103.14899
 
     Parameters
-    ----------
+    -----------
     cls_dim: int
         Dimension of cls token embedding
     patch_dim: int
@@ -72,7 +73,7 @@ class CrossAttentionWithClsToken(nn.Module):
 @ATTENTION_REGISTRY.register()
 class CrossAttention(nn.Module):
     """
-    Cross-Attention
+    Cross-Attention 
 
     Parameters
     ----------

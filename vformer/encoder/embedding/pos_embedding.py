@@ -9,7 +9,7 @@ class PVTPosEmbedding(nn.Module):
     """
 
     Parameters
-    ----------
+    -----------
     pos_shape : int or tuple(int)
         The shape of the absolute position embedding.
     pos_dim : int
@@ -36,7 +36,7 @@ class PVTPosEmbedding(nn.Module):
     def resize_pos_embed(self, pos_embed, shape, mode="bilinear", **kwargs):
         """
         Parameters
-        ----------
+        -----------
             pos_embed : torch.Tensor
                 Position embedding weights
             shape : tuple

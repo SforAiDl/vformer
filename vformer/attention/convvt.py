@@ -11,10 +11,11 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class ConvVTAttention(nn.Module):
     """
-    Attention with Convolutional Projection
+    Attention with Convolutional Projection introduced in Paper-  Introducing Convolutions to Vision Transformers:
+    https://arxiv.org/abs/2103.15808
 
-    Parameters:
-    ------------
+    Parameters
+    -----------
     dim_in: int
         Dimension of input tensor
     dim_out: int
@@ -27,8 +28,8 @@ class ConvVTAttention(nn.Module):
         Probability of dropout in attention
     proj_dropout: float
         Probability of dropout in convolution projection
-    method: str ('dw_bn' for depth-wise convolution and batch norm, 'avg' for average pooling)
-        Method of projection
+    method: str 
+        Method of projection, ``'dw_bn'`` for depth-wise convolution and batch norm, ``'avg'`` for average pooling, default is ``'dw_bn'``
     kernel_size: int
         Size of kernel
     stride_kv: int

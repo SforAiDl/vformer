@@ -12,7 +12,7 @@ class LinearVideoEmbedding(nn.Module):
     """
 
     Parameters
-    ----------
+    -----------
     embedding_dim: int
         Dimension of the resultant embedding
     patch_height: int
@@ -44,7 +44,7 @@ class LinearVideoEmbedding(nn.Module):
         """
 
         Parameters
-        ----------
+        -----------
         x: torch.Tensor
             Input tensor
 

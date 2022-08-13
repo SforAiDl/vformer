@@ -5,8 +5,8 @@ Encoder
     :caption: Contents
     :maxdepth: 2
 
-    cross
     embedding/index
+    cross
     nn
     pyramid
     swin

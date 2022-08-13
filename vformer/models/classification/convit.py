@@ -13,7 +13,7 @@ class ConViT(VanillaViT):
     https://arxiv.org/abs/2103.10697
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Size of the image
     patch_size: int

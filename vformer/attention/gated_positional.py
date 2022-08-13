@@ -13,7 +13,7 @@ class GatedPositionalSelfAttention(VanillaSelfAttention):
     Implementation of the Gated Positional Self-Attention from the paper: "ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases"
 
     Parameters
-    ----------
+    -----------
     dim: int
         Dimension of the embedding
     num_heads: int

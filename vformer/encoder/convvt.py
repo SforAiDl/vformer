@@ -15,7 +15,7 @@ class ConvVTStage(nn.Module):
     Implementation of a Stage in CVT
 
     Parameters
-    ----------
+    -----------
     patch_size: int
         Size of patch, default is 16
     patch_stride: int
@@ -156,8 +156,8 @@ class ConvVTBlock(nn.Module):
     """
     Implementation of a Attention MLP block in CVT
 
-    Parameters:
-    ------------
+    Parameters
+    -----------
     dim_in: int
         Input dimensions
     dim_out: int

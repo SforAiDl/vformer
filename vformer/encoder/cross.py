@@ -9,6 +9,7 @@ from .vanilla import VanillaEncoder
 @ENCODER_REGISTRY.register()
 class CrossEncoder(nn.Module):
     """
+    Encoder block used in Cross-VIT .
 
     Parameters
     ----------

@@ -14,8 +14,8 @@ class CVT(BaseClassificationModel):
     Implementation of Escaping the Big Data Paradigm with Compact Transformers:
     https://arxiv.org/abs/2104.05704
 
-    Parameters:
-    ------------
+    Parameters
+    -----------
     img_size: int
         Size of the image, default is 224
     patch_size:int

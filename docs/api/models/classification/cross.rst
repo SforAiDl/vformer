@@ -1,4 +1,4 @@
-Cross-attention Transformer
+Cross-Attention Transformer
 ================================
 
 .. automodule:: vformer.models.classification.cross

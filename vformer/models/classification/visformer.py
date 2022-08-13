@@ -12,7 +12,7 @@ class VisformerConvBlock(nn.Module):
     https://arxiv.org/abs/2104.12533
 
     Parameters
-    ----------
+    -----------
     in_channels: int
         Number of input channels
     group: int

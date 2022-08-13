@@ -6,7 +6,7 @@ from .utils import pair
 def cyclicshift(input, shift_size, dims=None):
     """
     Parameters
-    ----------
+    -----------
     input: torch.Tensor
         input tensor
     shift_size: int or tuple(int)
@@ -23,7 +23,7 @@ def cyclicshift(input, shift_size, dims=None):
 def window_partition(x, window_size):
     """
     Parameters
-    ----------
+    -----------
     x: torch.Tensor
         input tensor
     window_size: int
@@ -41,7 +41,7 @@ def window_partition(x, window_size):
 def window_reverse(windows, window_size, H, W):
     """
     Parameters
-    ----------
+    -----------
     windows: torch.Tensor
     window_size: int
     """

@@ -11,8 +11,8 @@ class ConvVT(nn.Module):
     Implementation of CvT: Introducing Convolutions to Vision Transformers:
     https://arxiv.org/pdf/2103.15808.pdf
 
-    Parameters:
-    ------------
+    Parameters
+    -----------
     img_size: int
         Size of the image, default is 224
     in_channels:int
