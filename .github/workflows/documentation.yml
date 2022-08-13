@@ -35,4 +35,4 @@ jobs:
         name: docs
         path: _build/html
         if-no-files-found: error
-    retention-days: 20
+        retention-days: 20
