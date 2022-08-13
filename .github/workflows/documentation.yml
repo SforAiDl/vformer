@@ -34,5 +34,5 @@ jobs:
       with:
         name: docs
         path: _build/html
-    if-no-files-found: error
+        if-no-files-found: error
     retention-days: 20
