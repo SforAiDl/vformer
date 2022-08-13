@@ -24,11 +24,10 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
 
-    - name: change dir to docs and run a `make html` command
+    - name: Build the documentation
       run: |
         cd docs
         make html
-        echo $PWD
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
