@@ -14,7 +14,7 @@ class PVTClassification(nn.Module):
     https://arxiv.org/abs/2102.12122v1
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Image size
     patch_size: list(int)

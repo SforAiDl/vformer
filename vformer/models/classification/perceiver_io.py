@@ -16,7 +16,7 @@ class PerceiverIO(nn.Module):
     https://github.com/lucidrains/perceiver-pytorch
 
     Parameters
-    ----------
+    -----------
     dim: int
         Size of sequence to be encoded
     depth: int

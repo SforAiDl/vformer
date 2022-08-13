@@ -10,13 +10,13 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class MemoryEfficientAttention(nn.Module):
     """
-    Implementation of Memory-Efficient O(1) Attention:
-    https://arxiv.org/abs/2112.05682
+    Memory Effecient attention introduced in paper
+    `Self-attention Does Not Need O(n2) Memory <https://arxiv.org/abs/2112.05682>`
 
     Implementation based on https://github.com/AminRezaei0x443/memory-efficient-attention
 
     Parameters
-    ----------
+    -----------
     dim: int
         Dimension of the embedding
     num_heads: int

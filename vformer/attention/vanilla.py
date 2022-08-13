@@ -11,7 +11,7 @@ class VanillaSelfAttention(nn.Module):
     Vanilla O(n^2) Self attention
 
     Parameters
-    ----------
+    -----------
     dim: int
         Dimension of the embedding
     num_heads: int

@@ -15,7 +15,7 @@ class SwinTransformer(BaseClassificationModel):
     https://arxiv.org/abs/2103.14030v1
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Size of an Image
     patch_size: int

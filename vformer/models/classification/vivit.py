@@ -16,7 +16,7 @@ class ViViTModel2(BaseClassificationModel):
     """
     Model 2 implementation of  A Video vision Transformer -
     Parameters
-    ----------
+    -----------
     img_size:int
         Size of single frame/ image in video
     in_channels:int

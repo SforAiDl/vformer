@@ -13,7 +13,7 @@ class ConViTEncoder(VanillaEncoder):
     """
 
     Parameters
-    ----------
+    -----------
     embedding_dim: int
         Dimension of the embedding
     depth: int

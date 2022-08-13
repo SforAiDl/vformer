@@ -7,7 +7,6 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class SpatialAttention(nn.Module):
     """
-
     Spatial Reduction Attention- Linear complexity attention layer
 
     Parameters

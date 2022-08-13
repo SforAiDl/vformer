@@ -49,7 +49,7 @@ class DPTDepth(nn.Module):
     https://arxiv.org/abs/2103.13413
 
     Parameters
-    ----------
+    -----------
     backbone:str
         Name of ViT model to be used as backbone, must be one of {`vitb16`,`vitl16`,`vit_tiny`}
     in_channels: int
@@ -210,7 +210,7 @@ class DPTDepth(nn.Module):
         """
         Registers forward hooks to the backbone and initializes activation-postprocessing-blocks (act_postprocess(int))
         Parameters
-        ----------
+        -----------
         size: tuple[int]
             Input image size
         features:tuple[int]
@@ -335,7 +335,7 @@ class DPTDepth(nn.Module):
         Makes a scratch module which is subclass of nn.Module
 
         Parameters
-        ----------
+        -----------
         in_shape: list[int]
         out_shape:int
         groups: int
@@ -359,7 +359,7 @@ class DPTDepth(nn.Module):
         """
 
         Parameters
-        ----------
+        -----------
         features: int
             Number of features
         use_bn: bool
@@ -433,7 +433,7 @@ class DPTDepth(nn.Module):
         Forward pass of DPTDepth
 
         Parameters
-        ----------
+        -----------
         x:torch.Tensor
             Input image tensor
         """
@@ -507,7 +507,7 @@ class Interpolate(nn.Module):
     """Interpolation module
 
     Parameters
-    ----------
+    -----------
     scale_factor : float
         Scaling factor used in interpolation
     mode :str
@@ -553,7 +553,7 @@ class ResidualConvUnit_custom(nn.Module):
     """Residual convolution module
 
     Parameters
-    ----------
+    -----------
     features :int
         Number of features
     activation: nn.Module

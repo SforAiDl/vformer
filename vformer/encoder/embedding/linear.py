@@ -6,7 +6,7 @@ class LinearEmbedding(nn.Module):
     """
 
     Parameters
-    ----------
+    -----------
     embedding_dim: int
         Dimension of the resultant embedding
     patch_height: int
@@ -40,7 +40,7 @@ class LinearEmbedding(nn.Module):
         """
 
         Parameters
-        ----------
+        -----------
         x: torch.Tensor
             Input tensor
 

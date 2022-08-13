@@ -49,7 +49,7 @@ class CrossViT(BaseClassificationModel):
     https://arxiv.org/abs/2103.14899
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Size of the image
     patch_size_s: int

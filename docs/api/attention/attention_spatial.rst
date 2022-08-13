@@ -1,5 +1,5 @@
-Spatial
-=================
+Spatial Self Attention
+=======================
 
 .. automodule:: vformer.attention.spatial
     :members:
