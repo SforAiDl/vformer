@@ -28,11 +28,12 @@ jobs:
       run: |
         cd docs
         make html
-          
+        ls
+
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0
       with:
         name: docs
-        path: _build/html
+        path: 
         if-no-files-found: error
         retention-days: 20
