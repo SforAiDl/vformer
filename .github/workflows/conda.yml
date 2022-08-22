@@ -1,0 +1,26 @@
+name: Package Tests 
+
+on:
+  [push, pull_request]
+
+jobs:
+  setup_env:
+    name: Setup environment and run tests
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.7', '3.8']
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: anaconda-client-env
+          environment-file: environment.yml
+          python-version: ${{ matrix.python-version }}
+          auto-activate-base: false
+      - run: |
+          pytest 
