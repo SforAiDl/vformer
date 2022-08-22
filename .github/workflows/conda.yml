@@ -1,4 +1,4 @@
-name: Package Tests with conda environment
+name: Package Tests
 
 on:
   push
@@ -11,7 +11,6 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - name: Create Environment and update files. 
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
