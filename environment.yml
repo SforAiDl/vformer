@@ -10,7 +10,6 @@ dependencies:
   - ncurses
   - openssl
   - pip
-  - python=3.8
   - readline
   - setuptools
   - sqlite
