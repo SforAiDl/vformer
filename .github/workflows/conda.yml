@@ -5,7 +5,7 @@ on:
 
 jobs:
   setup_env:
-    name: Setup environment
+    name: Setup environment and run tests
     runs-on: "ubuntu-latest"
     strategy:
       fail-fast: false
@@ -15,7 +15,6 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - name: Install dependancies and run tests
       - uses: actions/checkout@v2
       - uses: conda-incubator/setup-miniconda@v2
         with:
