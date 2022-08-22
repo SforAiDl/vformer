@@ -8,7 +8,6 @@ dependencies:
   - libffi=3.4.2
   - openssl=1.1.1p
   - pip=21.2.4
-  - python=3.10.4
   - setuptools=61.2.0
   - sqlite=3.38.5
   - tk=8.6.12
