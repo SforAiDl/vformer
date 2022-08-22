@@ -1,6 +1,7 @@
 name: vformer
 channels:
   - defaults
+  - conda-forge
 dependencies:
   - bzip2=1.0.8
   - ca-certificates=2022.4.26
