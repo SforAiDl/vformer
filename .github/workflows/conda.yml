@@ -1,4 +1,4 @@
-name: Package Tests
+name: Package Tests with conda environment
 
 on:
   push
