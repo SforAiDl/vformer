@@ -2,6 +2,7 @@ name: Package Tests
 
 on:
   push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
 
