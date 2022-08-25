@@ -11,9 +11,10 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class ConvVTAttention(nn.Module):
     """
-    Attention with Convolutional Projection introduced in Paper-  Introducing Convolutions to Vision Transformers:
-    https://arxiv.org/abs/2103.15808
+    Attention with Convolutional Projection introduced in Paper:  `Introducing Convolutions to Vision Transformers <https://arxiv.org/abs/2103.15808>`_
 
+    Position-wise linear projection for Multi-Head Self-Attention (MHSA) replaced by Depth-wise separable convolutions
+    
     Parameters
     -----------
     dim_in: int
@@ -139,6 +140,18 @@ class ConvVTAttention(nn.Module):
         return q, k, v
 
     def forward(self, x):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor by applying self-attention on input tensor
+
+        """
         q, k, v = self.forward_conv(x)
 
         q = rearrange(self.proj_q(q), "b t (h d) -> b h t d", h=self.num_heads)

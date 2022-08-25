@@ -11,9 +11,9 @@ from ..utils import ATTENTION_REGISTRY
 class MemoryEfficientAttention(nn.Module):
     """
     Memory Effecient attention introduced in paper
-    `Self-attention Does Not Need O(n2) Memory <https://arxiv.org/abs/2112.05682>`
+    `Self-attention Does Not Need O(n2) Memory <https://arxiv.org/abs/2112.05682>`_
 
-    Implementation based on https://github.com/AminRezaei0x443/memory-efficient-attention
+    Implementation based on `this repository<https://github.com/AminRezaei0x443/memory-efficient-attention>`_
 
     Parameters
     -----------

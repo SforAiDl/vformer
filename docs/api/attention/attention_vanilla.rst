@@ -1,4 +1,4 @@
-Vanilla Self Attention O(:math:`n^2)`
+Vanilla Self Attention O(:math:`n^2`)
 =====================================
 
 .. automodule:: vformer.attention.vanilla

@@ -7,6 +7,9 @@ from ..utils import ATTENTION_REGISTRY, get_relative_position_bias_index, pair
 @ATTENTION_REGISTRY.register()
 class WindowAttention(nn.Module):
     """
+    Implementation of Window Attention introduced in: `Swin Transformer: Hierarchical Vision Transformer using Shifted Windows <https://arxiv.org/abs/2103.14030>`_
+
+
     Parameters
     -----------
     dim: int
@@ -67,7 +70,7 @@ class WindowAttention(nn.Module):
         mask: torch.Tensor
             Attention mask used for shifted window attention, if None, window attention will be used,
             else attention mask will be taken into consideration.
-            for better understanding you may refer `this <https://github.com/microsoft/Swin-Transformer/issues/38>`
+            for better understanding you may refer `this github issue. <https://github.com/microsoft/Swin-Transformer/issues/38>`_
 
         Returns
         ----------

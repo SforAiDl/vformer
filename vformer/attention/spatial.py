@@ -7,7 +7,8 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class SpatialAttention(nn.Module):
     """
-    Spatial Reduction Attention- Linear complexity attention layer
+    Spatial Reduction Attention introduced in : `Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions <https://arxiv.org/abs/2102.12122>`_
+    This class also supports the linear complexity spatial attention in the improved `paper <https://arxiv.org/abs/2106.13797>`_
 
     Parameters
     -----------
@@ -26,7 +27,7 @@ class SpatialAttention(nn.Module):
     proj_drop :float, optional
         Dropout rate
     linear : bool
-        Whether to use linear Spatial attention,default is False
+        Whether to use linear Spatial attention,default is False.
     act_fn : nn.Module
         Activation function, default is False
 
