@@ -5,8 +5,8 @@ channels:
   - pytorch
 dependencies:
   - pip
-  - torch=>1.10.0
-  - torchvision=>0.11.0
+  - torch>=1.10.0
+  - torchvision>=0.11.0
   - pip:
     - einops
     - numpy
