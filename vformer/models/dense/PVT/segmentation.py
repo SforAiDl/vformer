@@ -10,7 +10,7 @@ from ....utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class PVTSegmentation(nn.Module):
     """
-    Implementation of Pyramid Vision Transformer:
+    Using Pyramid Vision Transformer as a backbone for a segmentation model with help of U-Net like segmentation head.
     https://arxiv.org/abs/2102.12122v1
 
     Parameters
@@ -193,7 +193,10 @@ class PVTSegmentation(nn.Module):
 @MODEL_REGISTRY.register()
 class PVTSegmentationV2(PVTSegmentation):
     """
-    Implementation of Pyramid Vision Transformer - https://arxiv.org/abs/2102.12122v1
+    Using Pyramid Vision Transformer as a backbone for a segmentation model with help of U-Net like segmentation head.
+
+    https://arxiv.org/abs/2106.13797
+
 
     Parameters
     ----------

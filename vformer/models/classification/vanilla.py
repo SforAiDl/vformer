@@ -11,8 +11,7 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class VanillaViT(BaseClassificationModel):
     """
-    Implementation of 'An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'
-    https://arxiv.org/abs/2010.11929
+    Implementation of `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale <https://arxiv.org/abs/2010.11929>`_
 
     Parameters
     -----------

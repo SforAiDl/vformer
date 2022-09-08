@@ -11,8 +11,7 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class SwinTransformer(BaseClassificationModel):
     """
-    Implementation of `Swin Transformer: Hierarchical Vision Transformer using Shifted Windows`
-    https://arxiv.org/abs/2103.14030v1
+    Implementation of `Swin Transformer: Hierarchical Vision Transformer using Shifted Windows` <https://arxiv.org/abs/2103.14030v1>`_
 
     Parameters
     -----------

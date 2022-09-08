@@ -1,4 +1,4 @@
-Vanilla Transformer
+Vanilla Encoder
 ====================
 
 .. automodule:: vformer.encoder.vanilla

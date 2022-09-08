@@ -8,8 +8,7 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class ConvVT(nn.Module):
     """
-    Implementation of CvT: Introducing Convolutions to Vision Transformers:
-    https://arxiv.org/pdf/2103.15808.pdf
+    Implementation of `CvT: Introducing Convolutions to Vision Transformers <https://arxiv.org/abs/2103.15808>`_
 
     Parameters
     -----------

@@ -13,7 +13,7 @@ class MemoryEfficientAttention(nn.Module):
     Memory Effecient attention introduced in paper
     `Self-attention Does Not Need O(n2) Memory <https://arxiv.org/abs/2112.05682>`_
 
-    Implementation based on `this repository<https://github.com/AminRezaei0x443/memory-efficient-attention>`_
+    Implementation based on `this repository <https://github.com/AminRezaei0x443/memory-efficient-attention>`_
 
     Parameters
     -----------

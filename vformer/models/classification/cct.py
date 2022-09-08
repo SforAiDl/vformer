@@ -11,8 +11,7 @@ from ...utils import MODEL_REGISTRY, pair
 @MODEL_REGISTRY.register()
 class CCT(BaseClassificationModel):
     """
-    ```Implementation of Escaping the Big Data Paradigm with Compact Transformers```:
-    https://arxiv.org/abs/2104.05704
+    Implementation of `Escaping the Big Data Paradigm with Compact Transformers <https://arxiv.org/abs/2104.05704>`_
 
     Parameters
     -----------

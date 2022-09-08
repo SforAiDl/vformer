@@ -9,8 +9,7 @@ from .vanilla import VanillaViT
 @MODEL_REGISTRY.register()
 class ConViT(VanillaViT):
     """
-    Implementation of 'ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases'
-    https://arxiv.org/abs/2103.10697
+    Implementation of `ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases <https://arxiv.org/abs/2103.10697>`_
 
     Parameters
     -----------

@@ -45,8 +45,7 @@ class _cross_p(BaseClassificationModel):
 @MODEL_REGISTRY.register()
 class CrossViT(BaseClassificationModel):
     """
-    Implementation of 'CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification'
-    https://arxiv.org/abs/2103.14899
+    Implementation of `CrossViT: Cross-Attention Multi-Scale Vision Transformer for Image Classification <https://arxiv.org/abs/2103.14899>`_
 
     Parameters
     -----------

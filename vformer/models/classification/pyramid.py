@@ -10,8 +10,7 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class PVTClassification(nn.Module):
     """
-    Implementation of Pyramid Vision Transformer:
-    https://arxiv.org/abs/2102.12122v1
+    Implementation of `Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolution <https://arxiv.org/abs/2102.12122>`_    
 
     Parameters
     -----------
@@ -204,8 +203,7 @@ class PVTClassification(nn.Module):
 @MODEL_REGISTRY.register()
 class PVTClassificationV2(PVTClassification):
     """
-    Implementation of Pyramid Vision Transformer:
-    https://arxiv.org/abs/2102.12122v2
+    Implementation of `PVT v2: Improved Baselines with Pyramid Vision Transformer <https://arxiv.org/abs/2106.13797>`_
 
     Parameters
     ----------

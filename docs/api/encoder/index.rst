@@ -1,4 +1,4 @@
-Encoder
+Encoders
 =========
 
 .. toctree::
@@ -9,6 +9,7 @@ Encoder
     cross
     nn
     pyramid
+    perceiver_io
     swin
     vanilla
     convit
