@@ -5,7 +5,7 @@ from ..utils import pair
 
 class BaseClassificationModel(nn.Module):
     """
-    
+
     Parameters
     -----------
     img_size: int

@@ -10,7 +10,7 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class PVTClassification(nn.Module):
     """
-    Implementation of `Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolution <https://arxiv.org/abs/2102.12122>`_    
+    Implementation of `Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolution <https://arxiv.org/abs/2102.12122>`_
 
     Parameters
     -----------

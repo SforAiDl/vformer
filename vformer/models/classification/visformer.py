@@ -134,7 +134,7 @@ class VisformerAttentionBlock(nn.Module):
 class Visformer(nn.Module):
     """
     A builder to construct a Vision-Friendly transformer model as in the paper :`Visformer: The Vision-friendly Transformer <https://arxiv.org/abs/1906.11488>`_
-    
+
     Parameters
     ----------
     img_size: int,tuple

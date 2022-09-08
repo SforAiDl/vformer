@@ -10,8 +10,8 @@ class CrossAttentionWithClsToken(nn.Module):
     """
     Cross-Attention with Cls Token introduced in Paper: CrossViT: `Cross-Attention Multi-Scale Vision Transformer for Image Classification <https://arxiv.org/abs/2103.14899>`_
 
-    In Cross-Attention, cls token from one branch and patch token from another branch are fused together. 
-    
+    In Cross-Attention, cls token from one branch and patch token from another branch are fused together.
+
     Parameters
     -----------
     cls_dim: int
@@ -55,7 +55,7 @@ class CrossAttentionWithClsToken(nn.Module):
         x: torch.Tensor
             Input tensor
         cls: torch.Tensor
-            CLS token from one branch 
+            CLS token from one branch
         patch: torch.Tensor
             patch tokens from another branch
         Returns
@@ -91,7 +91,7 @@ class CrossAttentionWithClsToken(nn.Module):
 class CrossAttention(nn.Module):
     """
     This variant of Cross Attention is iteratively used in Perciever IO
-    In Cross-Attention, cls token from one branch and patch token from another branch are fused together. 
+    In Cross-Attention, cls token from one branch and patch token from another branch are fused together.
 
     Parameters
     ----------

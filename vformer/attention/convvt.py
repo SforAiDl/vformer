@@ -14,7 +14,7 @@ class ConvVTAttention(nn.Module):
     Attention with Convolutional Projection introduced in Paper:  `Introducing Convolutions to Vision Transformers <https://arxiv.org/abs/2103.15808>`_
 
     Position-wise linear projection for Multi-Head Self-Attention (MHSA) replaced by Depth-wise separable convolutions
-    
+
     Parameters
     -----------
     dim_in: int
@@ -29,7 +29,7 @@ class ConvVTAttention(nn.Module):
         Probability of dropout in attention
     proj_dropout: float
         Probability of dropout in convolution projection
-    method: str 
+    method: str
         Method of projection, ``'dw_bn'`` for depth-wise convolution and batch norm, ``'avg'`` for average pooling, default is ``'dw_bn'``
     kernel_size: int
         Size of kernel
