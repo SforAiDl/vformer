@@ -41,8 +41,8 @@ class PVTPosEmbedding(nn.Module):
                 Position embedding weights
             shape : tuple
                 Required shape
-            mode : str  ('nearest' | 'linear' | 'bilinear' | 'bicubic' | 'trilinear')
-                Algorithm used for up/down sampling, default is 'bilinear'
+            mode : str  (``nearest`` | ``linear`` | ``bilinear`` | ``bicubic`` | ``trilinear`` )
+                Algorithm used for up/down sampling, default is ``bilinear``.
         """
         assert pos_embed.ndim == 3, "shape of pos_embed must be [B, L, C]"
 

@@ -16,7 +16,7 @@ class DWConv(nn.Module):
     padding_dwconv: int or tuple or str
         Padding added to all sides of the input, default is 1
     bias_dwconv:bool
-        Whether to add learnable bias to the output,default is True.
+        Whether to add learnable bias to the output,default is ``True``.
 
     """
 

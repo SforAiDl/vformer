@@ -40,7 +40,7 @@ class CVT(BaseClassificationModel):
     drop_path: float
         Stochastic depth rate, default is 0.1
     positional_embedding: str
-        One of the string values {'learnable','sine','None'}, default is learnable
+        One of the string values {``'learnable'``, ``'sine'`` , ``None``}, default is ``'learnable'``
     decoder_config: tuple(int) or int
         Configuration of the decoder. If None, the default configuration is used.
     """

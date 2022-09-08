@@ -15,6 +15,7 @@ from ...utils.utils import pair
 class ViViTModel2(BaseClassificationModel):
     """
     Model 2 implementation of: `ViViT: A Video Vision Transformer <https://arxiv.org/abs/2103.15691>`_
+
     Parameters
     -----------
     img_size:int

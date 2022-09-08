@@ -42,7 +42,7 @@ class PVTFeedForward(nn.Module):
         dim,
         hidden_dim=None,
         out_dim=None,
-        act_layer=nn.GELU,
+        activation=nn.GELU,
         p_dropout=0.0,
         linear=False,
         use_dwconv=False,
@@ -60,7 +60,7 @@ class PVTFeedForward(nn.Module):
             self.dw_conv = DWConv(dim=hidden_dim, **kwargs)
 
         self.to_out = nn.Sequential(
-            act_layer(),
+            activation(),
             nn.Dropout(p=p_dropout),
             nn.Linear(hidden_dim, out_dim),
             nn.Dropout(p=p_dropout),
@@ -116,14 +116,16 @@ class PVTEncoder(nn.Module):
         Dropout probability
     drop_path: tuple(float)
         List of stochastic drop rate
-    act_layer: activation layer
+    activation: nn.Module
         Activation layer
     use_dwconv:bool
         Whether to use depth-wise convolutions in overlap-patch embedding
     sr_ratio: float
         Spatial Reduction ratio
     linear: bool
-        Whether to use linear Spatial attention, default is False
+        Whether to use linear Spatial attention, default is ```False```.
+    drop_path_mode: str
+        Mode for `StochasticDepth <https://pytorch.org/vision/main/generated/torchvision.ops.stochastic_depth.html>_ , must be one of {``batch`` or ``row``}
     """
 
     def __init__(
@@ -137,7 +139,7 @@ class PVTEncoder(nn.Module):
         p_dropout,
         attn_dropout,
         drop_path,
-        act_layer,
+        activation,
         use_dwconv,
         sr_ratio,
         linear=False,
@@ -169,7 +171,7 @@ class PVTEncoder(nn.Module):
                             fn=PVTFeedForward(
                                 dim=dim,
                                 hidden_dim=int(dim * mlp_ratio),
-                                act_layer=act_layer,
+                                activation=activation,
                                 p_dropout=p_dropout,
                                 linear=linear,
                                 use_dwconv=use_dwconv,

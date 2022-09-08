@@ -71,7 +71,7 @@ def test_PVTEncoder():
         p_dropout=0.0,
         attn_dropout=0.1,
         drop_path=[0.0] * 3,
-        act_layer=nn.GELU,
+        activation=nn.GELU,
         sr_ratio=1,
         linear=False,
         use_dwconv=False,

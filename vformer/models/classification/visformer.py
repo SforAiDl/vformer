@@ -155,7 +155,7 @@ class Visformer(nn.Module):
         Dropout rate for convolution block, default is 0.0
     p_dropout_attn: float
         Dropout rate for attention block, default is 0.0
-    activation: torch.nn.Module
+    activation: nn.Module
         Activation function between layers, default is nn.GELU
     pos_embedding: bool
         Whether to use positional embedding, default is True

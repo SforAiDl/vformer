@@ -91,10 +91,10 @@ class CrossViT(BaseClassificationModel):
         Configuration of the decoder for the smaller patches
     decoder_config_l: int or tuple or list, optional
         Configuration of the decoder for the larger patches
-    pool_s: {"cls","mean"}
-        Feature pooling type for the smaller patches
-    pool_l: {"cls","mean"}
-        Feature pooling type for the larger patches
+    pool_s: str
+        Feature pooling type for the smaller patches, one of {``cls``,``mean``}
+    pool_l: str
+        Feature pooling type for the larger patches, one of {``cls``,``mean``}
     p_dropout_encoder_s: float
         Dropout probability in the encoder for the smaller patches
     p_dropout_encoder_l: float

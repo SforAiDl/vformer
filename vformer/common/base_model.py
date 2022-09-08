@@ -14,8 +14,8 @@ class BaseClassificationModel(nn.Module):
         Size of the patch
     in_channels: int
         Number of channels in input image
-    pool: {"mean","cls"}
-        Feature pooling type
+    pool: str
+        Feature pooling type, must be one of {``mean``, ``cls``}
     """
 
     def __init__(self, img_size, patch_size, in_channels=3, pool="cls"):

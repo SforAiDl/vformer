@@ -30,7 +30,7 @@ class ConvVTAttention(nn.Module):
     proj_dropout: float
         Probability of dropout in convolution projection
     method: str
-        Method of projection, ``'dw_bn'`` for depth-wise convolution and batch norm, ``'avg'`` for average pooling, default is ``'dw_bn'``
+        Method of projection, ``'dw_bn'`` for depth-wise convolution and batch norm, ``'avg'`` for average pooling. default is ``'dw_bn'``
     kernel_size: int
         Size of kernel
     stride_kv: int
@@ -42,7 +42,7 @@ class ConvVTAttention(nn.Module):
     padding_q: int
         Padding for query
     with_cls_token: bool
-        Whether to include classification token
+        Whether to include classification token, default is ```False```.
     """
 
     def __init__(

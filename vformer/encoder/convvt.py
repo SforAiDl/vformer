@@ -52,8 +52,8 @@ class ConvVTStage(nn.Module):
         Stride in kv, default is 2
     stride_q: int
         Stride in q, default is 1
-    init: str ('trunc_norm' or 'xavier')
-        Initialization method, default is 'trunc_norm'
+    init: str
+        Initialization method, one of  {``trunc_norm`` or ``xavier``} default is ``trunc_norm``
     """
 
     def __init__(

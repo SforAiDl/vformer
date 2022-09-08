@@ -35,8 +35,8 @@ class VanillaViT(BaseClassificationModel):
         Number of input channels
     decoder_config: int or tuple or list, optional
         Configuration of the decoder. If None, the default configuration is used.
-    pool: {"cls","mean"}
-        Feature pooling type
+    pool: str 
+        Feature pooling type, one of {``cls``,``mean``}
     p_dropout_encoder: float
         Dropout probability in the encoder
     p_dropout_embedding: float
