@@ -37,7 +37,7 @@ class ConViT(VanillaViT):
         Number of input channels
     decoder_config: int or tuple or list, optional
         Configuration of the decoder. If None, the default configuration is used.
-    pool: str 
+    pool: str
         Feature pooling type, one of {``cls``,``mean``}
     p_dropout_encoder: float
         Dropout probability in the encoder

@@ -164,7 +164,7 @@ class SwinEncoderBlock(nn.Module):
 @ENCODER_REGISTRY.register()
 class SwinEncoder(nn.Module):
     """
-    
+
     Parameters
     -----------
     dim: int
