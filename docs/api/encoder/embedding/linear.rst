@@ -1,4 +1,4 @@
-Linear embedding
+Linear Embedding
 =================
 
 .. automodule:: vformer.encoder.embedding.linear
