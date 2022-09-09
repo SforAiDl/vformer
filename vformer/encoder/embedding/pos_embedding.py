@@ -7,6 +7,7 @@ from ...utils import pair
 
 class PVTPosEmbedding(nn.Module):
     """
+    Positional Embedding class used in Pyramid vision transformer.
 
     Parameters
     -----------
@@ -74,6 +75,9 @@ class PVTPosEmbedding(nn.Module):
 
 
 class PosEmbedding(nn.Module):
+    """
+    Generalised Positional Embedding class
+    """
     def __init__(self, shape, dim, drop=None, sinusoidal=False, std=0.02):
         super(PosEmbedding, self).__init__()
 

@@ -4,7 +4,7 @@ from einops import rearrange
 
 class ConvEmbedding(nn.Module):
     """
-    This class converts images to tensors.
+    Projects image patches into embedding space using convolutional layer. 
 
     Parameters
     -----------
