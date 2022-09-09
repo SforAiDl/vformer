@@ -9,11 +9,10 @@ from .vanilla import VanillaViT
 @MODEL_REGISTRY.register()
 class ConViT(VanillaViT):
     """
-    Implementation of 'ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases'
-    https://arxiv.org/abs/2103.10697
+    Implementation of `ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases <https://arxiv.org/abs/2103.10697>`_
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Size of the image
     patch_size: int
@@ -38,8 +37,8 @@ class ConViT(VanillaViT):
         Number of input channels
     decoder_config: int or tuple or list, optional
         Configuration of the decoder. If None, the default configuration is used.
-    pool: {"cls","mean"}
-        Feature pooling type
+    pool: str
+        Feature pooling type, one of {``cls``,``mean``}
     p_dropout_encoder: float
         Dropout probability in the encoder
     p_dropout_embedding: float

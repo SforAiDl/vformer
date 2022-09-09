@@ -4,9 +4,10 @@ from torch import nn
 
 class LinearEmbedding(nn.Module):
     """
+    Projects image patches into embedding space using Linear layer.
 
     Parameters
-    ----------
+    -----------
     embedding_dim: int
         Dimension of the resultant embedding
     patch_height: int
@@ -40,7 +41,7 @@ class LinearEmbedding(nn.Module):
         """
 
         Parameters
-        ----------
+        -----------
         x: torch.Tensor
             Input tensor
 

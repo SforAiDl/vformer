@@ -1,14 +1,13 @@
-import torch
 import torch.nn as nn
 from einops import rearrange
 
 
 class ConvEmbedding(nn.Module):
     """
-    This class converts images to tensors.
+    Projects image patches into embedding space using convolutional layer.
 
     Parameters
-    ----------
+    -----------
     patch_size: int, default is 7
         Size of a patch
     in_channels: int, default is 3
@@ -39,7 +38,7 @@ class ConvEmbedding(nn.Module):
     def forward(self, x):
         """
         Parameters
-        ----------
+        -----------
         x: torch.tensor
             Input tensor
 

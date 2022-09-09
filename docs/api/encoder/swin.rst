@@ -1,4 +1,4 @@
-Swin
+Swin Encoder
 =============
 
 .. automodule:: vformer.encoder.swin

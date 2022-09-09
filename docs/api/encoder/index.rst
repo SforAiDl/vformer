@@ -1,14 +1,15 @@
-Encoder
+Encoders
 =========
 
 .. toctree::
     :caption: Contents
     :maxdepth: 2
 
-    cross
     embedding/index
+    cross
     nn
     pyramid
+    perceiver_io
     swin
     vanilla
     convit

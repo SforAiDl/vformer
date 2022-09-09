@@ -133,7 +133,7 @@ class PVTDetection(nn.Module):
                             drop_path=dpr[sum(depths[:i]) : sum(depths[: i + 1])],
                             sr_ratio=sr_ratios[i],
                             linear=linear,
-                            act_layer=nn.GELU,
+                            activation=nn.GELU,
                             use_dwconv=use_dwconv,
                         )
                     ]

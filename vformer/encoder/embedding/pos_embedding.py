@@ -7,9 +7,10 @@ from ...utils import pair
 
 class PVTPosEmbedding(nn.Module):
     """
+    Positional Embedding class used in Pyramid vision transformer.
 
     Parameters
-    ----------
+    -----------
     pos_shape : int or tuple(int)
         The shape of the absolute position embedding.
     pos_dim : int
@@ -36,13 +37,13 @@ class PVTPosEmbedding(nn.Module):
     def resize_pos_embed(self, pos_embed, shape, mode="bilinear", **kwargs):
         """
         Parameters
-        ----------
+        -----------
             pos_embed : torch.Tensor
                 Position embedding weights
             shape : tuple
                 Required shape
-            mode : str  ('nearest' | 'linear' | 'bilinear' | 'bicubic' | 'trilinear')
-                Algorithm used for up/down sampling, default is 'bilinear'
+            mode : str  (``nearest`` | ``linear`` | ``bilinear`` | ``bicubic`` | ``trilinear`` )
+                Algorithm used for up/down sampling, default is ``bilinear``.
         """
         assert pos_embed.ndim == 3, "shape of pos_embed must be [B, L, C]"
 
@@ -74,6 +75,10 @@ class PVTPosEmbedding(nn.Module):
 
 
 class PosEmbedding(nn.Module):
+    """
+    Generalised Positional Embedding class
+    """
+
     def __init__(self, shape, dim, drop=None, sinusoidal=False, std=0.02):
         super(PosEmbedding, self).__init__()
 

@@ -7,8 +7,8 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class SpatialAttention(nn.Module):
     """
-
-    Spatial Reduction Attention- Linear complexity attention layer
+    Spatial Reduction Attention introduced in : `Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolutions <https://arxiv.org/abs/2102.12122>`_
+    This class also supports the linear complexity spatial attention in the improved `paper <https://arxiv.org/abs/2106.13797>`_
 
     Parameters
     -----------
@@ -18,8 +18,8 @@ class SpatialAttention(nn.Module):
         Number of attention heads
     sr_ratio :int
         Spatial Reduction ratio
-    qkv_bias : bool, default is True
-        If True, add a learnable bias to query, key, value.
+    qkv_bias : bool
+        If True, add a learnable bias to query, key, value, default is ``True``
     qk_scale : float, optional
         Override default qk scale of head_dim ** -0.5 if set
     attn_drop : float, optional
@@ -27,9 +27,9 @@ class SpatialAttention(nn.Module):
     proj_drop :float, optional
         Dropout rate
     linear : bool
-        Whether to use linear Spatial attention,default is False
-    act_fn : nn.Module
-        Activation function, default is False
+        Whether to use linear Spatial attention,default is ``False``.
+    activation : nn.Module
+        Activation function, default is ``nn.GELU``.
 
     """
 
@@ -43,7 +43,7 @@ class SpatialAttention(nn.Module):
         attn_drop=0.0,
         proj_drop=0.0,
         linear=False,
-        act_fn=nn.GELU,
+        activation=nn.GELU,
     ):
         super(SpatialAttention, self).__init__()
 
@@ -66,7 +66,7 @@ class SpatialAttention(nn.Module):
         self.to_out = nn.Sequential(nn.Linear(dim, dim), nn.Dropout(p=proj_drop))
         self.linear = linear
         self.sr_ratio = sr_ratio
-        self.norm = PreNorm(dim=dim, fn=act_fn() if linear else nn.Identity())
+        self.norm = PreNorm(dim=dim, fn=activation() if linear else nn.Identity())
 
         if not linear:
             if sr_ratio > 1:

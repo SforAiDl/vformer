@@ -1,12 +1,12 @@
 .. highlight:: shell
 
-============
+=============
 Installation
-============
+=============
 
 
 From source (recommended)
-------------
+--------------------------
 
 VFormer can be installed from the `GitHub repo`_.
 
@@ -27,7 +27,7 @@ and then run the following command to install VFormer:
 
 
 Stable release
---------------
+---------------
 
 To install VFormer, run this command in your terminal:
 

@@ -10,11 +10,10 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class PVTClassification(nn.Module):
     """
-    Implementation of Pyramid Vision Transformer:
-    https://arxiv.org/abs/2102.12122v1
+    Implementation of `Pyramid Vision Transformer: A Versatile Backbone for Dense Prediction without Convolution <https://arxiv.org/abs/2102.12122>`_
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Image size
     patch_size: list(int)
@@ -138,7 +137,7 @@ class PVTClassification(nn.Module):
                             drop_path=dpr[sum(depths[:i]) : sum(depths[: i + 1])],
                             sr_ratio=sr_ratios[i],
                             linear=linear,
-                            act_layer=nn.GELU,
+                            activation=nn.GELU,
                             use_dwconv=use_dwconv,
                         )
                     ]
@@ -204,8 +203,7 @@ class PVTClassification(nn.Module):
 @MODEL_REGISTRY.register()
 class PVTClassificationV2(PVTClassification):
     """
-    Implementation of Pyramid Vision Transformer:
-    https://arxiv.org/abs/2102.12122v2
+    Implementation of `PVT v2: Improved Baselines with Pyramid Vision Transformer <https://arxiv.org/abs/2106.13797>`_
 
     Parameters
     ----------

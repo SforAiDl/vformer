@@ -12,7 +12,7 @@ class VisformerConvBlock(nn.Module):
     https://arxiv.org/abs/2104.12533
 
     Parameters
-    ----------
+    -----------
     in_channels: int
         Number of input channels
     group: int
@@ -133,8 +133,7 @@ class VisformerAttentionBlock(nn.Module):
 @MODEL_REGISTRY.register()
 class Visformer(nn.Module):
     """
-    A builder to construct a Vision-Friendly transformer model as in the paper: "Visformer: A vision-friendly transformer"
-    https://arxiv.org/abs/2104.12533
+    A builder to construct a Vision-Friendly transformer model as in the paper :`Visformer: The Vision-friendly Transformer <https://arxiv.org/abs/1906.11488>`_
 
     Parameters
     ----------
@@ -156,7 +155,7 @@ class Visformer(nn.Module):
         Dropout rate for convolution block, default is 0.0
     p_dropout_attn: float
         Dropout rate for attention block, default is 0.0
-    activation: torch.nn.Module
+    activation: nn.Module
         Activation function between layers, default is nn.GELU
     pos_embedding: bool
         Whether to use positional embedding, default is True
@@ -300,8 +299,7 @@ class Visformer(nn.Module):
 @MODEL_REGISTRY.register()
 def Visformer_S(img_size, n_classes, in_channels=3):
     """
-    Visformer-S model from the paper:"Visformer: The Vision-friendly Transformer"
-    https://arxiv.org/abs/1906.11488
+    Visformer-S model from the paper: `Visformer: The Vision-friendly Transformer <https://arxiv.org/abs/1906.11488>`_
 
     Parameters
     ----------
@@ -325,8 +323,7 @@ def Visformer_S(img_size, n_classes, in_channels=3):
 @MODEL_REGISTRY.register()
 def VisformerV2_S(img_size, n_classes, in_channels=3):
     """
-    VisformerV2-S model from the paper:"Visformer: The Vision-friendly Transformer"
-    https://arxiv.org/abs/1906.11488
+    VisformerV2-S model from the paper: `Visformer: The Vision-friendly Transformer <https://arxiv.org/abs/1906.11488>`_
 
     Parameters
     ----------
@@ -350,8 +347,7 @@ def VisformerV2_S(img_size, n_classes, in_channels=3):
 @MODEL_REGISTRY.register()
 def Visformer_Ti(img_size, n_classes, in_channels=3):
     """
-    Visformer-Ti model from the paper:"Visformer: The Vision-friendly Transformer"
-    https://arxiv.org/abs/1906.11488
+    Visformer-Ti model from the paper: `Visformer: The Vision-friendly Transformer <https://arxiv.org/abs/1906.11488>`_
 
     Parameters
     ----------
@@ -375,8 +371,7 @@ def Visformer_Ti(img_size, n_classes, in_channels=3):
 @MODEL_REGISTRY.register()
 def VisformerV2_Ti(img_size, n_classes, in_channels=3):
     """
-    VisformerV2-Ti model from the paper:"Visformer: The Vision-friendly Transformer"
-    https://arxiv.org/abs/1906.11488
+    VisformerV2-Ti model from the paper: `Visformer: The Vision-friendly Transformer <https://arxiv.org/abs/1906.11488>`_
 
     Parameters
     ----------

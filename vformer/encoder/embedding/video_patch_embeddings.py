@@ -12,13 +12,15 @@ class LinearVideoEmbedding(nn.Module):
     """
 
     Parameters
-    ----------
+    -----------
     embedding_dim: int
         Dimension of the resultant embedding
     patch_height: int
         Height of the patch
     patch_width: int
         Width of the patch
+    patch_dim: int
+        patch_dimension
 
     """
 
@@ -44,7 +46,7 @@ class LinearVideoEmbedding(nn.Module):
         """
 
         Parameters
-        ----------
+        -----------
         x: torch.Tensor
             Input tensor
 
@@ -72,7 +74,8 @@ class TubeletEmbedding(nn.Module):
         Heigth  of single tube/patch
     tubelet_w: int
         Width of single tube/patch
-
+    in_channels: int
+        Number of channels
     """
 
     def __init__(self, embedding_dim, tubelet_t, tubelet_h, tubelet_w, in_channels):

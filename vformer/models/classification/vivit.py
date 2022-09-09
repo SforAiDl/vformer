@@ -14,9 +14,10 @@ from ...utils.utils import pair
 @MODEL_REGISTRY.register()
 class ViViTModel2(BaseClassificationModel):
     """
-    Model 2 implementation of  A Video vision Transformer -
+    Model 2 implementation of: `ViViT: A Video Vision Transformer <https://arxiv.org/abs/2103.15691>`_
+
     Parameters
-    ----------
+    -----------
     img_size:int
         Size of single frame/ image in video
     in_channels:int
@@ -151,7 +152,7 @@ class ViViTModel2(BaseClassificationModel):
 @MODEL_REGISTRY.register()
 class ViViTModel3(BaseClassificationModel):
     """
-    model 3 of A video Vision Trnasformer- https://arxiv.org/abs/2103.15691
+    Model 3 Implementation from : `ViViT: A Video Vision Transformer <https://arxiv.org/abs/2103.15691>`_
 
     Parameters
     ----------

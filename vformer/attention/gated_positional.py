@@ -10,10 +10,11 @@ from .vanilla import VanillaSelfAttention
 @ATTENTION_REGISTRY.register()
 class GatedPositionalSelfAttention(VanillaSelfAttention):
     """
-    Implementation of the Gated Positional Self-Attention from the paper: "ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases"
+    Implementation of the Gated Positional Self-Attention from the paper: `ConViT: Improving Vision Transformers with Soft Convolutional Inductive Biases  <https://arxiv.org/abs/2103.10697>`_
+
 
     Parameters
-    ----------
+    -----------
     dim: int
         Dimension of the embedding
     num_heads: int

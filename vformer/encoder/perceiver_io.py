@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from einops import rearrange, repeat
+from einops import repeat
 
 from ..attention.cross import CrossAttention
 from ..attention.vanilla import VanillaSelfAttention
@@ -12,7 +12,7 @@ from ..utils import ENCODER_REGISTRY
 @ENCODER_REGISTRY.register()
 class PerceiverIOEncoder(nn.Module):
     """
-    Implementation of the Perceiver IO Encoder and Processor
+    Implementation of the Perceiver IO Encoder containing Iterative Cross Attention and Processor
 
     Parameters
     ----------

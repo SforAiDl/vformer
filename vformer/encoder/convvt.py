@@ -15,7 +15,7 @@ class ConvVTStage(nn.Module):
     Implementation of a Stage in CVT
 
     Parameters
-    ----------
+    -----------
     patch_size: int
         Size of patch, default is 16
     patch_stride: int
@@ -52,8 +52,8 @@ class ConvVTStage(nn.Module):
         Stride in kv, default is 2
     stride_q: int
         Stride in q, default is 1
-    init: str ('trunc_norm' or 'xavier')
-        Initialization method, default is 'trunc_norm'
+    init: str
+        Initialization method, one of  {``trunc_norm`` or ``xavier``} default is ``trunc_norm``
     """
 
     def __init__(
@@ -156,8 +156,8 @@ class ConvVTBlock(nn.Module):
     """
     Implementation of a Attention MLP block in CVT
 
-    Parameters:
-    ------------
+    Parameters
+    -----------
     dim_in: int
         Input dimensions
     dim_out: int

@@ -8,10 +8,12 @@ from ..utils import ATTENTION_REGISTRY
 @ATTENTION_REGISTRY.register()
 class CrossAttentionWithClsToken(nn.Module):
     """
-    Cross-Attention with Cls Token
+    Cross-Attention with Cls Token introduced in Paper: CrossViT: `Cross-Attention Multi-Scale Vision Transformer for Image Classification <https://arxiv.org/abs/2103.14899>`_
+
+    In Cross-Attention, cls token from one branch and patch token from another branch are fused together.
 
     Parameters
-    ----------
+    -----------
     cls_dim: int
         Dimension of cls token embedding
     patch_dim: int
@@ -46,6 +48,22 @@ class CrossAttentionWithClsToken(nn.Module):
         self.attend = nn.Softmax(dim=-1)
 
     def forward(self, cls, patches):
+        """
+
+        Parameters
+        ----------
+        x: torch.Tensor
+            Input tensor
+        cls: torch.Tensor
+            CLS token from one branch
+        patch: torch.Tensor
+            patch tokens from another branch
+        Returns
+        ----------
+        torch.Tensor
+            Returns output tensor by applying cross attention on input tensor
+
+        """
         h = self.num_heads
         cls = self.fl(cls)
 
@@ -72,7 +90,9 @@ class CrossAttentionWithClsToken(nn.Module):
 @ATTENTION_REGISTRY.register()
 class CrossAttention(nn.Module):
     """
-    Cross-Attention
+    This variant of Cross Attention is iteratively used in Perciever IO.
+
+    In Cross-Attention, cls token from one branch and patch token from another branch are fused together.
 
     Parameters
     ----------

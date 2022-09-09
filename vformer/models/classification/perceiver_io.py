@@ -9,14 +9,13 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class PerceiverIO(nn.Module):
     """
-    Implementation of 'Perceiver IO: A General Architecture for Structured Inputs & Outputs'
-    https://arxiv.org/abs/2107.14795
+    Implementation of `Perceiver IO: A General Architecture for Structured Inputs & Outputs <https://arxiv.org/abs/2107.14795>`_
 
     Code Implementation based on:
     https://github.com/lucidrains/perceiver-pytorch
 
     Parameters
-    ----------
+    -----------
     dim: int
         Size of sequence to be encoded
     depth: int

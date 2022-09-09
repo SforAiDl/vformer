@@ -6,4 +6,5 @@ Decoder
     :maxdepth: 2
 
     mlp
+    perceiver_io
     task_heads/index

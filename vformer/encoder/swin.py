@@ -19,7 +19,7 @@ class SwinEncoderBlock(nn.Module):
     """
 
     Parameters
-    ----------
+    -----------
     dim: int
         Number of the input channels
     input_resolution: int or tuple[int]
@@ -164,6 +164,9 @@ class SwinEncoderBlock(nn.Module):
 @ENCODER_REGISTRY.register()
 class SwinEncoder(nn.Module):
     """
+
+    Parameters
+    -----------
     dim: int
         Number of input channels.
     input_resolution: tuple[int]

@@ -1,5 +1,5 @@
-Memory Efficient Attention
-=================
+Memory Efficient self Attention O(:math:`n`)
+=================================================
 
 .. automodule:: vformer.attention.memory_efficient
     :members:

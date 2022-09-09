@@ -11,11 +11,10 @@ from ...utils import MODEL_REGISTRY
 @MODEL_REGISTRY.register()
 class VanillaViT(BaseClassificationModel):
     """
-    Implementation of 'An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale'
-    https://arxiv.org/abs/2010.11929
+    Implementation of `An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale <https://arxiv.org/abs/2010.11929>`_
 
     Parameters
-    ----------
+    -----------
     img_size: int
         Size of the image
     patch_size: int
@@ -36,8 +35,8 @@ class VanillaViT(BaseClassificationModel):
         Number of input channels
     decoder_config: int or tuple or list, optional
         Configuration of the decoder. If None, the default configuration is used.
-    pool: {"cls","mean"}
-        Feature pooling type
+    pool: str
+        Feature pooling type, one of {``cls``,``mean``}
     p_dropout_encoder: float
         Dropout probability in the encoder
     p_dropout_embedding: float

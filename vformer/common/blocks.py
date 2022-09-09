@@ -6,7 +6,7 @@ class DWConv(nn.Module):
     Depth Wise Convolution
 
     Parameters
-    ----------
+    -----------
     dim: int
         Dimension of the input tensor
     kernel_size_dwconv: int,optional
@@ -16,7 +16,7 @@ class DWConv(nn.Module):
     padding_dwconv: int or tuple or str
         Padding added to all sides of the input, default is 1
     bias_dwconv:bool
-        Whether to add learnable bias to the output,default is True.
+        Whether to add learnable bias to the output,default is ``True``.
 
     """
 
@@ -42,8 +42,8 @@ class DWConv(nn.Module):
     def forward(self, x, H, W):
         """
 
-        Parameters:
-        ----------
+        Parameters
+        -----------
         x: torch.Tensor
             Input tensor
         H: int
@@ -51,8 +51,8 @@ class DWConv(nn.Module):
         W: int
             Width of image patch
 
-        Returns:
-        ----------
+        Returns
+        --------
         torch.Tensor
             Returns output tensor after performing depth-wise convolution operation
 

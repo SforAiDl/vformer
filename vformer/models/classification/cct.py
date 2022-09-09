@@ -11,11 +11,10 @@ from ...utils import MODEL_REGISTRY, pair
 @MODEL_REGISTRY.register()
 class CCT(BaseClassificationModel):
     """
-    Implementation of Escaping the Big Data Paradigm with Compact Transformers:
-    https://arxiv.org/abs/2104.05704
+    Implementation of `Escaping the Big Data Paradigm with Compact Transformers <https://arxiv.org/abs/2104.05704>`_
 
-    Parameters:
-    ------------
+    Parameters
+    -----------
     img_size: int
         Size of the image
     patch_size: int
@@ -41,7 +40,7 @@ class CCT(BaseClassificationModel):
     drop_path: float
         Stochastic depth rate, default is 0.1
     positional_embedding: str
-        One of the string values {'learnable','sine','None'}, default is learnable
+        One of the string values {``'learnable'``, ``'sine'`` , ``None``}, default is ``'learnable'``.
     decoder_config: tuple(int) or int
         Configuration of the decoder. If None, the default configuration is used.
     pooling_kernel_size: int or tuple(int)
@@ -132,7 +131,7 @@ class CCT(BaseClassificationModel):
                 self.sequence_length,
                 dim=embedding_dim,
                 drop=p_dropout,
-                sinusoidal=True if positional_embedding is "sine" else False,
+                sinusoidal=True if positional_embedding == "sine" else False,
             )
         else:
             self.positional_emb = None
