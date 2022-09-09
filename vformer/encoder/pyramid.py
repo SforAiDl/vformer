@@ -18,7 +18,7 @@ class PVTFeedForward(nn.Module):
         Dimension of hidden layer
     out_dim:int, optional
         Dimension of output tensor
-    act_layer: nn.Module
+    activation: nn.Module
         Activation Layer, default is nn.GELU
     p_dropout: float
         Dropout probability/rate, default is 0.0
