@@ -1,5 +1,7 @@
 import codecs
+import glob
 import os
+import shutil
 
 from setuptools import find_packages, setup
 
@@ -66,6 +68,44 @@ def get_requires(path=REQUIRE_PATH):
             yield line
 
 
+def get_model_zoo_configs():
+    """
+    Return a list of configs to include in package for model zoo. Copy over these configs inside
+    vformer/model_zoo.
+    """
+
+    # Use absolute paths while symlinking.
+    source_configs_dir = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)), "configs"
+    )
+    destination = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        "vformer",
+        "model_zoo",
+        "configs",
+    )
+    # Symlink the config directory inside package to have a cleaner pip install.
+
+    # Remove stale symlink/directory from a previous build.
+    if os.path.exists(source_configs_dir):
+        if os.path.islink(destination):
+            os.unlink(destination)
+        elif os.path.isdir(destination):
+            shutil.rmtree(destination)
+
+    if not os.path.exists(destination):
+        try:
+            os.symlink(source_configs_dir, destination)
+        except OSError:
+            # Fall back to copying if symlink fails: ex. on Windows.
+            shutil.copytree(source_configs_dir, destination)
+
+    config_paths = glob.glob("configs/**/*.py", recursive=True) + glob.glob(
+        "configs/**/*.py", recursive=True
+    )
+    return config_paths
+
+
 # Define the configuration
 CONFIG = {
     "name": NAME,
@@ -83,6 +123,7 @@ CONFIG = {
     "packages": find_packages(
         where=PROJECT, include=["vformer", "vformer.*"], exclude=EXCLUDES
     ),
+    "package_data": {"vformer.model_zoo": get_model_zoo_configs()},
     "install_requires": list(get_requires()),
     "python_requires": ">=3.6",
     "test_suite": "tests",

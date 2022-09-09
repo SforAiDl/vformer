@@ -31,6 +31,7 @@ class CrossAttentionWithClsToken(nn.Module):
         inner_dim = num_heads * head_dim
         self.num_heads = num_heads
         self.scale = head_dim**-0.5
+
         self.fl = (
             nn.Linear(cls_dim, patch_dim) if not cls_dim == patch_dim else nn.Identity()
         )
