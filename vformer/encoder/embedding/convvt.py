@@ -4,7 +4,7 @@ from einops import rearrange
 
 class ConvEmbedding(nn.Module):
     """
-    Projects image patches into embedding space using convolutional layer. 
+    Projects image patches into embedding space using convolutional layer.
 
     Parameters
     -----------

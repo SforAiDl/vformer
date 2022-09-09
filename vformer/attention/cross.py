@@ -91,7 +91,7 @@ class CrossAttentionWithClsToken(nn.Module):
 class CrossAttention(nn.Module):
     """
     This variant of Cross Attention is iteratively used in Perciever IO.
-    
+
     In Cross-Attention, cls token from one branch and patch token from another branch are fused together.
 
     Parameters

@@ -78,6 +78,7 @@ class PosEmbedding(nn.Module):
     """
     Generalised Positional Embedding class
     """
+
     def __init__(self, shape, dim, drop=None, sinusoidal=False, std=0.02):
         super(PosEmbedding, self).__init__()
 
