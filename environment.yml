@@ -3,18 +3,18 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - bzip2=1.0.8
-  - ca-certificates=2022.4.26
-  - libffi=3.4.2
-  - openssl=1.1.1p
-  - pip=21.2.4
-  - setuptools=61.2.0
-  - sqlite=3.38.5
-  - tk=8.6.12
-  - tzdata=2022a
-  - wheel=0.37.1
-  - xz=5.2.5
-  - zlib=1.2.12
+  - bzip2
+  - ca-certificates
+  - libffi
+  - openssl
+  - pip
+  - setuptools
+  - sqlite
+  - tk
+  - tzdata
+  - wheel
+  - xz
+  - zlib
   - pip:
     - arrow
     - attrs
